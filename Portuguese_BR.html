@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>巴葡语音练习 · 万国语言之门</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fef9e7 0%, #f4f9e9 100%);
+            min-height: 100vh;
+            padding: 20px 16px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 36px;
+            box-shadow: 0 25px 50px -12px rgba(1, 33, 105, 0.25);
+            padding: 24px 20px 30px;
+            border: 1px solid rgba(1, 33, 105, 0.1);
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #012169;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        h1 span {
+            background: #FEDD00;
+            padding: 4px 18px;
+            border-radius: 30px;
+            font-size: 1rem;
+            color: #012169;
+            font-weight: 600;
+        }
+        .subhead {
+            text-align: center;
+            color: #2d5a27;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #009739;
+            padding-bottom: 12px;
+        }
+        .control-bar {
+            background: #eaf4e2;
+            border-radius: 24px;
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 18px;
+            border: 1px solid #b8d9a6;
+            font-size: 0.9rem;
+            color: #012169;
+        }
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        select, input[type="range"] {
+            padding: 8px 10px;
+            border-radius: 20px;
+            border: 1px solid #009739;
+            background: white;
+            font-size: 0.9rem;
+        }
+        select { min-width: 160px; }
+        #rate-slider { width: 100px; }
+        #rate-value { font-weight: 700; color: #009739; min-width: 45px; display: inline-block; }
+        .input-section {
+            background: #f0f7e6;
+            border-radius: 28px;
+            padding: 20px 16px;
+            margin-bottom: 28px;
+            border: 2px solid #009739;
+        }
+        .input-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+        #user-pt-text {
+            flex: 2; min-width: 250px; padding: 14px 18px; border-radius: 24px;
+            border: 2px solid #009739; font-size: 0.95rem; background: white;
+            color: #012169; resize: vertical; line-height: 1.5;
+        }
+        .speak-btn {
+            background: #009739; border: none; color: white; font-weight: bold;
+            padding: 14px 24px; border-radius: 40px; font-size: 1rem;
+            cursor: pointer; box-shadow: 0 6px 14px rgba(0, 151, 57, 0.4);
+            border: 1px solid #016b2a; white-space: nowrap;
+        }
+        .speak-btn.yellow { background: #FEDD00; border-color: #d4b800; color: #012169; }
+        .table-wrapper {
+            overflow-x: auto; border-radius: 24px; border: 1px solid rgba(1,33,105,0.15);
+            background: white; box-shadow: 0 10px 25px -8px rgba(0,0,0,0.1); margin-bottom: 20px;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 620px; font-size: 0.9rem; }
+        th { background: #012169; color: white; font-weight: 700; padding: 12px 8px; text-align: left; }
+        td { padding: 10px 8px; border-bottom: 1px solid #eef2e6; }
+        .pt-cell { font-weight: 700; color: #012169; display: flex; align-items: center; gap: 6px; }
+        .play-icon {
+            background: #FEDD00; border-radius: 50%; width: 32px; height: 32px;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #012169; cursor: pointer; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .play-btn-word {
+            background: #FEDD00; border: none; border-radius: 50%; width: 24px; height: 24px;
+            font-size: 12px; cursor: pointer; color: #012169; display: inline-flex;
+            align-items: center; justify-content: center; vertical-align: middle;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: 0.2s;
+        }
+        .play-btn-word:hover { background: #ffe100; transform: scale(1.1); }
+        details.phonetics {
+            margin-top: 30px; background: #fafdf7; border: 1px solid #c8e0b5;
+            border-radius: 28px; padding: 18px 16px;
+        }
+        details.phonetics summary {
+            font-size: 1.4rem; font-weight: 700; color: #012169; cursor: pointer;
+            padding: 8px; list-style: none; display: flex; align-items: center; gap: 8px;
+        }
+        details.phonetics summary::before { content: "🔤"; font-size: 1.5rem; }
+        .bilingual { font-style: italic; color: #2d5a27; font-size: 0.9rem; margin: 8px 0; }
+        .note-box {
+            background: #fffbe6; border-left: 4px solid #FEDD00; padding: 10px 15px;
+            border-radius: 8px; margin: 15px 0; font-size: 0.9rem;
+        }
+        .section-title { font-weight: 700; color: #009739; margin: 20px 0 10px; }
+        hr { border: 0.5px solid #d0e0c0; margin: 20px 0; }
+        @media (max-width: 600px) {
+            .container { padding: 16px 10px; }
+            table { min-width: 500px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🇧🇷 巴葡语音练习 <span>万国语言之门（公众号：汲汲孜孜）</span></h1>
+    <div class="subhead">🔊 双击葡语句子或点 ▶ 按钮 · 巴西口音 🎧</div>
+
+    <div class="control-bar">
+        <div class="control-item">
+            <label for="voice-select">🎙️ 语音引擎：</label>
+            <select id="voice-select"></select>
+        </div>
+        <div class="control-item">
+            <label for="rate-slider">⚡ 语速：</label>
+            <input type="range" id="rate-slider" min="0.5" max="1.5" step="0.05" value="0.85">
+            <span id="rate-value">0.85</span>
+        </div>
+    </div>
+
+    <div class="input-section">
+        <div style="font-weight:700; color:#012169; margin-bottom:8px;">✍️ 输入任意葡萄牙语</div>
+        <div class="input-row">
+            <textarea id="user-pt-text" rows="4">Olá, amigo! Tenho cerca de 40 anos, um homem comum. Tenho dois filhos, um menino e uma menina. Moro na China. Adoro aprender idiomas do mundo. Porque os idiomas são super divertidos! Eles escondem cultura, pensamentos e segredos da vida. Gosto de fazer amigos de todo o mundo online. Conforme envelheço, gosto cada vez mais de coisas simples e verdadeiras. Vamos ser amigos!（你好，朋友！……）</textarea>
+            <button id="speak-user-btn" class="speak-btn">🔊 朗读</button>
+            <button id="stop-user-btn" class="speak-btn yellow">⏹️ 停止</button>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="phrase-table">
+            <thead><tr><th>🇨🇳 中文</th><th>🇧🇷 葡萄牙语</th><th>🇬🇧 英语</th><th>🇪🇸 西班牙语</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div style="text-align:center; color:#5a6d53; margin-top:10px;">💡 点击黄色按钮或双击葡语文字即可听到巴葡发音</div>
+    <div id="voice-status" style="text-align:center; color:#2d5a27; font-size:0.8rem; margin-top:6px;">🎙️ 正在加载语音列表...</div>
+
+    <!-- 语音入门板块 -->
+    <details class="phonetics" open>
+        <summary>语音入门 (Portuguese Pronunciation Guide)</summary>
+        <p class="bilingual">🇧🇷 巴西葡萄牙语语音表格速览 / Brazilian Portuguese Pronunciation Cheat Sheet</p>
+
+        <div class="section-title">🔹 一、元音 (Vowels)</div>
+        <p class="bilingual">（一）单元音 / Oral Monophthongs</p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>No.</th><th>IPA</th><th>字母/组合</th><th>例词1</th><th>例词2</th><th>例词3</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>/a/</td><td><b>a</b> 或 <b>á</b></td><td><b>a</b>rte 艺术 (art)</td><td>m<b>a</b>pa 地图 (map)</td><td>c<b>a</b>sa 房子 (house)</td></tr>
+                    <tr><td>2</td><td>/ɐ/</td><td>非重读 <b>a</b></td><td>caminh<b>a</b> 床 (bed)</td><td><b>a</b>marelo 黄色 (yellow)</td><td>alm<b>a</b>ço 午餐 (lunch)</td></tr>
+                    <tr><td>3</td><td>/ɛ/</td><td><b>e</b> 或 <b>é</b></td><td>pr<b>e</b>to 黑色 (black)</td><td>c<b>e</b>rto 正确 (correct)</td><td>p<b>é</b> 脚 (foot)</td></tr>
+                    <tr><td>4</td><td>/e/</td><td><b>e</b> 或 <b>ê</b></td><td>m<b>e</b>do 恐惧 (fear)</td><td>c<b>ê</b>do 早 (early)</td><td>diz<b>e</b>r 说 (to say)</td></tr>
+                    <tr><td>5</td><td>/i/</td><td><b>i</b>, <b>í</b> 或词尾 <b>e</b></td><td>l<b>i</b>vro 书 (book)</td><td><b>i</b>greja 教会 (church)</td><td>cidad<b>e</b> 城市 (city)</td></tr>
+                    <tr><td>6</td><td>/ɔ/</td><td><b>o</b> 或 <b>ó</b></td><td><b>o</b>lho 眼睛 (eye)</td><td>p<b>o</b>rta 门 (door)</td><td>av<b>ó</b> 祖母 (grandmother)</td></tr>
+                    <tr><td>7</td><td>/o/</td><td><b>o</b> 或 <b>ô</b></td><td>t<b>o</b>do 全部 (all)</td><td>av<b>ô</b> 祖父 (grandfather)</td><td>c<b>o</b>r 颜色 (color)</td></tr>
+                    <tr><td>8</td><td>/u/</td><td><b>u</b>, <b>ú</b> 或词尾 <b>o</b></td><td>p<b>u</b>ro 纯净的 (pure)</td><td>s<b>u</b>co 果汁 (juice)</td><td>t<b>o</b>do /ˈto.du/</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="bilingual">（二）鼻化元音 / Nasal Monophthongs</p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>No.</th><th>IPA</th><th>标记方式</th><th>例词1</th><th>例词2</th><th>例词3</th></tr></thead>
+                <tbody>
+                    <tr><td>9</td><td>/ɐ̃/</td><td><b>ã</b> 或 <b>an/am</b></td><td>s<b>an</b>to 圣人 (saint)</td><td>m<b>ã</b>e 母亲 (mother)</td><td>c<b>am</b>po 田野 (field)</td></tr>
+                    <tr><td>10</td><td>/ẽ/</td><td><b>en/em</b></td><td>s<b>em</b>pre 永远 (always)</td><td>t<b>em</b>po 时间 (time)</td><td>d<b>en</b>te 牙齿 (tooth)</td></tr>
+                    <tr><td>11</td><td>/ĩ/</td><td><b>in/im</b></td><td>s<b>im</b> 是 (yes)</td><td>f<b>in</b>s 目的 (ends)</td><td>c<b>in</b>to 腰带 (belt)</td></tr>
+                    <tr><td>12</td><td>/õ/</td><td><b>on/om</b></td><td>s<b>om</b> 声音 (sound)</td><td>b<b>om</b> 好的 (good)</td><td>c<b>on</b>to 短篇故事 (short story)</td></tr>
+                    <tr><td>13</td><td>/ũ/</td><td><b>un/um</b></td><td><b>um</b> 一个 (one)</td><td>at<b>um</b> 金枪鱼 (tuna)</td><td>m<b>un</b>do 世界 (world)</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="note-box">💡 <b>发音要点 / Pronunciation note：</b>巴葡中，音节末尾的 m/n 并不独立发音，而是使其前面的元音鼻化。例如 <code>bom</code> /bõ/——“m”是记号，不是音。<br>In BP, syllable-final m/n are not pronounced as separate consonants; they nasalize the preceding vowel.</div>
+
+        <div class="section-title">🔹 二、辅音 (Consonants)</div>
+        <p class="bilingual">（一）单辅音 / Single Consonants</p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>No.</th><th>IPA</th><th>字母/组合</th><th>例词1</th><th>例词2</th><th>例词3</th></tr></thead>
+                <tbody>
+                    <tr><td>14</td><td>/p/</td><td><b>p</b></td><td><b>p</b>ai 父亲 (father)</td><td>com<b>p</b>rar 购买 (to buy)</td><td><b>p</b>ato 鸭子 (duck)</td></tr>
+                    <tr><td>15</td><td>/b/</td><td><b>b</b></td><td><b>b</b>em 好 (well)</td><td>so<b>b</b>re 关于 (about)</td><td><b>b</b>ola 球 (ball)</td></tr>
+                    <tr><td>16</td><td>/t/</td><td><b>t</b></td><td><b>t</b>erra 土地 (earth)</td><td>ga<b>t</b>o 猫 (cat)</td><td><b>t</b>udo 一切 (everything)</td></tr>
+                    <tr><td>17</td><td>/d/</td><td><b>d</b></td><td><b>d</b>ia 日 (day)</td><td>na<b>d</b>a 没有什么 (nothing)</td><td><b>d</b>or 痛 (pain)</td></tr>
+                    <tr><td>18</td><td>/k/</td><td><b>c</b>+a/o/u、<b>qu</b>+e/i</td><td><b>c</b>asa 房子 (house)</td><td><b>qu</b>e 什么 (what)</td><td><b>k</b>iwi 猕猴桃 (kiwi)</td></tr>
+                    <tr><td>19</td><td>/ɡ/</td><td><b>g</b>+a/o/u、<b>gu</b>+e/i</td><td><b>g</b>ato 猫 (cat)</td><td><b>gu</b>erra 战争 (war)</td><td><b>g</b>osto 口味 (taste)</td></tr>
+                    <tr><td>20</td><td>/f/</td><td><b>f</b></td><td><b>f</b>alar 说话 (to speak)</td><td>a<b>f</b>ável 亲切的 (kind)</td><td><b>f</b>ogo 火 (fire)</td></tr>
+                    <tr><td>21</td><td>/v/</td><td><b>v</b></td><td><b>v</b>ida 生命 (life)</td><td>no<b>v</b>o 新的 (new)</td><td><b>v</b>oz 嗓音 (voice)</td></tr>
+                    <tr><td>22</td><td>/s/</td><td><b>s</b> (词首/ss/ç)</td><td><b>s</b>ol 太阳 (sun)</td><td>a<b>ss</b>im 这样 (like this)</td><td>mo<b>ç</b>o 青年 (young man)</td></tr>
+                    <tr><td>23</td><td>/z/</td><td><b>s</b> (元音间)、<b>z</b></td><td>ca<b>s</b>a 房子 (house)</td><td><b>z</b>ebra 斑马 (zebra)</td><td>ro<b>s</b>a 玫瑰 (rose)</td></tr>
+                    <tr><td>24</td><td>/ʃ/</td><td><b>ch</b>、<b>x</b></td><td><b>ch</b>ave 钥匙 (key)</td><td><b>x</b>arope 糖浆 (syrup)</td><td>dei<b>x</b>ar 留下 (to leave)</td></tr>
+                    <tr><td>25</td><td>/ʒ/</td><td><b>g</b>+e/i、<b>j</b></td><td><b>g</b>ente 人们 (people)</td><td><b>j</b>á 已经 (already)</td><td>lo<b>j</b>a 商店 (shop)</td></tr>
+                    <tr><td>26</td><td>/m/</td><td><b>m</b></td><td><b>m</b>ão 手 (hand)</td><td>a<b>m</b>or 爱 (love)</td><td><b>m</b>esa 桌子 (table)</td></tr>
+                    <tr><td>27</td><td>/n/</td><td><b>n</b></td><td><b>n</b>ão 不 (no)</td><td>bo<b>n</b>ito 美丽的 (beautiful)</td><td><b>n</b>ovo 新的 (new)</td></tr>
+                    <tr><td>28</td><td>/ɲ/</td><td><b>nh</b></td><td>a<b>nh</b>o 年 (year)</td><td>so<b>nh</b>o 梦/睡眠 (dream)</td><td>vizi<b>nh</b>o 邻居 (neighbor)</td></tr>
+                    <tr><td>29</td><td>/l/</td><td><b>l</b> (元音前)</td><td><b>l</b>ado 侧面 (side)</td><td>fa<b>l</b>ar 说话 (to speak)</td><td><b>l</b>ivro 书 (book)</td></tr>
+                    <tr><td>30</td><td>/w/</td><td><b>l</b> (音节末尾)</td><td>Brasi<b>l</b> 巴西 (Brazil)</td><td>so<b>l</b> 太阳 (sun)</td><td>futebo<b>l</b> 足球 (football)</td></tr>
+                    <tr><td>31</td><td>/ʎ/</td><td><b>lh</b></td><td>fi<b>lh</b>o 儿子 (son)</td><td>o<b>lh</b>o 眼睛 (eye)</td><td>ve<b>lh</b>o 年老的 (old)</td></tr>
+                    <tr><td>32</td><td>/ʁ/</td><td><b>r</b> (词首)、<b>rr</b></td><td><b>r</b>ato 老鼠 (rat)</td><td>ca<b>rr</b>o 汽车 (car)</td><td><b>r</b>ua 街道 (street)</td></tr>
+                    <tr><td>33</td><td>/ɾ/</td><td><b>r</b> (元音间)</td><td>ba<b>r</b>ato 便宜的 (cheap)</td><td>po<b>r</b>ta 门 (door)</td><td>p<b>r</b>ato 盘子 (plate)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="bilingual">（二）辅音字母发音规则速查 / Consonant Letter Rules</p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>字母</th><th>环境</th><th>IPA</th><th>例词</th></tr></thead>
+                <tbody>
+                    <tr><td><b>C</b></td><td>+ a/o/u</td><td>/k/</td><td><b>c</b>asa 房子 (house)</td></tr>
+                    <tr><td><b>C</b></td><td>+ e/i</td><td>/s/</td><td><b>c</b>ento 一百 (hundred)</td></tr>
+                    <tr><td><b>G</b></td><td>+ a/o/u</td><td>/ɡ/</td><td><b>g</b>ato 猫 (cat)</td></tr>
+                    <tr><td><b>G</b></td><td>+ e/i</td><td>/ʒ/</td><td><b>g</b>elo 冰 (ice)</td></tr>
+                    <tr><td><b>X</b></td><td>词首</td><td>/ʃ/</td><td><b>x</b>adrez 国际象棋 (chess)</td></tr>
+                    <tr><td><b>X</b></td><td>元音间</td><td>/z/ /s/ /ks/</td><td>e<b>x</b>ibir 展示 (exhibit)</td></tr>
+                    <tr><td><b>S</b></td><td>词首/ss</td><td>/s/</td><td><b>s</b>ol 太阳 (sun)</td></tr>
+                    <tr><td><b>S</b></td><td>元音间</td><td>/z/</td><td>ca<b>s</b>a 房子 (house)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="bilingual">（三）特殊辅音组合 / Special Consonant Clusters</p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>No.</th><th>IPA</th><th>字母组合</th><th>例词1</th><th>例词2</th></tr></thead>
+                <tbody>
+                    <tr><td>38</td><td>/ks/</td><td><b>x</b> 或 <b>cc</b></td><td>tá<b>x</b>i 出租车 (taxi)</td><td>convicção 确信 (conviction)</td></tr>
+                    <tr><td>39</td><td>/kw/</td><td><b>qu</b> + a/o</td><td><b>qua</b>se 几乎 (almost)</td><td><b>quo</b>ta 配额 (quota)</td></tr>
+                    <tr><td>40</td><td>/ɡw/</td><td><b>gu</b> + a/o</td><td><b>gua</b>rdar 保存 (to keep)</td><td>anti<b>guo</b> 古老的 (ancient)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-title">🔹 三、双元音与二元音 (Diphthongs)</div>
+        <p class="bilingual">（一）口双元音 / Oral Diphthongs</p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>No.</th><th>IPA</th><th>字母组合</th><th>例词1</th><th>例词2</th><th>例词3</th></tr></thead>
+                <tbody>
+                    <tr><td>41</td><td>/aj/</td><td><b>ai</b></td><td>p<b>ai</b> 父亲 (father)</td><td>c<b>ai</b>xa 盒子 (box)</td><td>m<b>ai</b>s 更多 (more)</td></tr>
+                    <tr><td>42</td><td>/ej/</td><td><b>ei</b></td><td>l<b>ei</b> 法律 (law)</td><td>prim<b>ei</b>ro 第一 (first)</td><td>d<b>ei</b>xar 留下 (leave)</td></tr>
+                    <tr><td>43</td><td>/ɔj/</td><td><b>ói</b></td><td>her<b>ói</b> 英雄 (hero)</td><td>d<b>ói</b> (它)疼 (it hurts)</td><td>lenç<b>ói</b>s 床单 (sheets)</td></tr>
+                    <tr><td>44</td><td>/oj/</td><td><b>oi</b></td><td>d<b>oi</b>s 二 (two)</td><td>c<b>oi</b>sa 东西 (thing)</td><td>p<b>oi</b>s 因为/那么 (because/then)</td></tr>
+                    <tr><td>45</td><td>/aw/</td><td><b>au</b></td><td>m<b>au</b> 坏的 (bad)</td><td>s<b>au</b>dade 思念 (longing)</td><td>gr<b>au</b> 度/等级 (degree)</td></tr>
+                    <tr><td>46</td><td>/ew/</td><td><b>eu</b></td><td>m<b>eu</b> 我的 (my)</td><td>s<b>eu</b> 他的/您的 (his/your)</td><td>chap<b>éu</b> 帽子 (hat)</td></tr>
+                    <tr><td>47</td><td>/iw/</td><td><b>iu</b></td><td>v<b>iu</b> (他/她)看见 (saw)</td><td>part<b>iu</b> (他/她)出发 (left)</td><td>abr<b>iu</b> (他/她)打开 (opened)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="bilingual">（二）鼻化双元音 / Nasal Diphthongs</p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>No.</th><th>IPA</th><th>字母组合</th><th>例词1</th><th>例词2</th><th>例词3</th></tr></thead>
+                <tbody>
+                    <tr><td>48</td><td>/ɐ̃w̃/</td><td><b>ão</b> / <b>-am</b></td><td>m<b>ão</b> 手 (hand)</td><td>n<b>ão</b> 不 (no)</td><td>falar<b>am</b> (他们)说话 (they spoke)</td></tr>
+                    <tr><td>49</td><td>/ɐ̃j̃/</td><td><b>ãe</b></td><td>m<b>ãe</b> 母亲 (mother)</td><td>p<b>ãe</b>s 面包 (breads)</td><td>c<b>ãe</b>s 狗 (dogs)</td></tr>
+                    <tr><td>50</td><td>/õj̃/</td><td><b>õe</b></td><td>p<b>õe</b> (他/她)放 (puts)</td><td>liç<b>õe</b>s 课程 (lessons)</td><td>coraç<b>õe</b>s 心 (hearts)</td></tr>
+                    <tr><td>51</td><td>/ẽj̃/</td><td><b>em</b> (词末)</td><td>b<b>em</b> 好 (well)</td><td>t<b>em</b> (他/她)有 (has)</td><td>também 也 (also)</td></tr>
+                    <tr><td>52</td><td>/ũj̃/</td><td><b>uim</b></td><td>m<b>uit</b>o 非常 (very)</td><td><b>uim</b> (感叹词) (wow)</td><td>—</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="note-box">✨ <b>“性感”的巴葡鼻化：</b><code>mão</code> /mɐ̃w̃/ (手) 和 <code>mau</code> /maw/ (坏的) 差别仅在一口气。<br>The only difference between <code>mão</code> (hand) and <code>mau</code> (bad) is nasalization.</div>
+
+        <hr>
+        <p class="bilingual"><b>附录：巴葡与欧葡主要发音差异 / Appendix: BP vs. EP differences</b></p>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>差异点</th><th>巴葡 (BP)</th><th>欧葡 (EP)</th></tr></thead>
+                <tbody>
+                    <tr><td>词尾 <b>-e</b> (非重读)</td><td>读 /i/：cidade /si.ˈda.dʒi/</td><td>读 /ɨ/：cidade /si.ˈða.ðɨ/</td></tr>
+                    <tr><td>词尾 <b>-o</b> (非重读)</td><td>读 /u/：tudo /ˈtu.du/</td><td>读 /u/：tudo /ˈtu.ðu/</td></tr>
+                    <tr><td><b>t</b> + e/i</td><td>腭化为 /tʃ/：gente /ˈʒẽ.tʃi/</td><td>不腭化：gente /ˈʒẽ.tɨ/</td></tr>
+                    <tr><td><b>d</b> + e/i</td><td>腭化为 /dʒ/：cidade /si.ˈda.dʒi/</td><td>不腭化：cidade /si.ˈða.ðɨ/</td></tr>
+                    <tr><td><b>-r</b> (词末)</td><td>发 /ʁ/ 或 /ɾ/</td><td>一般发 /ɾ/</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size:0.85rem; color:#555; margin-top:15px;"><b>数据来源与声明 / Sources：</b>本表发音规则综合自维基百科、Mango Languages 等教材。巴葡发音以里约-圣保罗口音为基准。Valeu!</p>
+    </details>
+</div>
+
+<script>
+    (function() {
+        const phrases = [
+            { cn: "你好！", pt: "Olá!", en: "Hello! / Hi!", es: "¡Hola!" },
+            { cn: "早上好！", pt: "Bom dia!", en: "Good morning!", es: "¡Buenos días!" },
+            { cn: "下午好！", pt: "Boa tarde!", en: "Good afternoon!", es: "¡Buenas tardes!" },
+            { cn: "晚上好！/ 晚安！", pt: "Boa noite!", en: "Good evening! / Good night!", es: "¡Buenas noches!" },
+            { cn: "再见！", pt: "Tchau!", en: "Bye! / Goodbye!", es: "¡Chao! / ¡Adiós!" },
+            { cn: "谢谢！（男/女）", pt: "Obrigado! / Obrigada!", en: "Thank you!", es: "¡Gracias!" },
+            { cn: "不客气！", pt: "De nada!", en: "You're welcome!", es: "¡De nada!" },
+            { cn: "对不起。", pt: "Desculpe.", en: "Sorry.", es: "Perdón." },
+            { cn: "你好吗？", pt: "Como vai?", en: "How are you?", es: "¿Cómo estás?" },
+            { cn: "我很好，谢谢。", pt: "Estou bem.", en: "I'm fine, thanks.", es: "Estoy bien, gracias." },
+            { cn: "我的名字是……", pt: "Meu nome é...", en: "My name is...", es: "Mi nombre es..." },
+            { cn: "是的。", pt: "Sim.", en: "Yes.", es: "Sí." },
+            { cn: "不是。", pt: "Não.", en: "No.", es: "No." },
+            { cn: "请。", pt: "Por favor.", en: "Please.", es: "Por favor." },
+            { cn: "我不懂。", pt: "Eu não entendo.", en: "I don't understand.", es: "No entiendo." },
+            { cn: "请再说一遍。", pt: "Pode repetir, por favor?", en: "Can you repeat, please?", es: "¿Puede repetir, por favor?" },
+            { cn: "这个多少钱？", pt: "Quanto custa?", en: "How much is this?", es: "¿Cuánto cuesta esto?" },
+            { cn: "厕所在哪？", pt: "Onde fica o banheiro?", en: "Where is the bathroom?", es: "¿Dónde está el baño?" },
+            { cn: "救命！", pt: "Socorro!", en: "Help!", es: "¡Socorro!" },
+            { cn: "干杯！", pt: "Saúde!", en: "Cheers!", es: "¡Salud!" },
+            { cn: "我爱你。", pt: "Eu te amo.", en: "I love you.", es: "Te amo. / Te quiero." }
+        ];
+
+        const tbody = document.querySelector('#phrase-table tbody');
+        const voiceSelect = document.getElementById('voice-select');
+        const rateSlider = document.getElementById('rate-slider');
+        const rateValue = document.getElementById('rate-value');
+        const voiceStatus = document.getElementById('voice-status');
+        const userTextarea = document.getElementById('user-pt-text');
+        const speakUserBtn = document.getElementById('speak-user-btn');
+        const stopUserBtn = document.getElementById('stop-user-btn');
+
+        let synth = window.speechSynthesis;
+        let selectedVoice = null;
+        let currentRate = 0.85;
+        let allVoices = [];
+
+        function speakPortuguese(text) {
+            if (!synth || !text.trim()) return;
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text.trim());
+                u.lang = 'pt-BR';
+                u.rate = currentRate;
+                if (selectedVoice) u.voice = selectedVoice;
+                synth.speak(u);
+            }, 30);
+        }
+
+        function renderPhraseTable() {
+            tbody.innerHTML = '';
+            phrases.forEach((item) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.cn}</td>
+                    <td><div class="pt-cell" data-pt="${item.pt.replace(/"/g, '&quot;')}">
+                        <button class="play-icon" data-pt="${item.pt.replace(/"/g, '&quot;')}">▶</button> ${item.pt}
+                    </div></td>
+                    <td>${item.en}</td><td>${item.es}</td>`;
+                tbody.appendChild(tr);
+            });
+            document.querySelectorAll('.play-icon').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    speakPortuguese(btn.getAttribute('data-pt'));
+                });
+            });
+            document.querySelectorAll('.pt-cell').forEach(cell => {
+                cell.addEventListener('dblclick', function(e) {
+                    if (e.target.classList.contains('play-icon')) return;
+                    speakPortuguese(this.getAttribute('data-pt'));
+                });
+            });
+        }
+
+        function populateVoiceList() {
+            const voices = synth.getVoices();
+            allVoices = voices;
+            const ptVoices = voices.filter(v => v.lang && v.lang.startsWith('pt'));
+            voiceSelect.innerHTML = '';
+            if (ptVoices.length === 0) {
+                voiceSelect.innerHTML = '<option value="">未找到葡萄牙语语音</option>';
+                voiceStatus.textContent = '⚠️ 没有葡萄牙语语音，使用默认。';
+                selectedVoice = null;
+            } else {
+                ptVoices.forEach((v, i) => {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = `${v.name} (${v.lang})`;
+                    voiceSelect.appendChild(opt);
+                });
+                selectedVoice = ptVoices[0];
+                voiceSelect.selectedIndex = 0;
+                voiceStatus.textContent = `🎙️ 当前语音：${selectedVoice.name}`;
+            }
+        }
+
+        voiceSelect.addEventListener('change', () => {
+            const ptVoices = allVoices.filter(v => v.lang && v.lang.startsWith('pt'));
+            const idx = parseInt(voiceSelect.value, 10);
+            if (!isNaN(idx) && ptVoices[idx]) selectedVoice = ptVoices[idx];
+        });
+
+        rateSlider.addEventListener('input', () => {
+            currentRate = parseFloat(rateSlider.value);
+            rateValue.textContent = currentRate.toFixed(2);
+        });
+
+        speakUserBtn.addEventListener('click', () => speakPortuguese(userTextarea.value));
+        stopUserBtn.addEventListener('click', () => { if (synth.speaking) synth.cancel(); });
+
+        // 修复后的单词提取：使用 textContent 完整获取文本
+        function addWordPlayButtons() {
+            const details = document.querySelector('details.phonetics');
+            if (!details) return;
+            const tables = details.querySelectorAll('table');
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    if (row.querySelector('th')) return;
+                    const cells = row.querySelectorAll('td');
+                    cells.forEach(cell => {
+                        if (cell.querySelector('.play-btn-word')) return;
+                        const fullText = cell.textContent.trim();
+                        if (!fullText.match(/[\(\（]/)) return; // 有括号才认为是例词
+                        const word = fullText.split(/\s+/)[0]; // 取第一个空格前部分
+                        if (!word) return;
+                        const btn = document.createElement('button');
+                        btn.className = 'play-btn-word';
+                        btn.setAttribute('data-word', word);
+                        btn.textContent = '▶';
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            speakPortuguese(e.target.getAttribute('data-word'));
+                        });
+                        cell.insertBefore(btn, cell.firstChild);
+                    });
+                });
+            });
+        }
+
+        renderPhraseTable();
+        if (synth.getVoices().length) populateVoiceList();
+        else synth.addEventListener('voiceschanged', populateVoiceList, { once: true });
+
+        window.addEventListener('load', addWordPlayButtons);
+        if (document.readyState === 'complete') addWordPlayButtons();
+        else document.addEventListener('DOMContentLoaded', addWordPlayButtons);
+    })();
+</script>
+</body>
+</html>
