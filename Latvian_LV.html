@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>拉脱维亚语语音练习 · 万国语言之门</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #f9f4f4 0%, #fdf9f9 100%);
+            min-height: 100vh;
+            padding: 20px 16px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border-radius: 36px;
+            box-shadow: 0 25px 50px -12px rgba(158, 48, 57, 0.3);
+            padding: 24px 20px 30px;
+            border: 1px solid rgba(158, 48, 57, 0.15);
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #9E3039;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        h1 span {
+            background: #9E3039;
+            padding: 4px 18px;
+            border-radius: 30px;
+            font-size: 1rem;
+            color: white;
+            font-weight: 600;
+        }
+        .subhead {
+            text-align: center;
+            color: #6b2f2f;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #9E3039;
+            padding-bottom: 12px;
+        }
+        .control-bar {
+            background: #fdf2f2;
+            border-radius: 24px;
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 18px;
+            border: 1px solid #e6b3b3;
+            font-size: 0.9rem;
+            color: #9E3039;
+        }
+        .control-item { display: flex; align-items: center; gap: 8px; }
+        select, input[type="range"] {
+            padding: 8px 10px;
+            border-radius: 20px;
+            border: 1px solid #9E3039;
+            background: white;
+            font-size: 0.9rem;
+        }
+        select { min-width: 160px; }
+        #rate-slider { width: 100px; }
+        #rate-value { font-weight: 700; color: #9E3039; min-width: 45px; display: inline-block; }
+        .input-section {
+            background: #fff9f9;
+            border-radius: 28px;
+            padding: 20px 16px;
+            margin-bottom: 28px;
+            border: 2px solid #9E3039;
+        }
+        .input-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+        #user-lv-text {
+            flex: 2; min-width: 250px; padding: 14px 18px; border-radius: 24px;
+            border: 2px solid #9E3039; font-size: 0.95rem; background: white;
+            color: #5a2e2e; resize: vertical; line-height: 1.5;
+        }
+        .speak-btn {
+            background: #9E3039; border: none; color: white; font-weight: bold;
+            padding: 14px 24px; border-radius: 40px; font-size: 1rem;
+            cursor: pointer; box-shadow: 0 6px 14px rgba(158, 48, 57, 0.4);
+            border: 1px solid #7a2028; white-space: nowrap;
+        }
+        .speak-btn.yellow {
+            background: #f0e6e6; border-color: #9E3039;
+            color: #9E3039; box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+        }
+        .table-wrapper {
+            overflow-x: auto; border-radius: 24px;
+            border: 1px solid rgba(158,48,57,0.2); background: white;
+            box-shadow: 0 10px 25px -8px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 620px; font-size: 0.9rem; }
+        th { background: #9E3039; color: white; font-weight: 700; padding: 12px 8px; text-align: left; }
+        td { padding: 10px 8px; border-bottom: 1px solid #f0e6e6; }
+        .pt-cell {
+            font-weight: 700; color: #9E3039; display: flex; align-items: center; gap: 6px;
+        }
+        .play-icon {
+            background: #fce8e8; border-radius: 50%; width: 32px; height: 32px;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #9E3039; cursor: pointer; border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .play-btn-word {
+            background: #fce8e8; border: none; border-radius: 50%;
+            width: 24px; height: 24px; font-size: 12px; cursor: pointer;
+            color: #9E3039; display: inline-flex; align-items: center;
+            justify-content: center; vertical-align: middle;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: 0.2s;
+            margin-right: 4px;
+        }
+        .play-btn-word:hover { background: #f5c6c6; transform: scale(1.1); }
+        details.phonetics {
+            margin-top: 30px; background: #fefcfc;
+            border: 1px solid #e6b3b3; border-radius: 28px; padding: 18px 16px;
+        }
+        details.phonetics summary {
+            font-size: 1.4rem; font-weight: 700; color: #9E3039;
+            cursor: pointer; padding: 8px; list-style: none;
+            display: flex; align-items: center; gap: 8px;
+        }
+        details.phonetics summary::before { content: "🔤"; font-size: 1.5rem; }
+        .bilingual { font-style: italic; color: #6b2f2f; font-size: 0.9rem; margin: 8px 0; }
+        .note-box {
+            background: #fff5f5; border-left: 4px solid #9E3039;
+            padding: 10px 15px; border-radius: 8px; margin: 15px 0; font-size: 0.9rem;
+        }
+        .section-title { font-weight: 700; color: #9E3039; margin: 20px 0 10px; }
+        hr { border: 0.5px solid #e6cccc; margin: 20px 0; }
+        .footer-links {
+            margin-top: 30px; padding: 20px 16px;
+            background: #fefcfc; border: 1px solid #e6b3b3;
+            border-radius: 24px; font-size: 0.9rem; color: #5a2e2e;
+        }
+        .footer-links a { color: #9E3039; word-break: break-all; }
+        .footer-links ul { padding-left: 20px; }
+        @media (max-width: 600px) {
+            .container { padding: 16px 10px; }
+            table { min-width: 500px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🇱🇻 拉脱维亚语语音练习 <span>万国语言之门（公众号：汲汲孜孜）</span></h1>
+    <div class="subhead">🔊 双击句子或点 ▶ 按钮 · 拉脱维亚语发音 🎧</div>
+
+    <div class="control-bar">
+        <div class="control-item">
+            <label for="voice-select">🎙️ 语音引擎：</label>
+            <select id="voice-select"></select>
+        </div>
+        <div class="control-item">
+            <label for="rate-slider">⚡ 语速：</label>
+            <input type="range" id="rate-slider" min="0.5" max="1.5" step="0.05" value="0.85">
+            <span id="rate-value">0.85</span>
+        </div>
+    </div>
+
+    <div class="input-section">
+        <div style="font-weight:700; color:#9E3039; margin-bottom:8px;">✍️ 输入任意拉脱维亚语</div>
+        <div class="input-row">
+            <textarea id="user-lv-text" rows="4">Es esmu apmēram 40 gadus vecs, parasts vīrietis. Man ir divi bērni, zēns un meitene. Es dzīvoju Ķīnā. Es mīlu mācīties pasaules valodas. Jo valodas ir super jautras! Tās slēpj kultūru, domas un dzīves noslēpumus. Man patīk tiešsaistē draudzēties ar cilvēkiem no visas pasaules. Jo vecāks es kļūstu, jo vairāk man patīk vienkāršas un īstas lietas. Draudzēsimies!（你好，朋友！……）</textarea>
+            <button id="speak-user-btn" class="speak-btn">🔊 朗读</button>
+            <button id="stop-user-btn" class="speak-btn yellow">⏹️ 停止</button>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="phrase-table">
+            <thead><tr><th>🇨🇳 中文 (拼音)</th><th>🇱🇻 拉脱维亚语</th><th>🇬🇧 英语</th><th>🇪🇸 西班牙语</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div style="text-align:center; color:#6b2f2f; margin-top:10px;">💡 点击播放按钮或双击拉脱维亚语文字即可听到发音</div>
+    <div id="voice-status" style="text-align:center; color:#9E3039; font-size:0.8rem; margin-top:6px;">🎙️ 正在加载语音列表...</div>
+
+    <details class="phonetics" open>
+        <summary>拉脱维亚语语音入门 (Latvian Pronunciation Guide)</summary>
+        <p class="bilingual">🇱🇻 拉脱维亚语字母发音表 / Latvian Alphabet & Pronunciation</p>
+
+        <div class="section-title">🔹 一、元音 (Vowels) / 单元音 (Monophthongs)</div>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>字母 (Letter)</th><th>音标 (IPA)</th><th>例词 1 (Example 1)</th><th>例词 2 (Example 2)</th><th>例词 3 (Example 3)</th></tr></thead>
+                <tbody>
+                    <tr><td><b>a</b></td><td>/a/</td><td>aka (井 jǐng; well)</td><td>lapa (叶 yè; leaf)</td><td>saka (说 shuō; say)</td></tr>
+                    <tr><td><b>ā</b></td><td>/aː/</td><td>māja (房子 fángzi; house)</td><td>tā (那个 nàge; that)</td><td>sāls (盐 yán; salt)</td></tr>
+                    <tr><td><b>e</b></td><td>/e, ɛ/</td><td>es (我 wǒ; I)</td><td>te (这里 zhèlǐ; here)</td><td>bet (但是 dànshì; but)</td></tr>
+                    <tr><td><b>ē</b></td><td>/eː/</td><td>vēl (仍然 réngrán; still)</td><td>bērns (孩子 háizi; child)</td><td>sēdēt (坐 zuò; sit)</td></tr>
+                    <tr><td><b>i</b></td><td>/i/</td><td>ir (是 shì; is)</td><td>mitrs (湿 shī; wet)</td><td>tilts (桥 qiáo; bridge)</td></tr>
+                    <tr><td><b>ī</b></td><td>/iː/</td><td>rīts (早晨 zǎochen; morning)</td><td>līnija (线 xiàn; line)</td><td>tīrs (干净 gānjìng; clean)</td></tr>
+                    <tr><td><b>u</b></td><td>/u/</td><td>tu (你 nǐ; you)</td><td>suns (狗 gǒu; dog)</td><td>uguns (火 huǒ; fire)</td></tr>
+                    <tr><td><b>ū</b></td><td>/uː/</td><td>lūgt (请求 qǐngqiú; ask)</td><td>būt (是 shì; be)</td><td>sūdzēt (抱怨 bàoyuàn; complain)</td></tr>
+                    <tr><td><b>o</b></td><td>/o/</td><td>oma (奶奶 nǎinai; grandma)</td><td>ola (蛋 dàn; egg)</td><td>logs (窗户 chuānghu; window)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-title">🔹 二、基础辅音 (Basic Consonants)</div>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>字母</th><th>音标</th><th>例词 1</th><th>例词 2</th><th>例词 3</th></tr></thead>
+                <tbody>
+                    <tr><td><b>b</b></td><td>/b/</td><td>bija (是 shì; was)</td><td>balts (白 bái; white)</td><td>bērns (孩子 háizi; child)</td></tr>
+                    <tr><td><b>c</b></td><td>/ts/</td><td>cits (其他 qítā; other)</td><td>cilvēks (人 rén; person)</td><td>ceļš (路 lù; road)</td></tr>
+                    <tr><td><b>d</b></td><td>/d/</td><td>daba (自然 zìrán; nature)</td><td>darbs (工作 gōngzuò; work)</td><td>dēls (儿子 érzi; son)</td></tr>
+                    <tr><td><b>f</b></td><td>/f/</td><td>foto (照片 zhàopiàn; photo)</td><td>fakts (事实 shìshí; fact)</td><td>forma (形式 xíngshì; form)</td></tr>
+                    <tr><td><b>g</b></td><td>/g/</td><td>gaiss (空气 kōngqì; air)</td><td>gads (年 nián; year)</td><td>gulēt (睡觉 shuìjiào; sleep)</td></tr>
+                    <tr><td><b>h</b></td><td>/x/</td><td>hokejs (曲棍球 qūgùnqiú; hockey)</td><td>hāls (大厅 dàtīng; hall)</td><td>horizonts (地平线 dìpíngxiàn; horizon)</td></tr>
+                    <tr><td><b>j</b></td><td>/j/</td><td>ja (是 shì; yes)</td><td>jūra (海 hǎi; sea)</td><td>jauns (新 xīn; new)</td></tr>
+                    <tr><td><b>k</b></td><td>/k/</td><td>kas (什么 shénme; what)</td><td>koks (树 shù; tree)</td><td>kāpt (爬 pá; climb)</td></tr>
+                    <tr><td><b>l</b></td><td>/l/</td><td>labs (好 hǎo; good)</td><td>logs (窗户 chuānghu; window)</td><td>lapa (叶 yè; leaf)</td></tr>
+                    <tr><td><b>m</b></td><td>/m/</td><td>man (我 wǒ; me)</td><td>māja (房子 fángzi; house)</td><td>mēness (月亮 yuèliang; moon)</td></tr>
+                    <tr><td><b>n</b></td><td>/n/</td><td>nav (不 bù; not)</td><td>nams (建筑 jiànzhù; building)</td><td>nakts (夜晚 yèwǎn; night)</td></tr>
+                    <tr><td><b>p</b></td><td>/p/</td><td>pats (自己 zìjǐ; self)</td><td>putns (鸟 niǎo; bird)</td><td>piens (牛奶 niúnǎi; milk)</td></tr>
+                    <tr><td><b>r</b></td><td>/r/</td><td>rīts (早晨 zǎochen; morning)</td><td>roka (手 shǒu; hand)</td><td>rats (轮 lún; wheel)</td></tr>
+                    <tr><td><b>s</b></td><td>/s/</td><td>suns (狗 gǒu; dog)</td><td>saule (太阳 tàiyáng; sun)</td><td>sāls (盐 yán; salt)</td></tr>
+                    <tr><td><b>t</b></td><td>/t/</td><td>te (这里 zhèlǐ; here)</td><td>tilts (桥 qiáo; bridge)</td><td>tēvs (父亲 fùqīn; father)</td></tr>
+                    <tr><td><b>v</b></td><td>/v/</td><td>viens (一 yī; one)</td><td>vārds (词 cí; word)</td><td>vējš (风 fēng; wind)</td></tr>
+                    <tr><td><b>z</b></td><td>/z/</td><td>zeme (地球 dìqiú; earth)</td><td>zivs (鱼 yú; fish)</td><td>zieds (花 huā; flower)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-title">🔹 三、特殊辅音 (Special Consonants with diacritics)</div>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>字母</th><th>音标</th><th>例词 1</th><th>例词 2</th><th>例词 3</th></tr></thead>
+                <tbody>
+                    <tr><td><b>š</b></td><td>/ʃ/</td><td>šis (这个 zhège; this)</td><td>šaurs (窄 zhǎi; narrow)</td><td>šodien (今天 jīntiān; today)</td></tr>
+                    <tr><td><b>ž</b></td><td>/ʒ/</td><td>žēl (遗憾 yíhàn; pity)</td><td>žurnāls (杂志 zázhì; journal)</td><td>žogs (篱笆 líbā; fence)</td></tr>
+                    <tr><td><b>č</b></td><td>/tʃ/</td><td>čau (嗨 hāi; hi)</td><td>četrs (四 sì; four)</td><td>čaula (壳 ké; shell)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-title">🔹 四、软音 / 腭化辅音 (Palatalized Consonants)</div>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>字母</th><th>音标</th><th>例词 1</th><th>例词 2</th><th>例词 3</th></tr></thead>
+                <tbody>
+                    <tr><td><b>ņ</b></td><td>/ɲ/</td><td>viņš (他 tā; he)</td><td>ziņa (消息 xiāoxi; news)</td><td>ņemt (拿 ná; take)</td></tr>
+                    <tr><td><b>ļ</b></td><td>/ʎ/</td><td>ceļš (路 lù; road)</td><td>ļauns (邪恶 xié'è; evil)</td><td>ļaunums (恶 è; evilness)</td></tr>
+                    <tr><td><b>ķ</b></td><td>/c/</td><td>ķert (抓 zhuā; catch)</td><td>ķermenis (身体 shēntǐ; body)</td><td>ķirsis (樱桃 yīngtáo; cherry)</td></tr>
+                    <tr><td><b>ģ</b></td><td>/ɟ/</td><td>ģimene (家庭 jiātíng; family)</td><td>ģērbt (穿 chuān; dress)</td><td>ģitāra (吉他 jítā; guitar)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-title">🔹 五、二合元音及复合辅音 (Diphthongs & Compound Consonants)</div>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>组合</th><th>音标</th><th>例词 1</th><th>例词 2</th><th>例词 3</th></tr></thead>
+                <tbody>
+                    <tr><td><b>dz</b></td><td>/dz/</td><td>dzert (喝 hē; drink)</td><td>dzīve (生活 shēnghuó; life)</td><td>dziesma (歌 gē; song)</td></tr>
+                    <tr><td><b>dž</b></td><td>/dʒ/</td><td>džins (牛仔裤 niúzǎikù; jeans)</td><td>džungļi (丛林 cónglín; jungle)</td><td>džezs (爵士 juéshì; jazz)</td></tr>
+                    <tr><td><b>ie</b></td><td>/i̯e/</td><td>viena (一 yī; one)</td><td>piens (牛奶 niúnǎi; milk)</td><td>diena (日子 rìzi; day)</td></tr>
+                    <tr><td><b>ai</b></td><td>/ai/</td><td>laiks (时间 shíjiān; time)</td><td>maize (面包 miànbāo; bread)</td><td>gaisma (光 guāng; light)</td></tr>
+                    <tr><td><b>au</b></td><td>/au/</td><td>saule (太阳 tàiyáng; sun)</td><td>augsts (高 gāo; high)</td><td>lauzt (打破 dǎpò; break)</td></tr>
+                    <tr><td><b>ei</b></td><td>/ei/</td><td>meita (女孩 nǚhái; girl)</td><td>veids (类型 lèixíng; type)</td><td>teikt (说 shuō; say)</td></tr>
+                    <tr><td><b>ui</b></td><td>/ui/</td><td>puika (男孩 nánhái; boy)</td><td>kuģis (船 chuán; ship)</td><td>—</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="note-box">
+            <b>🗣️ 拉脱维亚语语音特色 / Latvian Phonetic Features：</b><br>
+            • <b>拼读一致性</b>：所见即所读，规则如同西班牙语。<br>
+            • <b>长短元音</b>：ā, ī, ū 需明显拉长；e 有时开口很大类似英语 cat 中的 /æ/。<br>
+            • <b>双元音 "o"</b>：本土词中实际读作 /uo̯/，一个平滑的滑音。<br>
+            • <b>腭化辅音</b>：ķ, ģ, ņ, ļ 发音时舌面抬起，像轻快的 /ky/ /gy/。<br>
+            • <b>音高重音</b>：平调、降调、断调区分词义，断调时声带突然收紧。
+        </div>
+
+        <div class="section-title">🔹 六、字母表与英文发音对照 (Alphabet & English Approximation)</div>
+        <div class="table-wrapper small-table">
+            <table>
+                <thead><tr><th>字母</th><th>例词</th><th>英语近似发音</th><th>字母</th><th>例词</th><th>英语近似发音</th></tr></thead>
+                <tbody>
+                    <tr><td><b>A a</b></td><td>gads (年 nián; year)</td><td>but, sun</td><td><b>Ā ā</b></td><td>māte (母亲 mǔqīn; mother)</td><td>father, car</td></tr>
+                    <tr><td><b>B b</b></td><td>bagāts (富有 fùyǒu; rich)</td><td>butter, bad</td><td><b>C c</b></td><td>ceļot (旅行 lǚxíng; travel)</td><td>ts in cats</td></tr>
+                    <tr><td><b>Č č</b></td><td>četri (四 sì; four)</td><td>child, charming</td><td><b>D d</b></td><td>diena (日 rì; day)</td><td>day, definition</td></tr>
+                    <tr><td><b>Dz dz</b></td><td>dzīve (生活 shēnghuó; life)</td><td>adzuki bean, adz</td><td><b>Dž dž</b></td><td>dadži (蓟 jì; thistle)</td><td>John, jump</td></tr>
+                    <tr><td><b>E e</b></td><td>es (我 wǒ; I)</td><td>Ben, pen</td><td><b>E e</b></td><td>esmu (是 shì; am)</td><td>fat, bad</td></tr>
+                    <tr><td><b>Ē ē</b></td><td>ēst (吃 chī; eat)</td><td>chair, baby</td><td><b>Ē ē</b></td><td>tēvs (父亲 fùqīn; father)</td><td>mad, flat</td></tr>
+                    <tr><td><b>F f</b></td><td>filma (电影 diànyǐng; movie)</td><td>film, figure</td><td><b>G g</b></td><td>galds (桌子 zhuōzi; table)</td><td>give, gold</td></tr>
+                    <tr><td><b>Ģ ģ</b></td><td>ģimene (家庭 jiātíng; family)</td><td>dew</td><td><b>H h</b></td><td>humors (幽默 yōumò; humor)</td><td>hymn, half</td></tr>
+                    <tr><td><b>I i</b></td><td>ilgi (长 cháng; long)</td><td>big, tip</td><td><b>Ī ī</b></td><td>īss (短 duǎn; short)</td><td>feet, three</td></tr>
+                    <tr><td><b>J j</b></td><td>jūs (你们 nǐmen; you)</td><td>yes, you</td><td><b>K k</b></td><td>kafija (咖啡 kāfēi; coffee)</td><td>king (不送气)</td></tr>
+                    <tr><td><b>Ķ ķ</b></td><td>kaķis (猫 māo; cat)</td><td>tune</td><td><b>L l</b></td><td>lampa (灯 dēng; lamp)</td><td>lamp, look</td></tr>
+                    <tr><td><b>Ļ ļ</b></td><td>ļoti (非常 fēicháng; very)</td><td>million</td><td><b>M m</b></td><td>māja (房子 fángzi; house)</td><td>men, meat</td></tr>
+                    <tr><td><b>N n</b></td><td>nakts (夜 yè; night)</td><td>no, night</td><td><b>Ņ ņ</b></td><td>ola (蛋 dàn; egg)</td><td>wallet</td></tr>
+                    <tr><td><b>O o</b></td><td>foto (照片 zhàopiàn; photo)</td><td>fog, rob</td><td><b>O o</b></td><td>opera (歌剧 gējù; opera)</td><td>politics, oil</td></tr>
+                    <tr><td><b>P p</b></td><td>puika (男孩 nánhái; lad)</td><td>pet, pencil (不送气)</td><td><b>R r</b></td><td>Rīga (里加 Lǐjiā; Riga)</td><td>brogue (不送气)</td></tr>
+                    <tr><td><b>S s</b></td><td>sieva (妻子 qīzi; wife)</td><td>silk, save</td><td><b>Š š</b></td><td>šis (这个 zhège; this)</td><td>ship, she</td></tr>
+                    <tr><td><b>T t</b></td><td>tagad (现在 xiànzài; now)</td><td>ten, tall (不送气)</td><td><b>U u</b></td><td>upene (黑加仑 hēijiālún; currant)</td><td>look, put</td></tr>
+                    <tr><td><b>Ū ū</b></td><td>ūdens (水 shuǐ; water)</td><td>food, fool</td><td><b>V v</b></td><td>vecs (老 lǎo; old)</td><td>vote, vicar</td></tr>
+                    <tr><td><b>Z z</b></td><td>zāles (药物 yàowù; medicine)</td><td>zipper, zone</td><td><b>Ž ž</b></td><td>žurnāls (杂志 zázhì; journal)</td><td>measure, pleasure</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </details>
+
+    <div class="footer-links">
+        <strong>📚 参考资料与扩展阅读：</strong>
+        <ul>
+            <li><a href="https://mp.weixin.qq.com/s/BSZ00tnLO-f-YQbBA9wtlQ" target="_blank" rel="noopener">“拉”是哪个国家？ | [万国语言之门] (微信公众号文章)</a></li>
+            <li><a href="https://zh.wikipedia.org/wiki/%E6%8B%89%E8%84%AB%E7%B6%AD%E4%BA%9E" target="_blank" rel="noopener">拉脱维亚 - 维基百科</a></li>
+            <li><a href="http://valoda.ailab.lv/latval/vispareji/alph1.htm" target="_blank" rel="noopener">The Latvian Alphabet (AI Lab)</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const phrases = [
+            { cn: "你好！(Nǐ hǎo!)", lv: "Sveiki!", en: "Hello!", es: "¡Hola!" },
+            { cn: "早安！(Zǎo ān)", lv: "Labrīt!", en: "Good morning!", es: "¡Buenos días!" },
+            { cn: "再见！(Zàijiàn)", lv: "Uz redzēšanos!", en: "Goodbye!", es: "¡Adiós!" },
+            { cn: "谢谢！(Xièxie)", lv: "Paldies!", en: "Thank you!", es: "¡Gracias!" },
+            { cn: "不客气。(Bù kèqì)", lv: "Nav par ko.", en: "You are welcome.", es: "De nada." },
+            { cn: "对不起。(Duìbuqǐ)", lv: "Atvainojiet.", en: "Sorry / Excuse me.", es: "Perdón." },
+            { cn: "是。(Shì)", lv: "Jā.", en: "Yes.", es: "Sí." },
+            { cn: "不是。(Bù shì)", lv: "Nē.", en: "No.", es: "No." },
+            { cn: "请。(Qǐng)", lv: "Lūdzu.", en: "Please.", es: "Por favor." },
+            { cn: "救命！(Jiù mìng)", lv: "Palīgā!", en: "Help!", es: "¡Socorro!" },
+            { cn: "我爱你。(Wǒ ài nǐ)", lv: "Es tevi mīlu.", en: "I love you.", es: "Te amo." },
+            { cn: "这是什么？(Zhè shì shénme)", lv: "Kas tas ir?", en: "What is this?", es: "¿Qué es esto?" },
+            { cn: "这个多少钱？(Zhège duōshǎo qián)", lv: "Cik tas maksā?", en: "How much does this cost?", es: "¿Cuánto cuesta?" },
+            { cn: "这个怎么说？(Zhège zěnme shuō)", lv: "Kā to saka?", en: "How do you say this?", es: "¿Cómo se dice esto?" },
+            { cn: "请给我那个。(Qǐng gěi wǒ nàge)", lv: "Lūdzu, iedodiet man to.", en: "Please give me that.", es: "Por favor, deme eso." },
+            { cn: "我可以问你一个问题吗？(Wǒ kěyǐ wèn nǐ yī gè wèntí ma)", lv: "Vai es varu jums uzdot jautājumu?", en: "May I ask you a question?", es: "¿Puedo hacerte una pregunta?" },
+            { cn: "请问怎么去超市？(Qǐngwèn zěnme qù chāoshì)", lv: "Atvainojiet, kā var aiziet uz lielveikalu?", en: "Excuse me, how can I get to the supermarket?", es: "Disculpe, ¿cómo puedo ir al supermercado?" },
+            { cn: "我不懂。(Wǒ bù dǒng)", lv: "Es nesaprotu.", en: "I don't understand.", es: "No entiendo." },
+            { cn: "厕所在哪里？(Cèsuǒ zài nǎlǐ)", lv: "Kur ir tualete?", en: "Where is the toilet?", es: "¿Dónde está el baño?" },
+            { cn: "你会说英语吗？(Nǐ huì shuō Yīngyǔ ma)", lv: "Vai jūs runājat angliski?", en: "Do you speak English?", es: "¿Habla inglés?" },
+            { cn: "你会说中文吗？(Nǐ huì shuō Zhōngwén ma)", lv: "Vai jūs runājat ķīniešu valodā?", en: "Do you speak Chinese?", es: "¿Habla chino?" },
+            { cn: "你会说拉脱维亚语吗？(Nǐ huì shuō Lātuōwéiyàyǔ ma)", lv: "Vai jūs runājat latviski?", en: "Do you speak Latvian?", es: "¿Habla letón?" }
+        ];
+
+        const tbody = document.querySelector('#phrase-table tbody');
+        const voiceSelect = document.getElementById('voice-select');
+        const rateSlider = document.getElementById('rate-slider');
+        const rateValue = document.getElementById('rate-value');
+        const voiceStatus = document.getElementById('voice-status');
+        const userTextarea = document.getElementById('user-lv-text');
+        const speakUserBtn = document.getElementById('speak-user-btn');
+        const stopUserBtn = document.getElementById('stop-user-btn');
+
+        let synth = window.speechSynthesis;
+        let selectedVoice = null;
+        let currentRate = 0.85;
+        let allVoices = [];
+
+        function speakText(text, lang = 'lv-LV') {
+            if (!synth || !text.trim()) return;
+            if (synth.speaking) synth.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text.trim());
+                u.lang = lang;
+                u.rate = currentRate;
+                if (selectedVoice && selectedVoice.lang.startsWith('lv')) u.voice = selectedVoice;
+                synth.speak(u);
+            }, 25);
+        }
+
+        function renderPhraseTable() {
+            tbody.innerHTML = '';
+            phrases.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.cn}</td>
+                    <td><div class="pt-cell" data-lv="${item.lv.replace(/"/g, '&quot;')}">
+                        <button class="play-icon" data-lv="${item.lv.replace(/"/g, '&quot;')}">▶</button> ${item.lv}
+                    </div></td>
+                    <td>${item.en}</td><td>${item.es}</td>`;
+                tbody.appendChild(tr);
+            });
+            document.querySelectorAll('.play-icon').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    speakText(btn.getAttribute('data-lv'));
+                });
+            });
+            document.querySelectorAll('.pt-cell').forEach(cell => {
+                cell.addEventListener('dblclick', function(e) {
+                    if (e.target.classList.contains('play-icon')) return;
+                    speakText(this.getAttribute('data-lv'));
+                });
+            });
+        }
+
+        function populateVoiceList() {
+            const voices = synth.getVoices();
+            allVoices = voices;
+            const lvVoices = voices.filter(v => v.lang && v.lang.startsWith('lv'));
+            voiceSelect.innerHTML = '';
+            if (lvVoices.length === 0) {
+                voiceSelect.innerHTML = '<option value="">未找到拉脱维亚语语音</option>';
+                voiceStatus.textContent = '⚠️ 没有拉脱维亚语语音，将使用默认发音。';
+                selectedVoice = null;
+            } else {
+                lvVoices.forEach((v, i) => {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = `${v.name} (${v.lang})`;
+                    voiceSelect.appendChild(opt);
+                });
+                selectedVoice = lvVoices[0];
+                voiceSelect.selectedIndex = 0;
+                voiceStatus.textContent = `🎙️ 当前语音：${selectedVoice.name}`;
+            }
+        }
+
+        voiceSelect.addEventListener('change', () => {
+            const lvVoices = allVoices.filter(v => v.lang && v.lang.startsWith('lv'));
+            const idx = parseInt(voiceSelect.value, 10);
+            if (!isNaN(idx) && lvVoices[idx]) selectedVoice = lvVoices[idx];
+        });
+
+        rateSlider.addEventListener('input', () => {
+            currentRate = parseFloat(rateSlider.value);
+            rateValue.textContent = currentRate.toFixed(2);
+        });
+
+        speakUserBtn.addEventListener('click', () => speakText(userTextarea.value));
+        stopUserBtn.addEventListener('click', () => { if (synth.speaking) synth.cancel(); });
+
+        function addWordPlayButtons() {
+            const details = document.querySelector('details.phonetics');
+            if (!details) return;
+            const tables = details.querySelectorAll('table');
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    if (row.querySelector('th')) return;
+                    const cells = row.querySelectorAll('td');
+                    cells.forEach(cell => {
+                        if (cell.querySelector('.play-btn-word')) return;
+                        const fullText = cell.textContent.trim();
+                        if (!fullText.match(/[\(\（]/)) return;
+                        const word = fullText.split(/\s+/)[0];
+                        if (!word) return;
+                        const btn = document.createElement('button');
+                        btn.className = 'play-btn-word';
+                        btn.setAttribute('data-word', word);
+                        btn.textContent = '▶';
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            speakText(e.target.getAttribute('data-word'));
+                        });
+                        cell.insertBefore(btn, cell.firstChild);
+                    });
+                });
+            });
+        }
+
+        renderPhraseTable();
+        if (synth.getVoices().length) populateVoiceList();
+        else synth.addEventListener('voiceschanged', populateVoiceList, { once: true });
+
+        window.addEventListener('load', addWordPlayButtons);
+        if (document.readyState === 'complete') addWordPlayButtons();
+        else document.addEventListener('DOMContentLoaded', addWordPlayButtons);
+    })();
+</script>
+</body>
+</html>
