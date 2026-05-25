@@ -1,0 +1,1550 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chinese Reading easily, with Pinyin & vice versa  中文标拼音阅读、中文-外语直接互学 </title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f7f4;
+      --text: #222;
+      --muted: #4EA8DE;
+      --line: #d9d9d2;
+      --panel: #fff;
+      --accent: #2b6cb0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #17191c;
+        --text: #eceff3;
+        --muted: #a6adb7;
+        --line: #30343a;
+        --panel: #202329;
+        --accent: #7db2ff;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    main {
+      width: min(920px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: var(--panel);
+      color: var(--text);
+      font: 18px/1.7 "Songti SC", "Noto Serif CJK SC", "Microsoft YaHei", serif;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent), transparent 78%);
+    }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 14px 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .language {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .language label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .language select {
+      width: min(260px, 100%);
+    }
+
+    .tts {
+      display: grid;
+      grid-template-columns: 1fr 180px auto auto auto;
+      gap: 10px;
+      align-items: center;
+      margin: 0 0 18px;
+    }
+
+    .rate {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    select,
+    input[type="range"] {
+      min-width: 0;
+    }
+
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: var(--panel);
+      color: var(--text);
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 12px;
+      background: var(--panel);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    #output {
+      min-height: 180px;
+      border-top: 1px solid var(--line);
+      padding-top: 22px;
+      font: 24px/1.7 "Songti SC", "Noto Serif CJK SC", "Microsoft YaHei", serif;
+      overflow-wrap: anywhere;
+    }
+
+    .sentence {
+      display: block;
+      border-radius: 8px;
+      padding: 12px 10px;
+      margin: 0 0 14px;
+      transition: background 120ms ease, box-shadow 120ms ease;
+    }
+
+    .sentence.speaking {
+      background: color-mix(in srgb, var(--accent), transparent 82%);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent), transparent 88%);
+    }
+
+    .aligned {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.08em 0.32em;
+      align-items: end;
+    }
+
+    .word {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      justify-items: center;
+      align-items: end;
+      min-width: 1em;
+      margin-block: 0.08em;
+    }
+
+    .word.space {
+      min-width: 0.6em;
+    }
+
+    .py,
+    .literal {
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      line-height: 1.2;
+      user-select: text;
+      text-align: center;
+    }
+
+    .py {
+      font-size: 0.58em;
+    }
+
+    .zh {
+      line-height: 1.45;
+    }
+
+    .literal {
+      font-size: 0.5em;
+      max-width: 8em;
+    }
+
+    .natural {
+      margin-top: 6px;
+      color: #d26a1e;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      font-size: 0.72em;
+      font-style: italic;
+      line-height: 1.45;
+    }
+
+    .subject .py,
+    .subject .zh,
+    .subject .literal {
+      color: #d12b2b;
+    }
+
+    .predicate .py,
+    .predicate .zh,
+    .predicate .literal {
+      font-weight: 800;
+    }
+
+    .plain {
+      margin-inline: 0.02em;
+    }
+
+    .empty {
+      color: var(--muted);
+    }
+
+    @media (max-width: 760px) {
+      .tts {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .tts select,
+      .rate {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="language">
+      <label>
+        <span id="targetLanguageLabel">目标语言 / Target language</span>
+        <select id="targetLang" aria-label="目标语言 / Target language">
+        <option value="zh" selected>中文</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português (Portugal)</option>
+        <option value="it">Italiano</option>
+        <option value="nl">Nederlands</option>
+        <option value="ru">Русский</option>
+        <option value="ar">العربية</option>
+        <option value="hi">हिन्दी</option>
+        <option value="lv">Latviešu</option>
+        <option value="he">עברית</option>
+        </select>
+      </label>
+      <label>
+        <span id="learningLanguageLabel">学习语言 / Learning language</span>
+        <select id="learningLang" aria-label="学习语言 / Learning language">
+        <option value="zh">中文</option>
+        <option value="en" selected>English</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português (Portugal)</option>
+        <option value="it">Italiano</option>
+        <option value="nl">Nederlands</option>
+        <option value="ru">Русский</option>
+        <option value="ar">العربية</option>
+        <option value="hi">हिन्दी</option>
+        <option value="lv">Latviešu</option>
+        <option value="he">עברית</option>
+        </select>
+      </label>
+    </div>
+    <h1 id="title"></h1>
+    <textarea id="input" spellcheck="false"></textarea>
+    <div class="bar">
+      <span id="status">正在加载拼音库...</span>
+      <button id="clear" type="button"></button>
+    </div>
+    <div class="tts">
+      <select id="voice" aria-label="选择语音"></select>
+      <label class="rate">
+        <span id="rateLabel">速度 / Speed</span>
+        <input id="rate" type="range" min="0.5" max="2" step="0.05" value="1">
+        <span id="rateValue">1.00x</span>
+      </label>
+      <button id="play" type="button"></button>
+      <button id="playFromSelection" type="button"></button>
+      <button id="stop" type="button"></button>
+    </div>
+    <div id="output" aria-live="polite"></div>
+  </main>
+
+  <script type="module">
+    const targetLang = document.querySelector("#targetLang");
+    const learningLang = document.querySelector("#learningLang");
+    const targetLanguageLabel = document.querySelector("#targetLanguageLabel");
+    const learningLanguageLabel = document.querySelector("#learningLanguageLabel");
+    const title = document.querySelector("#title");
+    const input = document.querySelector("#input");
+    const output = document.querySelector("#output");
+    const status = document.querySelector("#status");
+    const clear = document.querySelector("#clear");
+    const voiceSelect = document.querySelector("#voice");
+    const rate = document.querySelector("#rate");
+    const rateLabel = document.querySelector("#rateLabel");
+    const rateValue = document.querySelector("#rateValue");
+    const play = document.querySelector("#play");
+    const playFromSelection = document.querySelector("#playFromSelection");
+    const stop = document.querySelector("#stop");
+    const hanzi = /\p{Script=Han}/u;
+    const hanziChunk = /\p{Script=Han}+/gu;
+    const japaneseKana = /[\p{Script=Hiragana}\p{Script=Katakana}]/u;
+    const latin = /[A-Za-z]/;
+    const meaningfulText = /[\p{Letter}\p{Number}]/u;
+    const sentenceEnd = /[。！？!?；;.\n؟।]/;
+    const commonPredicates = new Set([
+      "是", "有", "在", "像", "叫", "姓", "去", "来", "做", "吃", "喝", "看", "听",
+      "说", "想", "学", "学习", "喜欢", "需要", "应该", "可以", "能", "会", "要",
+      "忙", "好", "高兴", "漂亮", "重要", "简单", "难", "热", "冷", "快", "慢"
+    ]);
+    const modalVerbs = new Set(["想", "要", "会", "能", "可以", "应该", "需要", "得"]);
+    const degreeWords = new Set(["很", "太", "真", "非常", "特别", "比较", "更", "最"]);
+    const functionWords = new Set(["的", "地", "得", "了", "着", "过", "很", "太", "也", "都"]);
+    const contextualGlosses = new Map([
+      ["我", "I"], ["你", "you"], ["他", "he"], ["她", "she"], ["它", "it"],
+      ["我们", "we"], ["你们", "you"], ["他们", "they"], ["她们", "they"],
+      ["这", "this"], ["那", "that"], ["这里", "here"], ["那里", "there"],
+      ["今天", "today"], ["明天", "tomorrow"], ["昨天", "yesterday"],
+      ["现在", "now"], ["中文", "Chinese"], ["汉语", "Chinese"],
+      ["英语", "English"], ["吗", "?"], ["呢", "?"], ["了", "[completed]"],
+      ["的", "'s"], ["地", "-ly"], ["得", "so that"], ["在", "at/in"],
+      ["是", "is"], ["有", "has"], ["很", "very"], ["想", "want to"],
+      ["会", "can/will"], ["能", "can"], ["可以", "can"], ["要", "want to"],
+      ["学习", "study"], ["想学习", "want to study"], ["会说", "can speak"],
+      ["想去", "want to go"], ["很忙", "is busy"], ["很好", "is good"],
+      ["很重要", "is important"], ["很漂亮", "is beautiful"],
+      ["学", "learn"], ["喜欢", "like"], ["忙", "busy"]
+    ]);
+    const languages = {
+      zh: {
+        name: "中文",
+        google: "zh-CN",
+        memory: "zh-CN",
+        tts: "zh",
+        dir: "ltr",
+        title: "中文互学工具",
+        chars: "字",
+        prompt: "请输入任意支持语言的文本。我会先得到中文，再生成目标语言的解释、翻译和朗读。",
+        targetLanguage: "目标语言",
+        learningLanguage: "学习语言",
+        invalidPair: "目标语言和学习语言必须有且只有一个是中文。请重新选择。",
+        loading: "正在加载拼音库...",
+        empty: "输入文本后，这里会显示中文、拼音、解释和翻译。",
+        clear: "清空",
+        rate: "速度",
+        play: "播放",
+        playFromSelection: "从选择处播放",
+        stop: "停止",
+        translating: "翻译中...",
+        unavailable: "无法翻译",
+        ttsUnsupported: "当前浏览器不支持朗读。",
+        voicesLoading: "正在加载系统语音...",
+        ttsMissing: "当前浏览器不支持朗读。",
+        readSentence: (index, total) => `朗读第 ${index} 句 / ${total}`,
+        pinyinFailed: "拼音库加载失败，请联网后刷新页面。",
+        stopped: "朗读已停止"
+      },
+      en: {
+        name: "English",
+        google: "en",
+        memory: "en",
+        tts: "en",
+        dir: "ltr",
+        title: "Chinese Pinyin and Reading Tool",
+        chars: "chars",
+        prompt: "Enter Chinese or any supported language here. I will first get Chinese, then show pinyin, word explanations, sentence translation, and read the target language aloud.",
+        language: "Interface language",
+        loading: "Loading pinyin library...",
+        empty: "Enter text, and Chinese, pinyin, explanations, and translation will appear here.",
+        clear: "Clear",
+        rate: "Speed",
+        play: "Play",
+        playFromSelection: "Play from selection",
+        stop: "Stop",
+        translating: "Translating...",
+        unavailable: "Translation unavailable",
+        ttsUnsupported: "This browser does not support speech.",
+        voicesLoading: "Loading system voices...",
+        ttsMissing: "Speech is not supported in this browser.",
+        readSentence: (index, total) => `Reading sentence ${index} / ${total}`,
+        pinyinFailed: "Failed to load the pinyin library. Please refresh after connecting to the internet.",
+        stopped: "Speech stopped"
+      },
+      ja: {
+        name: "日本語",
+        google: "ja",
+        memory: "ja",
+        tts: "ja",
+        dir: "ltr",
+        title: "中国語ピンイン・音読ツール",
+        chars: "文字",
+        prompt: "ここに中国語、または対応している言語を入力してください。まず中国語にしてから、ピンイン、語句説明、文の翻訳、目標言語の音読を表示します。",
+        language: "表示言語",
+        loading: "ピンインライブラリを読み込み中...",
+        empty: "テキストを入力すると、中国語、ピンイン、説明、翻訳がここに表示されます。",
+        clear: "クリア",
+        rate: "速度",
+        play: "再生",
+        playFromSelection: "選択位置から再生",
+        stop: "停止",
+        translating: "翻訳中...",
+        unavailable: "翻訳できません",
+        ttsUnsupported: "このブラウザは音声読み上げに対応していません。",
+        voicesLoading: "システム音声を読み込み中...",
+        ttsMissing: "このブラウザは音声読み上げに対応していません。",
+        readSentence: (index, total) => `${index} / ${total} 文目を読み上げ中`,
+        pinyinFailed: "ピンインライブラリの読み込みに失敗しました。インターネット接続後に更新してください。",
+        stopped: "読み上げを停止しました"
+      },
+      ko: {
+        name: "한국어",
+        google: "ko",
+        memory: "ko",
+        tts: "ko",
+        dir: "ltr",
+        title: "중국어 병음 및 낭독 도구",
+        chars: "글자",
+        prompt: "여기에 중국어 또는 지원되는 언어를 입력하세요. 먼저 중국어로 만든 뒤 병음, 단어 설명, 문장 번역, 목표 언어 낭독을 제공합니다.",
+        language: "인터페이스 언어",
+        loading: "병음 라이브러리를 불러오는 중...",
+        empty: "텍스트를 입력하면 중국어, 병음, 설명, 번역이 여기에 표시됩니다.",
+        clear: "지우기",
+        rate: "속도",
+        play: "재생",
+        playFromSelection: "선택한 곳부터 재생",
+        stop: "정지",
+        translating: "번역 중...",
+        unavailable: "번역할 수 없습니다",
+        ttsUnsupported: "이 브라우저는 음성 읽기를 지원하지 않습니다.",
+        voicesLoading: "시스템 음성을 불러오는 중...",
+        ttsMissing: "이 브라우저는 음성 읽기를 지원하지 않습니다.",
+        readSentence: (index, total) => `${index} / ${total}번째 문장 읽는 중`,
+        pinyinFailed: "병음 라이브러리를 불러오지 못했습니다. 인터넷 연결 후 새로고침하세요.",
+        stopped: "읽기가 중지되었습니다"
+      },
+      es: {
+        name: "Español",
+        google: "es",
+        memory: "es",
+        tts: "es",
+        dir: "ltr",
+        title: "Herramienta de pinyin y lectura de chino",
+        chars: "caracteres",
+        prompt: "Escribe chino o cualquier idioma compatible aquí. Primero obtendré el chino, luego mostraré pinyin, explicaciones, traducción y lectura en la lengua meta.",
+        language: "Idioma de la interfaz",
+        loading: "Cargando la biblioteca de pinyin...",
+        empty: "Escribe texto y aquí aparecerán el chino, el pinyin, las explicaciones y la traducción.",
+        clear: "Borrar",
+        rate: "Velocidad",
+        play: "Reproducir",
+        playFromSelection: "Reproducir desde la selección",
+        stop: "Detener",
+        translating: "Traduciendo...",
+        unavailable: "Traducción no disponible",
+        ttsUnsupported: "Este navegador no admite lectura en voz alta.",
+        voicesLoading: "Cargando voces del sistema...",
+        ttsMissing: "Este navegador no admite lectura en voz alta.",
+        readSentence: (index, total) => `Leyendo oración ${index} / ${total}`,
+        pinyinFailed: "No se pudo cargar la biblioteca de pinyin. Conéctate a internet y actualiza.",
+        stopped: "Lectura detenida"
+      },
+      fr: {
+        name: "Français",
+        google: "fr",
+        memory: "fr",
+        tts: "fr",
+        dir: "ltr",
+        title: "Outil de pinyin et de lecture du chinois",
+        chars: "caractères",
+        prompt: "Saisissez du chinois ou toute langue prise en charge. Je passerai d'abord par le chinois, puis j'afficherai le pinyin, les explications, la traduction et la lecture dans la langue cible.",
+        language: "Langue de l'interface",
+        loading: "Chargement de la bibliothèque pinyin...",
+        empty: "Saisissez du texte : le chinois, le pinyin, les explications et la traduction apparaîtront ici.",
+        clear: "Effacer",
+        rate: "Vitesse",
+        play: "Lire",
+        playFromSelection: "Lire depuis la sélection",
+        stop: "Arrêter",
+        translating: "Traduction...",
+        unavailable: "Traduction indisponible",
+        ttsUnsupported: "Ce navigateur ne prend pas en charge la lecture vocale.",
+        voicesLoading: "Chargement des voix système...",
+        ttsMissing: "Ce navigateur ne prend pas en charge la lecture vocale.",
+        readSentence: (index, total) => `Lecture de la phrase ${index} / ${total}`,
+        pinyinFailed: "Impossible de charger la bibliothèque pinyin. Connectez-vous à internet puis actualisez.",
+        stopped: "Lecture arrêtée"
+      },
+      de: {
+        name: "Deutsch",
+        google: "de",
+        memory: "de",
+        tts: "de",
+        dir: "ltr",
+        title: "Chinesisch-Pinyin- und Vorlesewerkzeug",
+        chars: "Zeichen",
+        prompt: "Gib hier Chinesisch oder eine unterstützte Sprache ein. Ich erzeuge zuerst Chinesisch und zeige dann Pinyin, Worterklärungen, Übersetzung und Sprachausgabe der Zielsprache.",
+        language: "Oberflächensprache",
+        loading: "Pinyin-Bibliothek wird geladen...",
+        empty: "Gib Text ein. Chinesisch, Pinyin, Erklärungen und Übersetzung erscheinen hier.",
+        clear: "Leeren",
+        rate: "Tempo",
+        play: "Abspielen",
+        playFromSelection: "Ab Auswahl abspielen",
+        stop: "Stoppen",
+        translating: "Übersetzen...",
+        unavailable: "Übersetzung nicht verfügbar",
+        ttsUnsupported: "Dieser Browser unterstützt keine Sprachausgabe.",
+        voicesLoading: "Systemstimmen werden geladen...",
+        ttsMissing: "Dieser Browser unterstützt keine Sprachausgabe.",
+        readSentence: (index, total) => `Satz ${index} / ${total} wird vorgelesen`,
+        pinyinFailed: "Die Pinyin-Bibliothek konnte nicht geladen werden. Bitte nach Internetverbindung neu laden.",
+        stopped: "Sprachausgabe gestoppt"
+      },
+      pt: {
+        name: "Português (Portugal)",
+        google: "pt",
+        memory: "pt",
+        tts: "pt-PT",
+        dir: "ltr",
+        title: "Ferramenta de pinyin e leitura do chinês",
+        chars: "caracteres",
+        prompt: "Escreva aqui chinês ou qualquer língua suportada. Primeiro obtenho o chinês; depois mostro pinyin, explicações, tradução e leitura na língua-alvo.",
+        language: "Idioma da interface",
+        loading: "A carregar a biblioteca de pinyin...",
+        empty: "Escreva texto e aparecerão aqui o chinês, o pinyin, as explicações e a tradução.",
+        clear: "Limpar",
+        rate: "Velocidade",
+        play: "Reproduzir",
+        playFromSelection: "Reproduzir a partir da seleção",
+        stop: "Parar",
+        translating: "A traduzir...",
+        unavailable: "Tradução indisponível",
+        ttsUnsupported: "Este navegador não suporta leitura em voz alta.",
+        voicesLoading: "A carregar vozes do sistema...",
+        ttsMissing: "Este navegador não suporta leitura em voz alta.",
+        readSentence: (index, total) => `A ler a frase ${index} / ${total}`,
+        pinyinFailed: "Não foi possível carregar a biblioteca de pinyin. Atualize depois de ligar à internet.",
+        stopped: "Leitura parada"
+      },
+      it: {
+        name: "Italiano",
+        google: "it",
+        memory: "it",
+        tts: "it",
+        dir: "ltr",
+        title: "Strumento di pinyin e lettura del cinese",
+        chars: "caratteri",
+        prompt: "Scrivi qui cinese o qualsiasi lingua supportata. Prima otterrò il cinese, poi mostrerò pinyin, spiegazioni, traduzione e lettura nella lingua target.",
+        language: "Lingua dell'interfaccia",
+        loading: "Caricamento della libreria pinyin...",
+        empty: "Scrivi del testo e qui appariranno cinese, pinyin, spiegazioni e traduzione.",
+        clear: "Cancella",
+        rate: "Velocità",
+        play: "Riproduci",
+        playFromSelection: "Riproduci dalla selezione",
+        stop: "Ferma",
+        translating: "Traduzione...",
+        unavailable: "Traduzione non disponibile",
+        ttsUnsupported: "Questo browser non supporta la lettura ad alta voce.",
+        voicesLoading: "Caricamento delle voci di sistema...",
+        ttsMissing: "Questo browser non supporta la lettura ad alta voce.",
+        readSentence: (index, total) => `Lettura della frase ${index} / ${total}`,
+        pinyinFailed: "Impossibile caricare la libreria pinyin. Aggiorna dopo aver connesso a Internet.",
+        stopped: "Lettura interrotta"
+      },
+      nl: {
+        name: "Nederlands",
+        google: "nl",
+        memory: "nl",
+        tts: "nl",
+        dir: "ltr",
+        title: "Pinyin- en voorleeshulpmiddel voor Chinees",
+        chars: "tekens",
+        prompt: "Typ hier Chinees of een ondersteunde taal. Ik maak er eerst Chinees van en toon daarna pinyin, woorduitleg, vertaling en voorlezen in de doeltaal.",
+        language: "Interfacetaal",
+        loading: "Pinyin-bibliotheek wordt geladen...",
+        empty: "Typ tekst en Chinees, pinyin, uitleg en vertaling verschijnen hier.",
+        clear: "Wissen",
+        rate: "Snelheid",
+        play: "Afspelen",
+        playFromSelection: "Afspelen vanaf selectie",
+        stop: "Stoppen",
+        translating: "Vertalen...",
+        unavailable: "Vertaling niet beschikbaar",
+        ttsUnsupported: "Deze browser ondersteunt geen voorlezen.",
+        voicesLoading: "Systeemstemmen worden geladen...",
+        ttsMissing: "Deze browser ondersteunt geen voorlezen.",
+        readSentence: (index, total) => `Zin ${index} / ${total} wordt voorgelezen`,
+        pinyinFailed: "De pinyinbibliotheek kon niet worden geladen. Vernieuw na verbinding met internet.",
+        stopped: "Voorlezen gestopt"
+      },
+      ru: {
+        name: "Русский",
+        google: "ru",
+        memory: "ru",
+        tts: "ru",
+        dir: "ltr",
+        title: "Инструмент пиньиня и чтения китайского",
+        chars: "символов",
+        prompt: "Введите здесь китайский или любой поддерживаемый язык. Сначала я получу китайский текст, затем покажу пиньинь, объяснения, перевод и озвучивание на целевом языке.",
+        language: "Язык интерфейса",
+        loading: "Загрузка библиотеки пиньиня...",
+        empty: "Введите текст, и здесь появятся китайский, пиньинь, объяснения и перевод.",
+        clear: "Очистить",
+        rate: "Скорость",
+        play: "Воспроизвести",
+        playFromSelection: "Воспроизвести с выделения",
+        stop: "Стоп",
+        translating: "Перевод...",
+        unavailable: "Перевод недоступен",
+        ttsUnsupported: "Этот браузер не поддерживает озвучивание.",
+        voicesLoading: "Загрузка системных голосов...",
+        ttsMissing: "Этот браузер не поддерживает озвучивание.",
+        readSentence: (index, total) => `Чтение предложения ${index} / ${total}`,
+        pinyinFailed: "Не удалось загрузить библиотеку пиньиня. Обновите страницу после подключения к интернету.",
+        stopped: "Озвучивание остановлено"
+      },
+      ar: {
+        name: "العربية",
+        google: "ar",
+        memory: "ar",
+        tts: "ar",
+        dir: "rtl",
+        title: "أداة بينيين وقراءة الصينية",
+        chars: "حرفًا",
+        prompt: "اكتب الصينية أو أي لغة مدعومة هنا. سأحصل أولًا على الصينية، ثم أعرض البينيين، الشرح، الترجمة، والقراءة باللغة الهدف.",
+        language: "لغة الواجهة",
+        loading: "جارٍ تحميل مكتبة البينيين...",
+        empty: "اكتب نصًا وستظهر هنا الصينية والبينيين والشرح والترجمة.",
+        clear: "مسح",
+        rate: "السرعة",
+        play: "تشغيل",
+        playFromSelection: "تشغيل من التحديد",
+        stop: "إيقاف",
+        translating: "جارٍ الترجمة...",
+        unavailable: "الترجمة غير متاحة",
+        ttsUnsupported: "هذا المتصفح لا يدعم القراءة الصوتية.",
+        voicesLoading: "جارٍ تحميل أصوات النظام...",
+        ttsMissing: "هذا المتصفح لا يدعم القراءة الصوتية.",
+        readSentence: (index, total) => `جاري قراءة الجملة ${index} / ${total}`,
+        pinyinFailed: "تعذر تحميل مكتبة البينيين. حدّث الصفحة بعد الاتصال بالإنترنت.",
+        stopped: "تم إيقاف القراءة"
+      },
+      hi: {
+        name: "हिन्दी",
+        google: "hi",
+        memory: "hi",
+        tts: "hi",
+        dir: "ltr",
+        title: "चीनी पिनयिन और पठन उपकरण",
+        chars: "अक्षर",
+        prompt: "यहाँ चीनी या कोई भी समर्थित भाषा लिखें। मैं पहले चीनी प्राप्त करूँगा, फिर पिनयिन, शब्दार्थ, अनुवाद और लक्ष्य भाषा में वाचन दिखाऊँगा।",
+        language: "इंटरफ़ेस भाषा",
+        loading: "पिनयिन लाइब्रेरी लोड हो रही है...",
+        empty: "पाठ लिखें, और यहाँ चीनी, पिनयिन, अर्थ और अनुवाद दिखाई देंगे।",
+        clear: "साफ़ करें",
+        rate: "गति",
+        play: "चलाएँ",
+        playFromSelection: "चयन से चलाएँ",
+        stop: "रोकें",
+        translating: "अनुवाद हो रहा है...",
+        unavailable: "अनुवाद उपलब्ध नहीं है",
+        ttsUnsupported: "यह ब्राउज़र आवाज़ में पढ़ने का समर्थन नहीं करता।",
+        voicesLoading: "सिस्टम वॉइसेज़ लोड हो रही हैं...",
+        ttsMissing: "यह ब्राउज़र आवाज़ में पढ़ने का समर्थन नहीं करता।",
+        readSentence: (index, total) => `वाक्य ${index} / ${total} पढ़ा जा रहा है`,
+        pinyinFailed: "पिनयिन लाइब्रेरी लोड नहीं हो सकी। इंटरनेट से जुड़ने के बाद रिफ्रेश करें।",
+        stopped: "पढ़ना रोक दिया गया"
+      },
+      lv: {
+        name: "Latviešu",
+        google: "lv",
+        memory: "lv",
+        tts: "lv",
+        dir: "ltr",
+        title: "Ķīniešu pinyin un lasīšanas rīks",
+        chars: "rakstzīmes",
+        prompt: "Šeit ierakstiet ķīniešu vai jebkuru atbalstītu valodu. Vispirms iegūšu ķīniešu tekstu, pēc tam parādīšu pinyin, skaidrojumus, tulkojumu un nolasīšanu mērķvalodā.",
+        language: "Saskarnes valoda",
+        loading: "Notiek pinyin bibliotēkas ielāde...",
+        empty: "Ierakstiet tekstu, un šeit parādīsies ķīniešu teksts, pinyin, skaidrojumi un tulkojums.",
+        clear: "Notīrīt",
+        rate: "Ātrums",
+        play: "Atskaņot",
+        playFromSelection: "Atskaņot no atlases",
+        stop: "Apturēt",
+        translating: "Tiek tulkots...",
+        unavailable: "Tulkojums nav pieejams",
+        ttsUnsupported: "Šis pārlūks neatbalsta balss nolasīšanu.",
+        voicesLoading: "Notiek sistēmas balsu ielāde...",
+        ttsMissing: "Šis pārlūks neatbalsta balss nolasīšanu.",
+        readSentence: (index, total) => `Tiek nolasīts teikums ${index} / ${total}`,
+        pinyinFailed: "Neizdevās ielādēt pinyin bibliotēku. Pēc interneta savienojuma atjaunošanas atsvaidziniet lapu.",
+        stopped: "Nolasīšana apturēta"
+      },
+      he: {
+        name: "עברית",
+        google: "he",
+        memory: "he",
+        tts: "he",
+        dir: "rtl",
+        title: "כלי פין-יין וקריאת סינית",
+        chars: "תווים",
+        prompt: "הקלד כאן סינית או כל שפה נתמכת. תחילה אקבל סינית, ואז אציג פין-יין, הסברי מילים, תרגום והקראה בשפת היעד.",
+        language: "שפת הממשק",
+        loading: "טוען את ספריית הפין-יין...",
+        empty: "הקלד טקסט, וכאן יופיעו סינית, פין-יין, הסברים ותרגום.",
+        clear: "נקה",
+        rate: "מהירות",
+        play: "נגן",
+        playFromSelection: "נגן מהבחירה",
+        stop: "עצור",
+        translating: "מתרגם...",
+        unavailable: "התרגום אינו זמין",
+        ttsUnsupported: "הדפדפן הזה לא תומך בקריאה קולית.",
+        voicesLoading: "טוען קולות מערכת...",
+        ttsMissing: "הדפדפן הזה לא תומך בקריאה קולית.",
+        readSentence: (index, total) => `קורא את המשפט ${index} / ${total}`,
+        pinyinFailed: "לא ניתן לטעון את ספריית הפין-יין. רענן לאחר חיבור לאינטרנט.",
+        stopped: "הקריאה נעצרה"
+      }
+    };
+    const controlLabels = {
+      en: { target: "Target language", learning: "Learning language" },
+      ja: { target: "目標言語", learning: "学習言語" },
+      ko: { target: "목표 언어", learning: "학습 언어" },
+      es: { target: "Lengua meta", learning: "Lengua de aprendizaje" },
+      fr: { target: "Langue cible", learning: "Langue d'apprentissage" },
+      de: { target: "Zielsprache", learning: "Lernsprache" },
+      pt: { target: "Língua-alvo", learning: "Língua de aprendizagem" },
+      it: { target: "Lingua target", learning: "Lingua di apprendimento" },
+      nl: { target: "Doeltaal", learning: "Leertaal" },
+      ru: { target: "Целевой язык", learning: "Язык обучения" },
+      ar: { target: "اللغة الهدف", learning: "لغة التعلّم" },
+      hi: { target: "लक्ष्य भाषा", learning: "सीखने की भाषा" },
+      lv: { target: "Mērķvaloda", learning: "Mācību valoda" },
+      he: { target: "שפת יעד", learning: "שפת למידה" },
+      zh: { target: "目标语言", learning: "学习语言" }
+    };
+    const translationCache = new Map();
+    let pinyin;
+    let segment;
+    let enPOSTag;
+    let voices = [];
+    let sentences = [];
+    let displaySentences = [];
+    let activeSentence = -1;
+    let playSession = 0;
+    let renderSession = 0;
+    let seededInput = false;
+
+    function targetLanguage() {
+      return languages[targetLang.value] ?? languages.zh;
+    }
+
+    function learningLanguage() {
+      return languages[learningLang.value] ?? languages.en;
+    }
+
+    function outputLanguage() {
+      return targetIsChinese() ? learningLanguage() : targetLanguage();
+    }
+
+    function interfaceLanguage() {
+      if (targetLang.value === "zh" && sourceHasChinese(input.value)) return languages.en;
+      return targetLang.value === "zh" ? learningLanguage() : targetLanguage();
+    }
+
+    function targetIsChinese() {
+      return targetLang.value === "zh";
+    }
+
+    function validLanguagePair() {
+      return (targetLang.value === "zh") !== (learningLang.value === "zh");
+    }
+
+    function currentLanguage() {
+      return interfaceLanguage();
+    }
+
+    function bilingual(chinese, local) {
+      return `${chinese} / ${local}`;
+    }
+
+    function countText(text) {
+      const count = Array.from(text).length;
+      return bilingual(`${count} 字`, `${count} ${currentLanguage().chars}`);
+    }
+
+    function applyLanguage() {
+      const lang = currentLanguage();
+      document.documentElement.lang = targetIsChinese() ? `zh-CN-${learningLang.value}` : `zh-CN-${targetLang.value}`;
+      document.documentElement.dir = lang.dir;
+      document.title = bilingual("中文学习工具", lang.title);
+      const labels = controlLabels[targetLang.value === "zh" && sourceHasChinese(input.value) ? "en" : (targetIsChinese() ? learningLang.value : targetLang.value)] || controlLabels.en;
+      targetLanguageLabel.textContent = bilingual("目标语言", labels.target);
+      learningLanguageLabel.textContent = bilingual("学习语言", labels.learning);
+      title.textContent = bilingual("中文互学、拼音、翻译和朗读", lang.title);
+      input.placeholder = bilingual("请输入任意支持语言文本", lang.prompt);
+      if (!seededInput) {
+        input.value = "我爱读中文！我们开始吧！Are you ready? Input anything please.";
+        seededInput = true;
+      }
+      clear.textContent = bilingual("清空", lang.clear);
+      rateLabel.textContent = bilingual("速度", lang.rate);
+      play.textContent = bilingual("播放", lang.play);
+      playFromSelection.textContent = bilingual("从选择处播放", lang.playFromSelection);
+      stop.textContent = bilingual("停止", lang.stop);
+      voiceSelect.setAttribute("aria-label", bilingual("选择语音", "Voice"));
+      status.textContent = pinyin ? countText(input.value) : bilingual("正在加载拼音库...", lang.loading);
+      if (!validLanguagePair()) {
+        status.textContent = bilingual("目标语言和学习语言必须有且只有一个是中文。", lang.invalidPair || languages.zh.invalidPair);
+      }
+    }
+
+    async function mark(text) {
+      const session = renderSession += 1;
+      output.replaceChildren();
+      sentences = [];
+      displaySentences = [];
+      activeSentence = -1;
+
+      if (!validLanguagePair()) {
+        const empty = document.createElement("span");
+        empty.className = "empty";
+        empty.textContent = bilingual("目标语言和学习语言必须有且只有一个是中文。", currentLanguage().invalidPair || languages.zh.invalidPair);
+        output.append(empty);
+        status.textContent = empty.textContent;
+        return;
+      }
+
+      if (!text.trim()) {
+        const empty = document.createElement("span");
+        empty.className = "empty";
+        empty.textContent = bilingual("输入文本后，这里会显示中文、拼音、解释和翻译。", currentLanguage().empty);
+        output.append(empty);
+        status.textContent = countText("");
+        return;
+      }
+
+      const inputSentences = splitSentences(text);
+      const keepTargetOriginal = await shouldKeepTargetOriginal(text);
+      const chineseText = await toChineseText(text);
+      if (session !== renderSession) return;
+
+      sentences = splitSentences(chineseText);
+      displaySentences = sentences.map((sentence, index) => ({
+        ...sentence,
+        targetText: keepTargetOriginal ? (inputSentences[index]?.text.trim() || "") : "",
+        spokenText: targetIsChinese() ? sentence.text : ""
+      }));
+
+      displaySentences.forEach((sentence, sentenceIndex) => {
+        const sentenceSpan = document.createElement("div");
+        sentenceSpan.className = "sentence";
+        sentenceSpan.dataset.sentence = sentenceIndex;
+
+        const aligned = document.createElement("div");
+        aligned.className = "aligned";
+        aligned.append(loadingWord(sentence.text));
+
+        const natural = document.createElement("div");
+        natural.className = "natural";
+        natural.textContent = bilingual("翻译中...", currentLanguage().translating);
+
+        sentenceSpan.append(aligned, natural);
+        output.append(sentenceSpan);
+        translateSentence(sentence.text, sentenceSpan, sentenceIndex, session);
+      });
+
+      status.textContent = countText(text);
+    }
+
+    async function toChineseText(text) {
+      if (sourceHasChinese(text)) return translateMixedToChinese(text);
+
+      try {
+        return await translateText(text, "auto", "zh-CN");
+      } catch {
+        return text;
+      }
+    }
+
+    async function shouldKeepTargetOriginal(text) {
+      if (targetIsChinese() || sourceHasChinese(text) || !text.trim()) return false;
+
+      try {
+        const detected = await detectSourceLanguage(text);
+        return languageMatches(detected, targetLanguage().google);
+      } catch {
+        return false;
+      }
+    }
+
+    async function detectSourceLanguage(text) {
+      const trimmed = text.trim();
+      const key = `detect:${trimmed}`;
+      if (translationCache.has(key)) return translationCache.get(key);
+
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(trimmed)}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("language detection failed");
+      const data = await response.json();
+      const detected = normalizeLanguageCode(data?.[2] || "");
+      if (!detected) throw new Error("language detection missing");
+      translationCache.set(key, detected);
+      return detected;
+    }
+
+    function normalizeLanguageCode(code) {
+      const normalized = String(code || "").toLowerCase();
+      if (normalized === "iw") return "he";
+      if (normalized.startsWith("zh")) return "zh-CN";
+      if (normalized.startsWith("pt")) return "pt";
+      return normalized.split("-")[0];
+    }
+
+    function languageMatches(source, target) {
+      return normalizeLanguageCode(source) === normalizeLanguageCode(target);
+    }
+
+    async function translateMixedToChinese(text) {
+      const parts = [];
+      let lastIndex = 0;
+
+      for (const match of text.matchAll(hanziChunk)) {
+        if (match.index > lastIndex) {
+          parts.push({ text: text.slice(lastIndex, match.index), chinese: false });
+        }
+        parts.push({ text: match[0], chinese: true });
+        lastIndex = match.index + match[0].length;
+      }
+
+      if (lastIndex < text.length) {
+        parts.push({ text: text.slice(lastIndex), chinese: false });
+      }
+
+      const translated = await Promise.all(parts.map(async (part) => {
+        if (part.chinese || !meaningfulText.test(part.text)) return part.text;
+
+        try {
+          return await translateText(part.text, "auto", "zh-CN");
+        } catch {
+          return part.text;
+        }
+      }));
+
+      return translated.join("");
+    }
+
+    function sourceHasChinese(text) {
+      return hanzi.test(text) && !japaneseKana.test(text);
+    }
+
+    function loadingWord(text) {
+      const word = document.createElement("span");
+      word.className = "word";
+      const py = document.createElement("span");
+      py.className = "py";
+      py.textContent = " ";
+      const zh = document.createElement("span");
+      zh.className = "zh";
+      zh.textContent = text;
+      const literal = document.createElement("span");
+      literal.className = "literal";
+      literal.textContent = "...";
+      word.append(py, zh, literal);
+      return word;
+    }
+
+    function renderSentence(sentenceNode, analysis, naturalText) {
+      const aligned = sentenceNode.querySelector(".aligned");
+      const natural = sentenceNode.querySelector(".natural");
+      aligned.replaceChildren();
+
+      analysis.tokens.forEach((token, tokenIndex) => {
+        const word = document.createElement("span");
+        word.className = "word";
+        word.dataset.token = tokenIndex;
+        if (!token.text.trim()) word.classList.add("space");
+        if (analysis.subject.has(tokenIndex)) word.classList.add("subject");
+        if (analysis.predicate.has(tokenIndex)) word.classList.add("predicate");
+
+        const py = document.createElement("span");
+        py.className = "py";
+        py.textContent = token.pinyin;
+
+        const zh = document.createElement("span");
+        zh.className = "zh";
+        zh.textContent = token.text;
+
+        const literal = document.createElement("span");
+        literal.className = "literal";
+        literal.textContent = token.literal;
+
+        word.append(py, zh, literal);
+        aligned.append(word);
+      });
+
+      natural.textContent = naturalText || bilingual("无法翻译", currentLanguage().unavailable);
+    }
+
+    function analyzeSentence(text, naturalText = "") {
+      const tokens = mergeContextualTokens(tokenize(text), naturalText).map((token) => ({
+        ...token,
+        pinyin: hanzi.test(token.text)
+          ? pinyin(token.text, { toneType: "symbol", v: true })
+          : "\u00a0",
+        literal: contextualGloss(token, naturalText)
+      }));
+      const predicate = findPredicate(tokens);
+      const subject = findSubject(tokens, predicate);
+
+      return { tokens, predicate, subject };
+    }
+
+    function tokenize(text) {
+      if (segment) {
+        try {
+          return segment.doSegment(text, { simple: false }).map((item) => ({
+            text: item.w,
+            pos: typeof enPOSTag === "function"
+              ? enPOSTag(item.p)
+              : String(item.p || item.p_word || item.pos || "")
+          }));
+        } catch {
+          return fallbackTokenize(text);
+        }
+      }
+
+      return fallbackTokenize(text);
+    }
+
+    function fallbackTokenize(text) {
+      if ("Segmenter" in Intl) {
+        return Array.from(new Intl.Segmenter("zh-CN", { granularity: "word" }).segment(text))
+          .map((item) => ({ text: item.segment, pos: "" }));
+      }
+
+      return Array.from(text).map((text) => ({ text, pos: "" }));
+    }
+
+    function mergeContextualTokens(tokens, naturalText) {
+      const merged = [];
+      for (let index = 0; index < tokens.length; index += 1) {
+        const current = tokens[index];
+        const next = tokens[index + 1];
+        const currentText = current.text.trim();
+        const nextText = next?.text.trim();
+
+        if (
+          next
+          && degreeWords.has(currentText)
+          && nextText
+          && hanzi.test(nextText)
+          && (commonPredicates.has(nextText) || isAdjectiveLike(nextText, naturalText))
+        ) {
+          merged.push({
+            text: current.text + next.text,
+            pos: [current.pos, next.pos, "adjective"].filter(Boolean).join("+")
+          });
+          index += 1;
+          continue;
+        }
+
+        if (
+          next
+          && modalVerbs.has(currentText)
+          && nextText
+          && hanzi.test(nextText)
+          && !/[，,。！？!?；;]/.test(nextText)
+        ) {
+          merged.push({
+            text: current.text + next.text,
+            pos: [current.pos, next.pos, "verb"].filter(Boolean).join("+")
+          });
+          index += 1;
+          continue;
+        }
+
+        merged.push(current);
+      }
+
+      return merged;
+    }
+
+    function isAdjectiveLike(text, naturalText) {
+      const lower = naturalText.toLowerCase();
+      if (commonPredicates.has(text)) return true;
+      return (
+        lower.includes(" is ")
+        || lower.includes(" are ")
+        || lower.includes(" am ")
+        || lower.includes(" was ")
+        || lower.includes(" were ")
+      );
+    }
+
+    function contextualGloss(token, naturalText) {
+      const text = token.text.trim();
+      if (!text) return "\u00a0";
+      if (!hanzi.test(text) && !latin.test(text)) return text;
+      const outLang = outputLanguage();
+      if (outLang.google === "zh-CN") return text;
+      if (outLang.google === "en" && contextualGlosses.has(text)) return contextualGlosses.get(text);
+
+      const naturalHint = pickWordsFromNatural(text, naturalText);
+      if (outLang.google === "en" && naturalHint) return naturalHint;
+
+      if (outLang.google !== "en") return "...";
+
+      for (const [source, gloss] of contextualGlosses) {
+        if (text.endsWith(source) && text.length > source.length) return gloss;
+      }
+
+      return "...";
+    }
+
+    function pickWordsFromNatural(text, naturalText) {
+      const words = naturalText.match(/[A-Za-z']+/g) || [];
+      const lowerWords = words.map((word) => word.toLowerCase());
+
+      const hints = [
+        ["银行", ["bank"]],
+        ["行", ["okay", "works", "line", "row"]],
+        ["忙", ["busy"]],
+        ["学习", ["study", "learn"]],
+        ["想学习", ["want", "study"]],
+        ["会说", ["can", "speak"]],
+        ["想", ["want", "would", "like"]],
+        ["中文", ["chinese"]],
+        ["今天", ["today"]],
+        ["重庆", ["chongqing"]],
+        ["漂亮", ["beautiful", "pretty"]],
+        ["高兴", ["happy", "glad"]],
+        ["重要", ["important"]],
+        ["简单", ["simple", "easy"]],
+        ["难", ["hard", "difficult"]]
+      ];
+
+      const hint = hints.find(([source]) => text.includes(source));
+      if (!hint) return "";
+
+      const found = hint[1].find((word) => lowerWords.includes(word));
+      return found || hint[1][0];
+    }
+
+    function findPredicate(tokens) {
+      const candidates = [];
+
+      tokens.forEach((token, index) => {
+        const text = token.text.trim();
+        const pos = token.pos.toLowerCase();
+        if (!text || !hanzi.test(text)) return;
+        if (
+          commonPredicates.has(text)
+          || [...commonPredicates].some((word) => text.endsWith(word))
+          || pos.startsWith("v")
+          || pos.includes("verb")
+          || pos.startsWith("a")
+          || pos.includes("adjective")
+        ) {
+          candidates.push(index);
+        }
+      });
+
+      if (candidates.length) return new Set([candidates[0]]);
+
+      let nounPredicate = -1;
+      for (let index = tokens.length - 1; index > 0; index -= 1) {
+        const token = tokens[index];
+        if (
+          hanzi.test(token.text)
+          && token.text.trim()
+          && !functionWords.has(token.text.trim())
+          && !/[，,。！？!?；;]/.test(token.text)
+        ) {
+          nounPredicate = index;
+          break;
+        }
+      }
+
+      return new Set(nounPredicate >= 0 ? [nounPredicate] : []);
+    }
+
+    function findSubject(tokens, predicate) {
+      const predicateIndex = [...predicate][0] ?? -1;
+      if (predicateIndex <= 0) return new Set();
+
+      const subject = new Set();
+      for (let index = predicateIndex - 1; index >= 0; index -= 1) {
+        const token = tokens[index];
+        if (!token.text.trim()) continue;
+        if (/[，,。！？!?；;]/.test(token.text)) break;
+        if (hanzi.test(token.text)) {
+          subject.add(index);
+          continue;
+        }
+      }
+
+      return subject;
+    }
+
+    async function translateSentence(text, sentenceNode, sentenceIndex, session) {
+      try {
+        const preservedTargetText = displaySentences[sentenceIndex]?.targetText;
+        const naturalText = preservedTargetText || await translateText(text, "zh-CN", outputLanguage().google);
+        if (session !== renderSession || !output.contains(sentenceNode)) return;
+        displaySentences[sentenceIndex].targetText = naturalText;
+        displaySentences[sentenceIndex].spokenText = targetIsChinese() ? text : naturalText;
+        const analysis = analyzeSentence(text, naturalText);
+        await fillContextualGlosses(analysis.tokens, naturalText);
+        if (session !== renderSession || !output.contains(sentenceNode)) return;
+        renderSentence(sentenceNode, analysis, naturalText);
+      } catch {
+        if (session !== renderSession || !output.contains(sentenceNode)) return;
+        renderSentence(sentenceNode, analyzeSentence(text, ""), bilingual("无法翻译", currentLanguage().unavailable));
+      }
+    }
+
+    async function fillContextualGlosses(tokens, naturalText) {
+      await Promise.all(tokens.map(async (token) => {
+        if (!token.text.trim()) return;
+
+        const outLang = outputLanguage();
+
+        if (outLang.google === "zh-CN") {
+          token.literal = token.text;
+          return;
+        }
+
+        if (outLang.google !== "en" && contextualGlosses.has(token.text.trim())) {
+          try {
+            token.literal = await translateText(contextualGlosses.get(token.text.trim()), "en", outLang.google);
+            return;
+          } catch {
+            token.literal = contextualGlosses.get(token.text.trim());
+            return;
+          }
+        }
+
+        if (token.literal !== "...") return;
+
+        try {
+          const translated = await translateText(token.text, "zh-CN", outLang.google);
+          token.literal = cleanLiteral(translated, naturalText);
+        } catch {
+          token.literal = token.text;
+        }
+      }));
+    }
+
+    function cleanLiteral(translated, naturalText) {
+      const text = translated.trim();
+      if (!text) return "...";
+      const natural = naturalText.toLowerCase();
+      const lower = text.toLowerCase();
+
+      if (natural.includes(lower)) return text;
+      return text.replace(/^to\s+/i, "");
+    }
+
+    async function translateText(text, source = "zh-CN", target = currentLanguage().google) {
+      const trimmed = text.trim();
+      if (!trimmed) return "\u00a0";
+      const key = `${source}-${target}:${trimmed}`;
+      if (translationCache.has(key)) return translationCache.get(key);
+
+      const googleUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${encodeURIComponent(source)}&tl=${encodeURIComponent(target)}&dt=t&q=${encodeURIComponent(trimmed)}`;
+      const google = await fetch(googleUrl);
+      if (google.ok) {
+        const data = await google.json();
+        const translated = data?.[0]?.map((part) => part?.[0] || "").join("").trim();
+        if (translated) {
+          translationCache.set(key, translated);
+          return translated;
+        }
+      }
+
+      if (source === "auto") throw new Error("translation failed");
+      const memoryTarget = Object.values(languages).find((lang) => lang.google === target)?.memory || target;
+      const memoryUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(trimmed)}&langpair=${encodeURIComponent(source)}|${encodeURIComponent(memoryTarget)}`;
+      const memory = await fetch(memoryUrl);
+      if (!memory.ok) throw new Error("translation failed");
+      const data = await memory.json();
+      const translated = data?.responseData?.translatedText?.trim();
+      if (!translated) throw new Error("translation missing");
+      translationCache.set(key, translated);
+      return translated;
+    }
+
+    function splitSentences(text) {
+      const result = [];
+      let start = 0;
+
+      for (let index = 0; index < text.length; index += 1) {
+        if (sentenceEnd.test(text[index])) {
+          result.push({ text: text.slice(start, index + 1), start, end: index + 1 });
+          start = index + 1;
+        }
+      }
+
+      if (start < text.length) {
+        result.push({ text: text.slice(start), start, end: text.length });
+      }
+
+      return result;
+    }
+
+    function loadVoices() {
+      voices = speechSynthesis.getVoices();
+      const current = voiceSelect.value;
+      voiceSelect.replaceChildren();
+
+      if (!voices.length) {
+        const option = document.createElement("option");
+        option.textContent = bilingual("正在加载系统语音...", currentLanguage().voicesLoading);
+        voiceSelect.append(option);
+        return;
+      }
+
+      for (const voice of voices) {
+        const option = document.createElement("option");
+        option.value = voice.name;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        if (voice.default) option.textContent += " 默认";
+        voiceSelect.append(option);
+      }
+
+      const targetVoiceLang = targetLanguage().tts || targetLanguage().google || "zh";
+      const targetVoicePrefix = targetVoiceLang.split("-")[0];
+      const preferred = voices.find((voice) => voice.name === current && voice.lang.toLowerCase().startsWith(targetVoicePrefix.toLowerCase()))
+        ?? voices.find((voice) => voice.lang.toLowerCase() === targetVoiceLang.toLowerCase())
+        ?? voices.find((voice) => voice.lang.toLowerCase().startsWith(targetVoicePrefix.toLowerCase()))
+        ?? voices.find((voice) => voice.default)
+        ?? voices[0];
+
+      if (preferred) voiceSelect.value = preferred.name;
+    }
+
+    function selectedVoice() {
+      return voices.find((voice) => voice.name === voiceSelect.value) ?? null;
+    }
+
+    function setActiveSentence(index) {
+      activeSentence = index;
+      output.querySelectorAll(".sentence.speaking").forEach((node) => {
+        node.classList.remove("speaking");
+      });
+
+      if (index < 0) return;
+
+      const node = output.querySelector(`[data-sentence="${index}"]`);
+      if (node) {
+        node.classList.add("speaking");
+        node.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    }
+
+    function sentenceIndexFromSelection() {
+      const selection = window.getSelection();
+      const selectedNode = selection?.rangeCount ? selection.anchorNode : null;
+      const selectedElement = selectedNode?.nodeType === Node.TEXT_NODE
+        ? selectedNode.parentElement
+        : selectedNode;
+      const selectedSentence = selectedElement?.closest?.(".sentence");
+
+      if (selectedSentence && output.contains(selectedSentence)) {
+        return Number(selectedSentence.dataset.sentence) || 0;
+      }
+
+      if (!sourceHasChinese(input.value)) return 0;
+
+      const position = input.selectionStart ?? 0;
+      const index = sentences.findIndex((sentence) => (
+        position >= sentence.start && position < sentence.end
+      ));
+
+      if (index >= 0) return index;
+
+      const nextIndex = sentences.findIndex((sentence) => position < sentence.start);
+      if (nextIndex >= 0) return nextIndex;
+
+      return Math.max(sentences.length - 1, 0);
+    }
+
+    function speakFrom(startIndex = 0) {
+      if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+        status.textContent = bilingual("当前浏览器不支持朗读", currentLanguage().ttsUnsupported);
+        return;
+      }
+
+      if (!displaySentences.length) return;
+
+      loadVoices();
+      speechSynthesis.cancel();
+      const session = playSession += 1;
+      const voice = selectedVoice();
+      let index = Math.max(0, Math.min(startIndex, displaySentences.length - 1));
+
+      const speakNext = () => {
+        if (session !== playSession) return;
+
+        const sentence = displaySentences[index];
+
+        if (!sentence) {
+          setActiveSentence(-1);
+          status.textContent = countText(input.value);
+          return;
+        }
+
+        if (!sentence.spokenText) {
+          status.textContent = bilingual("翻译中...", currentLanguage().translating);
+          return;
+        }
+
+        const text = sentence.spokenText.trim();
+        if (!text) {
+          index += 1;
+          speakNext();
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = voice?.lang || targetLanguage().tts || targetLanguage().google || "zh-CN";
+        utterance.voice = voice;
+        utterance.rate = Number(rate.value);
+        utterance.onstart = () => {
+          if (session !== playSession) return;
+          setActiveSentence(index);
+          status.textContent = bilingual(`朗读第 ${index + 1} 句 / ${displaySentences.length}`, currentLanguage().readSentence(index + 1, displaySentences.length));
+        };
+        utterance.onend = () => {
+          if (session !== playSession) return;
+          index += 1;
+          speakNext();
+        };
+        utterance.onerror = () => {
+          if (session !== playSession) return;
+          setActiveSentence(-1);
+          status.textContent = bilingual("朗读已停止", currentLanguage().stopped);
+        };
+        speechSynthesis.speak(utterance);
+      };
+
+      speakNext();
+    }
+
+    rate.addEventListener("input", () => {
+      rateValue.textContent = `${Number(rate.value).toFixed(2)}x`;
+    });
+    function handleLanguageChange() {
+      playSession += 1;
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      applyLanguage();
+      loadVoices();
+      if (pinyin) mark(input.value);
+    }
+
+    targetLang.addEventListener("change", handleLanguageChange);
+    learningLang.addEventListener("change", handleLanguageChange);
+    play.addEventListener("click", () => speakFrom(0));
+    playFromSelection.addEventListener("click", () => speakFrom(sentenceIndexFromSelection()));
+    stop.addEventListener("click", () => {
+      playSession += 1;
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      setActiveSentence(-1);
+      status.textContent = countText(input.value);
+    });
+    input.addEventListener("input", () => {
+      playSession += 1;
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      applyLanguage();
+      if (pinyin) mark(input.value);
+    });
+    clear.addEventListener("click", () => {
+      playSession += 1;
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      input.value = "";
+      input.focus();
+      if (pinyin) mark("");
+    });
+
+    if ("speechSynthesis" in window) {
+      loadVoices();
+      speechSynthesis.addEventListener("voiceschanged", loadVoices);
+    } else {
+      voiceSelect.innerHTML = `<option>${bilingual("当前浏览器不支持朗读", currentLanguage().ttsMissing)}</option>`;
+      play.disabled = true;
+      playFromSelection.disabled = true;
+      stop.disabled = true;
+    }
+
+    applyLanguage();
+
+    try {
+      ({ pinyin } = await import("https://cdn.jsdelivr.net/npm/pinyin-pro@3/+esm"));
+      try {
+        const segmentit = await import("https://cdn.jsdelivr.net/npm/segmentit@2.0.3/+esm");
+        segment = segmentit.useDefault(new segmentit.Segment());
+        enPOSTag = segmentit.enPOSTag;
+      } catch {
+        segment = null;
+        enPOSTag = null;
+      }
+      mark(input.value);
+    } catch {
+      output.innerHTML = `<span class="empty">${bilingual("拼音库加载失败，请联网后刷新页面。", currentLanguage().pinyinFailed)}</span>`;
+      status.textContent = bilingual("未加载", "Not loaded");
+    }
+  </script>
+</body>
+</html>
