@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cerf-volant · 风筝 · Les Choristes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── Colour Palette — Les Choristes poster ─────────────────────────────── */
+:root {
+  --parchment:   #EDE4C8;      /* aged paper, warm cream */
+  --parchment-2: #E3D8B4;      /* slightly deeper, alternate rows */
+  --sky-deep:    #1B3452;      /* misty deep-blue sky */
+  --sky-mid:     #2C4E72;      /* lighter band of sky */
+  --gold:        #BF982A;      /* warm amber gilt */
+  --gold-light:  #D9B84A;
+  --zh-ink:      #231205;      /* near-black warm brown — Chinese */
+  --fr-ink:      #1B3452;      /* deep navy — French */
+  --en-rust:     #5C2E18;      /* warm chestnut — English */
+  --ipa-sage:    #3D5A2C;      /* muted forest green — IPA */
+  --rule:        #C8BA90;      /* subtle divider */
+  --note-bg:     #DDD0A8;
+  --muted:       #7A6A48;
+}
+
+/* ─── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── Print setup ────────────────────────────────────────────────────────── */
+@page {
+  size: A4 portrait;
+  margin: 13mm 15mm 13mm 15mm;
+}
+
+/* ─── Body / page shell ──────────────────────────────────────────────────── */
+body {
+  background: var(--parchment);
+  color: var(--zh-ink);
+  font-size: 9.5pt;
+  line-height: 1.5;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 13mm 15mm;
+}
+
+@media screen {
+  html { background: #9AA8B8; }
+  body {
+    margin: 12mm auto;
+    box-shadow: 0 6px 40px rgba(0,0,0,0.40);
+    padding-bottom: 105px !important; /* 预留空间避免底部播放器遮挡内容 */
+  }
+}
+
+/* ─── Header block ───────────────────────────────────────────────────────── */
+.page-header {
+  background: var(--sky-deep);
+  color: var(--parchment);
+  padding: 7mm 9mm 6mm;
+  margin-bottom: 6mm;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle diagonal texture on header */
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -30deg,
+    transparent,
+    transparent 18px,
+    rgba(255,255,255,0.025) 18px,
+    rgba(255,255,255,0.025) 19px
+  );
+}
+
+.header-inner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4mm;
+}
+
+.header-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 1mm;
+}
+
+.title-fr {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 26pt;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.title-zh {
+  font-family: 'STLiti', 'STLi', 'LiSu', '隶书', 'FZLiShu-S05',
+               'AR PL UKai CN', 'Noto Serif SC', serif;
+  font-size: 15pt;
+  color: var(--parchment);
+  letter-spacing: 5px;
+  margin-top: 1.5mm;
+}
+
+.header-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.meta-film {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 7.5pt;
+  font-style: italic;
+  color: #A8BDD0;
+  line-height: 1.7;
+}
+
+.meta-composer {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 7pt;
+  color: #7A98B4;
+  margin-top: 0.5mm;
+}
+
+/* gold rule under header */
+.header-rule {
+  height: 1.5pt;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  margin-bottom: 4mm;
+}
+
+/* ─── Column labels ──────────────────────────────────────────────────────── */
+.col-labels {
+  display: grid;
+  grid-template-columns: 32% 38% 30%;
+  gap: 0;
+  margin-bottom: 1.5mm;
+  padding-bottom: 1.5mm;
+  border-bottom: 0.8pt solid var(--gold);
+}
+
+.col-label {
+  font-size: 6.5pt;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0 2mm;
+}
+
+.col-label.zh {
+  font-family: 'STLiti', 'STLi', 'LiSu', '隶书', 'Noto Serif SC', serif;
+  color: var(--muted);
+  font-size: 12pt;
+  letter-spacing: 3px;
+}
+
+.col-label.fr {
+  font-family: 'Playfair Display', serif;
+  color: var(--fr-ink);
+  font-style: italic;
+  font-size: 12pt;
+}
+
+.col-label.en {
+  font-family: 'EB Garamond', serif;
+  color: var(--en-rust);
+  font-size: 12pt;
+}
+
+/* ─── Lyrics rows ────────────────────────────────────────────────────────── */
+.lyrics-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.lyric-row {
+  display: grid;
+  grid-template-columns: 32% 38% 30%;
+  border-bottom: 0.3pt solid var(--rule);
+  transition: background-color 0.2s ease, border-left 0.2s ease;
+  cursor: pointer; /* 提示可点击选择 */
+}
+
+.lyric-row:nth-child(even) {
+  background: var(--parchment-2);
+}
+
+/* 鼠标悬停效果 */
+.lyric-row:hover {
+  background-color: rgba(44, 78, 114, 0.04);
+}
+
+/* 鼠标选中状态 (待播放起点) */
+.lyric-row.row-selected {
+  border-left: 3.5px solid var(--sky-mid) !important;
+  background-color: rgba(44, 78, 114, 0.08) !important;
+}
+
+/* 正在朗读高亮状态 */
+.lyric-row.active-speaking {
+  background-color: rgba(217, 184, 74, 0.25) !important;
+  border-left: 3.5px solid var(--gold) !important;
+}
+
+.cell {
+  padding: 2.5mm 2mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Chinese cell */
+.cell-zh {
+  font-family: "楷体", "Songti SC", 'AR PL UKai CN', serif;
+  font-size: 13pt;
+  color: var(--zh-ink);
+  line-height: 1.55;
+  padding-right: 3mm;
+  border-right: 0.3pt solid var(--rule);
+}
+
+/* French cell */
+.cell-fr {
+  border-right: 0.3pt solid var(--rule);
+  padding: 2.5mm 2.5mm;
+  padding-right: 32px; /* 给右侧绝对定位的播放按钮留出空间 */
+  gap: 0.8mm;
+  position: relative;
+}
+
+.fr-text {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 11.5pt;
+  font-style: italic;
+  color: var(--fr-ink);
+  line-height: 1.45;
+}
+
+.fr-text strong {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.ipa {
+  font-family: 'Noto Serif',  serif;
+  font-size: 11pt;
+  color: var(--ipa-sage);
+  letter-spacing: 0.2px;
+  line-height: 1.35;
+  margin-top: 0.5mm;
+}
+
+/* English cell */
+.cell-en {
+  font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  font-size: 12pt;
+  font-style: italic;
+  color: var(--en-rust);
+  line-height: 1.55;
+}
+
+/* ─── TTS Inline Controls (Option B - Refined) ───────────────────────────── */
+.inline-tts-ctrl {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tts-play-btn {
+  background: var(--note-bg);
+  color: var(--fr-ink);
+  border: 1.2px solid var(--rule);
+  border-radius: 50%; /* 优雅的圆形设计 */
+  width: 22px;
+  height: 22px;
+  font-size: 7.5pt;
+  font-family: 'Playfair Display', serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.tts-play-btn:hover {
+  background: var(--gold-light);
+  color: var(--zh-ink);
+  border-color: var(--gold);
+  transform: scale(1.1);
+}
+
+/* ─── TTS Global Control Bar (Option I) ──────────────────────────────────── */
+.global-player-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--sky-deep);
+  border-top: 2.5px solid var(--gold);
+  padding: 12px 24px;
+  box-shadow: 0 -5px 25px rgba(0,0,0,0.35);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen {
+  .global-player-bar {
+    width: 210mm;
+    margin: 0 auto;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.global-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.global-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.global-btn {
+  font-family: 'Playfair Display', serif;
+  font-size: 9pt;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.global-play-all {
+  background: var(--gold);
+  color: var(--zh-ink);
+}
+
+.global-play-all:hover:not(:disabled) {
+  background: var(--gold-light);
+}
+
+.global-play-selected {
+  background: var(--sky-mid);
+  color: #FFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.global-play-selected:hover:not(:disabled) {
+  background: #3B6695;
+}
+
+.global-stop-all {
+  background: #A03B30;
+  color: #FFF;
+}
+
+.global-stop-all:hover:not(:disabled) {
+  background: #C04B3E;
+}
+
+.global-btn:disabled {
+  background: #303d4d;
+  color: #6a7888;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.global-selector-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--parchment);
+  font-family: 'EB Garamond', serif;
+  font-size: 9pt;
+}
+
+.global-selector-group select {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--parchment);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-family: inherit;
+  font-size: 9pt;
+  outline: none;
+  max-width: 190px;
+  cursor: pointer;
+}
+
+.global-selector-group select option {
+  background: var(--sky-deep);
+  color: var(--parchment);
+}
+
+.global-selector-group input[type="range"] {
+  accent-color: var(--gold-light);
+  width: 90px;
+  cursor: pointer;
+}
+
+.rate-display-val {
+  min-width: 28px;
+  display: inline-block;
+  font-family: 'EB Garamond', serif;
+  font-size: 9.5pt;
+}
+
+/* ─── Notes block ────────────────────────────────────────────────────────── */
+.notes {
+  margin-top: 5.5mm;
+  background: var(--note-bg);
+  padding: 3.5mm 4mm 4mm;
+  border-left: 2pt solid var(--gold);
+}
+
+.notes-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 7.5pt;
+  font-variant: small-caps;
+  letter-spacing: 2px;
+  color: var(--sky-deep);
+  margin-bottom: 2mm;
+}
+
+.notes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5mm;
+}
+
+.notes-list li {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 8pt;
+  color: #3A2E18;
+  line-height: 1.55;
+  padding-left: 3mm;
+  position: relative;
+}
+
+.notes-list li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 5pt;
+  top: 1.5pt;
+}
+
+.notes-list em {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: var(--fr-ink);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────── */
+.page-footer {
+  margin-top: 4mm;
+  padding-top: 2mm;
+  border-top: 0.5pt solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-l, .footer-r {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 7pt;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.footer-c {
+  font-family: 'Playfair Display', serif;
+  font-size: 10pt;
+  color: var(--gold);
+  line-height: 1;
+}
+
+/* ─── Print color fidelity ───────────────────────────────────────────────── */
+@media print {
+  .page-header,
+  .lyric-row:nth-child(even),
+  .notes {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body { padding: 0; width: 100%; box-shadow: none; padding-bottom: 13mm !important; }
+  .global-player-bar, .inline-tts-ctrl { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
+<header class="page-header">
+  <div class="header-inner">
+    <div class="header-titles">
+      <div class="title-fr">Cerf-volant</div>
+      <div class="title-zh">放牛班的春天 · 风筝</div>
+    </div>
+    <div class="header-meta">
+      <div class="meta-film">Les Choristes, 2004</div>
+      <div class="meta-film">Musique · Bruno Coulais</div>
+      <div class="meta-composer">Les Petits Chanteurs de Saint-Marc</div>
+    </div>
+  </div>
+</header>
+<div class="header-rule"></div>
+
+<!-- ══ COLUMN LABELS ════════════════════════════════════════════════════════ -->
+<div class="col-labels">
+  <div class="col-label zh">中　文</div>
+  <div class="col-label fr">Français &amp; Phonétique</div>
+  <div class="col-label en">English</div>
+</div>
+
+<!-- ══ LYRICS ════════════════════════════════════════════════════════════════ -->
+<div class="lyrics-body">
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">风筝，迎风飞翔</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Cerf-volant, volant au vent</span>
+      <span class="ipa">/sɛʁ.vɔ.lɑ̃ vɔ.lɑ̃ o vɑ̃/</span>
+    </div>
+    <div class="cell cell-en">Kite, flying in the wind</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">不要停下</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Ne t'<strong>arrête</strong> pas</span>
+      <span class="ipa">/nə ta.ʁɛt pa/</span>
+    </div>
+    <div class="cell cell-en">Do not stop</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">朝着大海，在高高的天上</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Vers la mer, haut dans les airs</span>
+      <span class="ipa">/vɛʁ la mɛʁ o dɑ̃ le z‿ɛʁ/</span>
+    </div>
+    <div class="cell cell-en">Toward the sea, high in the sky</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">一个孩子看着你</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Un enfant te <strong>voit</strong></span>
+      <span class="ipa">/œ̃ n‿ɑ̃.fɑ̃ tə vwa/</span>
+    </div>
+    <div class="cell cell-en">A child sees you</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">不羁的旅程</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Voyage insolent</span>
+      <span class="ipa">/vwa.jaʒ ɛ̃.sɔ.lɑ̃/</span>
+    </div>
+    <div class="cell cell-en">Insolent journey</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">醉人的悸动</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Troubles enivrants</span>
+      <span class="ipa">/tʁubl ɑ̃.ni.vʁɑ̃/</span>
+    </div>
+    <div class="cell cell-en">Intoxicating disturbances</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">纯真的爱追随你的影踪</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Amours innocents <strong>suivent</strong> ta voie</span>
+      <span class="ipa">/a.muʁ z‿i.nɔ.sɑ̃ sɥiv ta vwa/</span>
+    </div>
+    <div class="cell cell-en">Innocent loves follow your path</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">追随你飞去的方向</div>
+    <div class="cell cell-fr">
+      <span class="fr-text"><strong>Suivent</strong> ta voie en volant</span>
+      <span class="ipa">/sɥiv ta vwa ɑ̃ vɔ.lɑ̃/</span>
+    </div>
+    <div class="cell cell-en">Follow your path as they fly</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">风筝，迎风飞翔</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Cerf-volant, volant au vent</span>
+      <span class="ipa">/sɛʁ.vɔ.lɑ̃ vɔ.lɑ̃ o vɑ̃/</span>
+    </div>
+    <div class="cell cell-en">Kite, flying in the wind</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">不要停下</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Ne t'<strong>arrête</strong> pas</span>
+      <span class="ipa">/nə ta.ʁɛt pa/</span>
+    </div>
+    <div class="cell cell-en">Do not stop</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">朝着大海，在高高的天上</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Vers la mer, haut dans les airs</span>
+      <span class="ipa">/vɛʁ la mɛʁ o dɑ̃ le z‿ɛʁ/</span>
+    </div>
+    <div class="cell cell-en">Toward the sea, high in the sky</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">一个孩子看着你</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Un enfant te <strong>voit</strong></span>
+      <span class="ipa">/œ̃ n‿ɑ̃.fɑ̃ tə vwa/</span>
+    </div>
+    <div class="cell cell-en">A child sees you</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">在飘摇的风中</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Et dans la tourmente</span>
+      <span class="ipa">/e dɑ̃ la tuʁ.mɑ̃t/</span>
+    </div>
+    <div class="cell cell-en">And in the turmoil</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">你凯旋的翅膀</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">Tes ailes triomphantes</span>
+      <span class="ipa">/te z‿ɛl tʁi.jɔ̃.fɑ̃t/</span>
+    </div>
+    <div class="cell cell-en">Your triumphant wings</div>
+  </div>
+
+  <div class="lyric-row">
+    <div class="cell cell-zh">勿忘回到我身旁</div>
+    <div class="cell cell-fr">
+      <span class="fr-text">N'<strong>oublie</strong> pas de <strong>revenir</strong> vers moi</span>
+      <span class="ipa">/nu.bli pa də ʁə.və.niʁ vɛʁ mwa/</span>
+    </div>
+    <div class="cell cell-en">Do not forget to return to me</div>
+  </div>
+
+</div><!-- /lyrics-body -->
+
+<!-- ══ NOTES ════════════════════════════════════════════════════════════════ -->
+<div class="notes">
+  <div class="notes-title">注　释 · Notes linguistiques</div>
+  <ul class="notes-list">
+    <li>法语 <em>cerf-volant</em> 本义为"风筝"，字面含义为"飞翔的鹿"，保留了古老的历史词源意味。</li>
+    <li>歌词大量使用现在分词与动词短语：<em>volant</em>（飞翔着）、<em>suivent</em>（追随）、<em>revenir</em>（回来），赋予全曲持续流动、飘扬之感。</li>
+    <li>《<em>Cerf-volant</em>》出自电影《<em>Les Choristes</em>》（放牛班的春天），由 Bruno Coulais 作曲，童声合唱团 Les Petits Chanteurs de Saint-Marc 演唱。</li>
+  </ul>
+</div>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<div class="page-footer">
+  <span class="footer-l">Bruno Coulais · Les Choristes, 2004</span>
+  <span class="footer-c">❧</span>
+  <span class="footer-r">仅供学习使用 · For educational use only (by skylark)</span>
+</div>
+
+<!-- ══ TTS GLOBAL PLAYER BAR ═══════════════════════════════════════════════ -->
+<div class="global-player-bar">
+  <div class="global-inner">
+    <div class="global-controls">
+      <button class="global-btn global-play-all" id="btn-play-all">▶ 全部连播</button>
+      <button class="global-btn global-play-selected" id="btn-play-selected">▶ 从当前播放</button>
+      <button class="global-btn global-stop-all" id="btn-stop-all" disabled>■ 停止</button>
+    </div>
+    <div class="global-selector-group">
+      <label for="global-rate">语速调节:</label>
+      <input type="range" id="global-rate" min="0.5" max="1.5" step="0.1" value="1.0">
+      <span class="rate-display-val" id="global-rate-val">1.0x</span>
+    </div>
+    <div class="global-selector-group">
+      <label for="voice-select">语音引擎:</label>
+      <select id="voice-select">
+        <option value="">(加载系统语音中...)</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TTS ENGINE JAVASCRIPT ═══════════════════════════════════════════════ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const synth = window.speechSynthesis;
+  let voices = [];
+  
+  // 播放状态管理
+  let isPlayingAll = false;
+  let playbackType = null; // 'all' (全部连播) 或 'selected' (从当前播放)
+  let playAllIndex = 0;
+  let selectedPlayIndex = 0; // 当前被鼠标选中的行索引 (默认第1行)
+  let currentSingleActiveBtn = null;
+
+  const btnPlayAll = document.getElementById('btn-play-all');
+  const btnPlaySelected = document.getElementById('btn-play-selected');
+  const btnStopAll = document.getElementById('btn-stop-all');
+  const globalRateInput = document.getElementById('global-rate');
+  const globalRateVal = document.getElementById('global-rate-val');
+  const voiceSelect = document.getElementById('voice-select');
+
+  // 1. 初始化每个法文单元格的单句圆形播放按钮（Option B - 精简版）
+  const initCellControls = () => {
+    const frCells = document.querySelectorAll('.cell-fr');
+    frCells.forEach((cell, index) => {
+      const frTextEl = cell.querySelector('.fr-text');
+      if (!frTextEl) return;
+
+      const ctrlDiv = document.createElement('div');
+      ctrlDiv.className = 'inline-tts-ctrl';
+
+      const playBtn = document.createElement('button');
+      playBtn.className = 'tts-play-btn';
+      playBtn.innerText = '▶';
+      playBtn.title = '朗读此句 (Play Sentence)';
+      playBtn.onclick = (e) => {
+        e.stopPropagation(); // 阻止触发歌词行的点击选中事件
+        handleSinglePlay(index, playBtn);
+      };
+
+      ctrlDiv.appendChild(playBtn);
+      cell.appendChild(ctrlDiv);
+    });
+  };
+
+  // 2. 鼠标点击歌词行选择逻辑
+  const initRowSelection = () => {
+    const rows = document.querySelectorAll('.lyric-row');
+    rows.forEach((row, index) => {
+      // 默认给第一行加上选中样式
+      if (index === 0) {
+        row.classList.add('row-selected');
+      }
+
+      row.addEventListener('click', (e) => {
+        // 如果点击的是单句播放按钮，不切换选中行
+        if (e.target.closest('.tts-play-btn')) return;
+
+        rows.forEach(r => r.classList.remove('row-selected'));
+        row.classList.add('row-selected');
+        selectedPlayIndex = index;
+      });
+    });
+  };
+
+  // 3. 加载系统本地法语 TTS 发音引擎
+  const loadVoices = () => {
+    voices = synth.getVoices();
+    voiceSelect.innerHTML = '';
+    
+    // 过滤出系统支持的所有法语发音引擎
+    const frVoices = voices.filter(voice => voice.lang.toLowerCase().startsWith('fr'));
+    
+    if (frVoices.length === 0) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.innerText = '未检测到本地法语引擎 (使用默认)';
+      voiceSelect.appendChild(opt);
+      return;
+    }
+
+    frVoices.forEach(voice => {
+      const opt = document.createElement('option');
+      opt.value = voice.name;
+      opt.innerText = `${voice.name} (${voice.lang})`;
+      voiceSelect.appendChild(opt);
+    });
+
+    // 默认寻找高质量法语引擎
+    const priorityVoices = ['celeste', 'thomas', 'aurelie', 'hortense', 'google'];
+    let selectedIndex = 0;
+    for (let p of priorityVoices) {
+      const foundIdx = frVoices.findIndex(v => v.name.toLowerCase().includes(p));
+      if (foundIdx !== -1) {
+        selectedIndex = foundIdx;
+        break;
+      }
+    }
+    voiceSelect.selectedIndex = selectedIndex;
+  };
+
+  if (typeof speechSynthesis !== 'undefined') {
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    loadVoices();
+  }
+
+  // 4. 单句播放核心 (改用全局语速与全局发音人)
+  const handleSinglePlay = (index, btn) => {
+    if (isPlayingAll) {
+      stopAll();
+    }
+
+    const rows = document.querySelectorAll('.lyric-row');
+    const currentRow = rows[index];
+
+    // 如果该行正在播放，且用户再次点击，则停止
+    if (currentRow.classList.contains('active-speaking') && btn.innerText === '■') {
+      synth.cancel();
+      resetUI();
+      return;
+    }
+
+    synth.cancel();
+    resetUI();
+
+    // 激活朗读高亮与图标状态
+    currentRow.classList.add('active-speaking');
+    btn.innerText = '■';
+    btn.style.backgroundColor = 'var(--gold-light)';
+    currentSingleActiveBtn = btn;
+
+    const frTextEl = currentRow.querySelector('.fr-text');
+    const textToSpeak = frTextEl.textContent || frTextEl.innerText;
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'fr-FR';
+    
+    // 完全采用全局语速和音质设置
+    utterance.rate = parseFloat(globalRateInput.value);
+    if (voiceSelect.value) {
+      const selectedVoice = voices.find(v => v.name === voiceSelect.value);
+      if (selectedVoice) utterance.voice = selectedVoice;
+    }
+
+    utterance.onend = () => {
+      currentRow.classList.remove('active-speaking');
+      btn.innerText = '▶';
+      btn.style.backgroundColor = '';
+      currentSingleActiveBtn = null;
+    };
+
+    utterance.onerror = () => {
+      currentRow.classList.remove('active-speaking');
+      btn.innerText = '▶';
+      btn.style.backgroundColor = '';
+      currentSingleActiveBtn = null;
+    };
+
+    synth.speak(utterance);
+  };
+
+  // 5. 连续播放顺序循环逻辑
+  const playSequence = () => {
+    if (!isPlayingAll) return;
+
+    const rows = document.querySelectorAll('.lyric-row');
+    if (playAllIndex >= rows.length) {
+      stopAll();
+      return;
+    }
+
+    resetUI();
+
+    const currentRow = rows[playAllIndex];
+    currentRow.classList.add('active-speaking');
+    
+    // 平滑滚动让当前朗读句保持在视口中央
+    currentRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    const frTextEl = currentRow.querySelector('.fr-text');
+    const textToSpeak = frTextEl.textContent || frTextEl.innerText;
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'fr-FR';
+    utterance.rate = parseFloat(globalRateInput.value);
+
+    if (voiceSelect.value) {
+      const selectedVoice = voices.find(v => v.name === voiceSelect.value);
+      if (selectedVoice) utterance.voice = selectedVoice;
+    }
+
+    utterance.onend = () => {
+      if (isPlayingAll) {
+        playAllIndex++;
+        playSequence();
+      }
+    };
+
+    utterance.onerror = () => {
+      if (isPlayingAll) {
+        playAllIndex++;
+        playSequence();
+      }
+    };
+
+    synth.speak(utterance);
+  };
+
+  // 开始全部连播
+  const startAll = () => {
+    synth.cancel();
+    isPlayingAll = true;
+    playbackType = 'all';
+    playAllIndex = 0;
+    
+    btnPlayAll.innerText = '⏸ 暂停';
+    btnPlaySelected.setAttribute('disabled', 'true');
+    btnStopAll.removeAttribute('disabled');
+    playSequence();
+  };
+
+  // 开始从当前选择行播放
+  const startSelected = () => {
+    synth.cancel();
+    isPlayingAll = true;
+    playbackType = 'selected';
+    playAllIndex = selectedPlayIndex; // 从选中行索引处作为起点
+    
+    btnPlaySelected.innerText = '⏸ 暂停';
+    btnPlayAll.setAttribute('disabled', 'true');
+    btnStopAll.removeAttribute('disabled');
+    playSequence();
+  };
+
+  // 连续播放过程中的暂停
+  const pauseAll = () => {
+    isPlayingAll = false;
+    synth.pause();
+    if (playbackType === 'all') {
+      btnPlayAll.innerText = '▶ 全部连播';
+    } else {
+      btnPlaySelected.innerText = '▶ 从当前播放';
+    }
+  };
+
+  // 连续播放暂停后的继续
+  const resumeAll = () => {
+    isPlayingAll = true;
+    synth.resume();
+    if (playbackType === 'all') {
+      btnPlayAll.innerText = '⏸ 暂停';
+    } else {
+      btnPlaySelected.innerText = '⏸ 暂停';
+    }
+  };
+
+  // 终止连续播放并恢复所有控制组件
+  const stopAll = () => {
+    isPlayingAll = false;
+    playbackType = null;
+    synth.cancel();
+    resetUI();
+    
+    btnPlayAll.innerText = '▶ 全部连播';
+    btnPlayAll.removeAttribute('disabled');
+    btnPlaySelected.innerText = '▶ 从当前播放';
+    btnPlaySelected.removeAttribute('disabled');
+    btnStopAll.setAttribute('disabled', 'true');
+  };
+
+  const resetUI = () => {
+    document.querySelectorAll('.lyric-row').forEach(row => {
+      row.classList.remove('active-speaking');
+    });
+    document.querySelectorAll('.tts-play-btn').forEach(btn => {
+      btn.innerText = '▶';
+      btn.style.backgroundColor = '';
+    });
+    currentSingleActiveBtn = null;
+  };
+
+  // 6. 绑定全局控制台按钮事件
+  btnPlayAll.onclick = () => {
+    if (isPlayingAll && playbackType === 'all') {
+      pauseAll();
+    } else if (!isPlayingAll && playbackType === 'all' && synth.paused) {
+      resumeAll();
+    } else {
+      startAll();
+    }
+  };
+
+  btnPlaySelected.onclick = () => {
+    if (isPlayingAll && playbackType === 'selected') {
+      pauseAll();
+    } else if (!isPlayingAll && playbackType === 'selected' && synth.paused) {
+      resumeAll();
+    } else {
+      startSelected();
+    }
+  };
+
+  btnStopAll.onclick = stopAll;
+
+  globalRateInput.oninput = () => {
+    const rateStr = parseFloat(globalRateInput.value).toFixed(1) + 'x';
+    globalRateVal.innerText = rateStr;
+  };
+
+  // 初始化所有事件与 DOM 渲染
+  initCellControls();
+  initRowSelection();
+});
+</script>
+
+</body>
+</html>
