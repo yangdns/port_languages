@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法语语音入门训练 · French Pronunciation Trainer · 汲汲孜孜</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        frBlue: '#052165',
+                        frRed: '#ED2939',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 国旗渐变上边框 */
+        .flag-border {
+            border-top: 8px solid;
+            border-image: linear-gradient(to right, #052165 33.3%, #ffffff 33.3%, #ffffff 66.6%, #ED2939 66.6%) 1;
+        }
+        .active-tab {
+            border-bottom: 3px solid #ED2939;
+            color: #052165;
+            font-weight: bold;
+        }
+        /* 播放时动态振幅律动效果 */
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        .playing-btn {
+            animation: pulse-red 0.8s infinite;
+            background-color: #ED2939 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen pb-16">
+
+    <!-- 顶部导航 & 标识 (汲汲孜孜公众号) -->
+    <header class="bg-white shadow-sm flag-border">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-frBlue flex items-center justify-center text-white font-black text-lg">FR</div>
+                <div>
+                    <h1 class="text-xl font-extrabold text-frBlue tracking-tight">法语语音交互训练</h1>
+                    <p class="text-xs text-slate-400">万国语言之门 · 公众号：汲汲孜孜 </p>
+                </div>
+            </div>
+            <!-- 公众号名片 -->
+            <div class="bg-slate-100 px-4 py-2 rounded-lg border-l-4 border-frRed text-xs flex items-center gap-2">
+                <span class="font-bold text-frBlue">🔍 微信搜索订阅：</span>
+                <span class="bg-frBlue text-white font-bold px-1.5 py-0.5 rounded text-[10px]">汲汲孜孜</span>
+                <span class="text-slate-600">获取更多“万国语言之门”文章和工具。</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主板块一：输入文本朗读与控制面板 (英汉双语对照) -->
+    <section class="max-w-6xl mx-auto px-4 mt-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
+            
+            <!-- 左栏：自定义文本朗读 / Custom Text TTS Reader -->
+            <div class="flex flex-col justify-between space-y-3">
+                <div>
+                    <h3 class="text-base font-extrabold text-frBlue flex items-center gap-2">
+                        ✍️ 自定义文本朗读 / Custom Text TTS Reader
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">
+                        请输入或粘贴任意法语文本进行朗读训练。/ Enter or paste any French text below to read aloud.
+                    </p>
+                </div>
+                <textarea id="customTextInput" rows="5" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-frBlue transition font-sans" placeholder="Veuillez saisir votre texte ici..."></textarea>
+                <div class="flex gap-3">
+                    <button id="playCustomBtn" class="flex-1 bg-frRed hover:bg-[#d61e2e] text-white text-xs font-bold py-3 px-5 rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
+                        🔊 朗读文本 / Speak Text
+                    </button>
+                    <button id="clearCustomBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold py-3 px-4 rounded-xl transition">
+                        🧹 清空 / Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- 右栏：语音控制中心 / Global TTS Settings Center -->
+            <div class="flex flex-col justify-between space-y-4 bg-slate-50/50 p-5 rounded-2xl border border-slate-100">
+                <div>
+                    <h3 class="text-base font-extrabold text-frBlue flex items-center gap-2">
+                        ⚙️ 语音控制中心 / Speech Settings Center
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">
+                        调整发音引擎、朗读速度及声调高低。/ Customize voice engine, reading speed, and pitch rate.
+                    </p>
+                </div>
+                
+                <div class="space-y-3.5">
+                    <!-- 语音选择 -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase flex items-center gap-1">
+                            🔊 语音引擎 (Voice Engine):
+                        </label>
+                        <select id="voiceSelect" class="bg-white border border-slate-200 text-xs rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-frBlue">
+                            <option value="">正在检测系统内置法语发音库...</option>
+                        </select>
+                    </div>
+
+                    <!-- 语速控制 -->
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold text-slate-500 uppercase min-w-[100px]">⚡ 语速 (Speed):</span>
+                        <input id="rateInput" type="range" min="0.5" max="1.5" step="0.1" value="0.9" class="w-full accent-frRed">
+                        <span id="rateValue" class="text-xs font-mono font-bold bg-white border border-slate-200 px-2 py-0.5 rounded text-slate-600 min-w-[40px] text-center">0.9x</span>
+                    </div>
+
+                    <!-- 音调控制 -->
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold text-slate-500 uppercase min-w-[100px]">🎵 音调 (Pitch):</span>
+                        <input id="pitchInput" type="range" min="0.5" max="1.5" step="0.1" value="1.0" class="w-full accent-frBlue">
+                        <span id="pitchValue" class="text-xs font-mono font-bold bg-white border border-slate-200 px-2 py-0.5 rounded text-slate-600 min-w-[40px] text-center">1.0x</span>
+                    </div>
+                </div>
+
+                <button id="stopBtn" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-1.5">
+                    ⏹ 停止播放 / Stop Speech
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 选项卡切换 -->
+    <main class="max-w-6xl mx-auto px-4 mt-6">
+        <div class="flex border-b border-slate-200 mb-6 bg-white rounded-t-2xl overflow-hidden shadow-sm">
+            <button id="tabRules" class="flex-1 py-4 text-center text-sm font-bold tracking-wide active-tab transition" onclick="switchTab('rules')">
+                📖 一、发音规则简表 / I. Pronunciation Chart
+            </button>
+            <button id="tabPhrases" class="flex-1 py-4 text-center text-sm font-bold tracking-wide text-slate-500 hover:text-frBlue transition" onclick="switchTab('phrases')">
+                💬 二、实用生存法语 32 句 / II. 32 Essential Phrases
+            </button>
+        </div>
+
+        <!-- 主板块二：发音规则简表 -->
+        <div id="contentRules" class="space-y-8">
+            
+            <!-- （一）口腔元音 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-frBlue text-white px-6 py-4 flex items-center justify-between">
+                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+                        <span class="bg-white text-frBlue w-5 h-5 rounded-full inline-flex items-center justify-center text-xs">1</span>
+                        口腔元音 (Voyelles orales)
+                    </h3>
+                    <span class="text-xs opacity-80 hidden sm:inline">点击卡片朗读单词 / Click card to pronounce</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 font-bold">
+                                <th class="py-3 px-4 w-16 text-center">序号</th>
+                                <th class="py-3 px-4 w-24">IPA音素</th>
+                                <th class="py-3 px-4 w-44">最常见字母组合</th>
+                                <th class="py-3 px-4">例词 1 (Example 1)</th>
+                                <th class="py-3 px-4">例词 2 (Example 2)</th>
+                                <th class="py-3 px-4">例词 3 (Example 3)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">1</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/a/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">a, à</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="la">la <span class="phonetic">/la/</span> <span class="def">定冠词 (the / el/la)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="là">là <span class="phonetic">/la/</span> <span class="def">那里 (there / allí)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="mal">mal <span class="phonetic">/mal/</span> <span class="def">坏的 (badly / mal)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">2</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɑ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">â, a+se</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="pâte">pâte <span class="phonetic">/pɑt/</span> <span class="def">面团 (pastry / pasta)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="bas">bas <span class="phonetic">/bɑ/</span> <span class="def">低的 (low / bajo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="classe">classe <span class="phonetic">/klɑs/</span> <span class="def">班级 (class / clase)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">3</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/i/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">i, î, ï, y</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="si">si <span class="phonetic">/si/</span> <span class="def">如果 (if / si)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="lit">lit <span class="phonetic">/li/</span> <span class="def">床 (bed / cama)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="île">île <span class="phonetic">/il/</span> <span class="def">岛屿 (island / isla)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">4</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/e/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">-er, -ez, -é/-ée</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="aller">aller <span class="phonetic">/ale/</span> <span class="def">去 (to go / ir)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="chez">chez <span class="phonetic">/ʃe/</span> <span class="def">在……家 (at / en casa de)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="été">été <span class="phonetic">/ete/</span> <span class="def">夏天 (summer / verano)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">5</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɛ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">è, ê, ai, aî, ei, -et</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="lait">lait <span class="phonetic">/lɛ/</span> <span class="def">牛奶 (milk / leche)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="mère">mère <span class="phonetic">/mɛʁ/</span> <span class="def">母亲 (mother / madre)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="fête">fête <span class="phonetic">/fɛt/</span> <span class="def">节日 (party / fiesta)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">6</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/y/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">u, û</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="tu">tu <span class="phonetic">/ty/</span> <span class="def">你 (you / tú)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="rue">rue <span class="phonetic">/ʁy/</span> <span class="def">街道 (street / calle)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="sûr">sûr <span class="phonetic">/syʁ/</span> <span class="def">确定的 (sure / seguro)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">7</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ø/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">eu, œu (开音节)</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="deux">deux <span class="phonetic">/dø/</span> <span class="def">二 (two / dos)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="peu">peu <span class="phonetic">/pø/</span> <span class="def">少量 (little / poco)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="heureux">heureux <span class="phonetic">/øʁø/</span> <span class="def">幸福的 (happy / feliz)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">8</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/œ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">eu, œu (多数闭音节)</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="sœur">sœur <span class="phonetic">/sœʁ/</span> <span class="def">姐妹 (sister / hermana)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="cœur">cœur <span class="phonetic">/cœur/</span> <span class="def">心 (heart / corazón)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="neuf">neuf <span class="phonetic">/nœf/</span> <span class="def">九 (nine / nueve)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">9</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ə/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">e (非重读位置)</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="le">le <span class="phonetic">/lə/</span> <span class="def">定冠词 (the / el)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="de">de <span class="phonetic">/də/</span> <span class="def">的 (of / de)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="petit">petit <span class="phonetic">/pəti/</span> <span class="def">小的 (small / pequeño)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">10</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/o/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">o, ô, au, eau</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="mot">mot <span class="phonetic">/mo/</span> <span class="def">词 (word / palabra)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="eau">eau <span class="phonetic">/o/</span> <span class="def">水 (water / agua)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="chaud">chaud <span class="phonetic">/ʃo/</span> <span class="def">热的 (hot / caliente)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">11</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɔ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">o (多数闭音节)</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="pomme">pomme <span class="phonetic">/pɔm/</span> <span class="def">苹果 (apple / manzana)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="porte">porte <span class="phonetic">/pɔʁt/</span> <span class="def">门 (door / puerta)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="donne">donne <span class="phonetic">/dɔn/</span> <span class="def">给 (gives / da)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">12</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/u/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">ou, où, oû</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="vous">vous <span class="phonetic">/vu/</span> <span class="def">您/你们 (you / ustedes)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="tout">tout <span class="phonetic">/tu/</span> <span class="def">全部 (all / todo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="goût">goût <span class="phonetic">/ɡu/</span> <span class="def">味道 (taste / gusto)</span></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- （二）鼻化元音 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-frBlue text-white px-6 py-4">
+                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+                        <span class="bg-white text-frBlue w-5 h-5 rounded-full inline-flex items-center justify-center text-xs">2</span>
+                        鼻化元音 (Voyelles nasales)
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 font-bold">
+                                <th class="py-3 px-4 w-16 text-center">序号</th>
+                                <th class="py-3 px-4 w-24">IPA音素</th>
+                                <th class="py-3 px-4 w-44">最常见字母组合</th>
+                                <th class="py-3 px-4">例词 1 (Example 1)</th>
+                                <th class="py-3 px-4">例词 2 (Example 2)</th>
+                                <th class="py-3 px-4">例词 3 (Example 3)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">13</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɛ̃/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">in, im, ain, aim, ein, eim, yn</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="vin">vin <span class="phonetic">/vɛ̃/</span> <span class="def">葡萄酒 (wine / vino)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="pain">pain <span class="phonetic">/pɛ̃/</span> <span class="def">面包 (bread / pan)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="plein">plein <span class="phonetic">/plɛ̃/</span> <span class="def">满的 (full / lleno)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">14</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɑ̃/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">an, am, en, em</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="an">an <span class="phonetic">/ɑ̃/</span> <span class="def">年 (year / año)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="temps">temps <span class="phonetic">/tɑ̃/</span> <span class="def">时间 (time / tiempo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="enfant">enfant <span class="phonetic">/ɑ̃fɑ̃/</span> <span class="def">孩子 (child / niño)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">15</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɔ̃/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">on, om</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="bon">bon <span class="phonetic">/bɔ̃/</span> <span class="def">好的 (good / bueno)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="nom">nom <span class="phonetic">/nɔ̃/</span> <span class="def">名字 (name / nombre)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="maison">maison <span class="phonetic">/mɛzɔ̃/</span> <span class="def">房子 (house / casa)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">16</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/œ̃/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">un, um</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="un">un <span class="phonetic">/œ̃/</span> <span class="def">一 (one / uno)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="brun">brun <span class="phonetic">/bʁœ̃/</span> <span class="def">棕色的 (brown / marrón)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="parfum">parfum <span class="phonetic">/paʁfœ̃/</span> <span class="def">香水 (perfume / perfume)</span></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- （三）半元音 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-frBlue text-white px-6 py-4">
+                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+                        <span class="bg-white text-frBlue w-5 h-5 rounded-full inline-flex items-center justify-center text-xs">3</span>
+                        半元音 (Semi-voyelles)
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 font-bold">
+                                <th class="py-3 px-4 w-16 text-center">序号</th>
+                                <th class="py-3 px-4 w-24">IPA音素</th>
+                                <th class="py-3 px-4 w-44">最常见字母组合</th>
+                                <th class="py-3 px-4">例词 1 (Example 1)</th>
+                                <th class="py-3 px-4">例词 2 (Example 2)</th>
+                                <th class="py-3 px-4">例词 3 (Example 3)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">17</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/j/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">i/y+元音, -il, -ill</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="pied">pied <span class="phonetic">/pje/</span> <span class="def">脚 (foot / pie)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="fille">fille <span class="phonetic">/fij/</span> <span class="def">女孩 (girl / chica)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="yeux">yeux <span class="phonetic">/jø/</span> <span class="def">眼睛 (eyes / ojos)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">18</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɥ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">u+元音</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="nuit">nuit <span class="phonetic">/nɥi/</span> <span class="def">夜晚 (night / noche)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="lui">lui <span class="phonetic">/lɥi/</span> <span class="def">他 (him / él)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="suis">suis <span class="phonetic">/sɥi/</span> <span class="def">是 (am / soy)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">19</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/w/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">ou+元音, oi, oin</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="oui">oui <span class="phonetic">/wi/</span> <span class="def">是 (yes / sí)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="moi">moi <span class="phonetic">/mwa/</span> <span class="def">我 (me / yo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="loin">loin <span class="phonetic">/lwɛ̃/</span> <span class="def">远 (far / lejos)</span></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- （四）辅音 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-frBlue text-white px-6 py-4">
+                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+                        <span class="bg-white text-frBlue w-5 h-5 rounded-full inline-flex items-center justify-center text-xs">4</span>
+                        辅音 (Consonnes)
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 font-bold">
+                                <th class="py-3 px-4 w-16 text-center">序号</th>
+                                <th class="py-3 px-4 w-24">IPA音素</th>
+                                <th class="py-3 px-4 w-44">最常见字母组合</th>
+                                <th class="py-3 px-4">例词 1 (Example 1)</th>
+                                <th class="py-3 px-4">例词 2 (Example 2)</th>
+                                <th class="py-3 px-4">例词 3 (Example 3)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">20</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/p/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">p, pp</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="papa">papa <span class="phonetic">/papa/</span> <span class="def">爸爸 (dad / papá)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="pas">pas <span class="phonetic">/pa/</span> <span class="def">不 (not / no)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="appeler">appeler <span class="phonetic">/aple/</span> <span class="def">呼叫 (to call / llamar)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">21</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/b/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">b, bb</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="bon">bon <span class="phonetic">/bɔ̃/</span> <span class="def">好的 (good / bueno)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="beau">beau <span class="phonetic">/bo/</span> <span class="def">美丽的 (beautiful / bello)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="beurre">beurre <span class="phonetic">/bœʁ/</span> <span class="def">黄油 (butter / mantequilla)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">22</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/t/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">t, tt, th</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="tu">tu <span class="phonetic">/ty/</span> <span class="def">你 (you / tú)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="tout">tout <span class="phonetic">/tu/</span> <span class="def">全部 (all / todo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="thé">thé <span class="phonetic">/te/</span> <span class="def">茶 (tea / té)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">23</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/d/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">d, dd</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="de">de <span class="phonetic">/də/</span> <span class="def">的 (of / de)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="doux">doux <span class="phonetic">/du/</span> <span class="def">柔软的 (soft / suave)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="dans">dans <span class="phonetic">/dɑ̃/</span> <span class="def">在……里 (in / en)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">24</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/k/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">c+a/o/u, k, qu, ch</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="car">car <span class="phonetic">/kaʁ/</span> <span class="def">因为 (because / porque)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="qui">qui <span class="phonetic">/ki/</span> <span class="def">谁 (who / quién)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="école">école <span class="phonetic">/ekɔl/</span> <span class="def">学校 (school / escuela)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">25</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɡ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">g+a/o/u, gu+e/i</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="gare">gare <span class="phonetic">/ɡaʁ/</span> <span class="def">车站 (station / estación)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="guerre">guerre <span class="phonetic">/ɡɛʁ/</span> <span class="def">战争 (war / guerra)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="grand">grand <span class="phonetic">/ɡʁɑ̃/</span> <span class="def">大的 (big / grande)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">26</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/f/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">f, ff, ph</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="faire">faire <span class="phonetic">/fɛʁ/</span> <span class="def">做 (to do / hacer)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="femme">femme <span class="phonetic">/fam/</span> <span class="def">女人 (woman / mujer)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="photo">photo <span class="phonetic">/fɔto/</span> <span class="def">照片 (photo / foto)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">27</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/v/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">v, w (少数词)</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="vous">vous <span class="phonetic">/vu/</span> <span class="def">您/你们 (you / ustedes)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="vie">vie <span class="phonetic">/vi/</span> <span class="def">生活 (life / vida)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="vin">vin <span class="phonetic">/vɛ̃/</span> <span class="def">葡萄酒 (wine / vino)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">28</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/s/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">s, ss, c+e/i, ç</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="si">si <span class="phonetic">/si/</span> <span class="def">如果 (if / si)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="poisson">poisson <span class="phonetic">/pwasɔ̃/</span> <span class="def">鱼 (fish / pez)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="garçon">garçon <span class="phonetic">/ɡaʁsɔ̃/</span> <span class="def">男孩 (boy / chico)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">29</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/z/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">s (双元音间), z</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="rose">rose <span class="phonetic">/ʁoz/</span> <span class="def">玫瑰 (rose / rosa)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="zéro">zéro <span class="phonetic">/zeʁo/</span> <span class="def">零 (zero / cero)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="maison">maison <span class="phonetic">/mɛzɔ̃/</span> <span class="def">房子 (house / casa)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">30</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ʃ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">ch, sch</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="chat">chat <span class="phonetic">/ʃa/</span> <span class="def">猫 (cat / gato)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="cher">cher <span class="phonetic">/ʃɛʁ/</span> <span class="def">亲爱的 (dear / querido)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="chose">chose <span class="phonetic">/ʃoz/</span> <span class="def">事物 (thing / cosa)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">31</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ʒ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">j, g+e/i, ge</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="je">je <span class="phonetic">/ʒə/</span> <span class="def">我 (I / yo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="manger">manger <span class="phonetic">/mɑ̃ʒe/</span> <span class="def">吃 (to eat / comer)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="jour">jour <span class="phonetic">/ʒuʁ/</span> <span class="def">日子 (day / día)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">32</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/m/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">m, mm</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="mer">mer <span class="phonetic">/mɛʁ/</span> <span class="def">海 (sea / mar)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="maman">maman <span class="phonetic">/mamɑ̃/</span> <span class="def">妈妈 (mom / mamá)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="main">main <span class="phonetic">/mɛ̃/</span> <span class="def">手 (hand / mano)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">33</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/n/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">n, nn</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="nous">nous <span class="phonetic">/nu/</span> <span class="def">我们 (we / nosotros)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="neuf">neuf <span class="phonetic">/nœf/</span> <span class="def">九 (nine / nueve)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="nom">nom <span class="phonetic">/nɔ̃/</span> <span class="def">名字 (name / nombre)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">34</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ɲ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">gn</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="montagne">montagne <span class="phonetic">/mɔ̃taɲ/</span> <span class="def">山 (mountain / montaña)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="signe">signe <span class="phonetic">/siɲ/</span> <span class="def">符号 (sign / signo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="agneau">agneau <span class="phonetic">/aɲo/</span> <span class="def">羔羊 (lamb / cordero)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">35</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/l/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">l, ll</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="le">le <span class="phonetic">/lə/</span> <span class="def">定冠词 (the / el)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="elle">elle <span class="phonetic">/ɛl/</span> <span class="def">她 (she / ella)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="livre">livre <span class="phonetic">/livʁ/</span> <span class="def">书 (book / libro)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 text-center text-xs text-slate-400 font-bold">36</td>
+                                <td class="py-3.5 px-4 font-mono font-bold text-frBlue">/ʁ/</td>
+                                <td class="py-3.5 px-4 text-slate-600 font-bold">r, rr</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="rue">rue <span class="phonetic">/ʁy/</span> <span class="def">街道 (street / calle)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="mer">mer <span class="phonetic">/mɛʁ/</span> <span class="def">海 (sea / mar)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="arriver">arriver <span class="phonetic">/aʁive/</span> <span class="def">到达 (to arrive / llegar)</span></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- （五）变音符号与特殊拼写字符 -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="bg-frBlue text-white px-6 py-4">
+                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+                        🌟 特殊拼写字符与变音符号 (Les Diacritiques)
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 font-bold">
+                                <th class="py-3 px-4">符号/字形</th>
+                                <th class="py-3 px-4">中文名称</th>
+                                <th class="py-3 px-4">发音及说明</th>
+                                <th class="py-3 px-4">例词 1 (Example 1)</th>
+                                <th class="py-3 px-4">例词 2 (Example 2)</th>
+                                <th class="py-3 px-4">例词 3 (Example 3)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <tr>
+                                <td class="py-3.5 px-4 font-extrabold text-frRed text-lg font-mono">´ (é)</td>
+                                <td class="py-3.5 px-4 font-bold">闭音符 (accent aigu)</td>
+                                <td class="py-3.5 px-4 text-xs text-slate-600">表示发闭口音 /e/，嘴角向两侧拉开</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="café">café <span class="phonetic">/kafe/</span> <span class="def">咖啡 (coffee / café)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="été">été <span class="phonetic">/ete/</span> <span class="def">夏天 (summer / verano)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="école">école <span class="phonetic">/ekɔl/</span> <span class="def">学校 (school / escuela)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 font-extrabold text-frRed text-lg font-mono">` (è, à, ù)</td>
+                                <td class="py-3.5 px-4 font-bold">开音符 (accent grave)</td>
+                                <td class="py-3.5 px-4 text-xs text-slate-600">è 发开口音 /ɛ/；à 和 ù 主要用于区分同形异义词</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="père">père <span class="phonetic">/pɛʁ/</span> <span class="def">父亲 (father / padre)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="très">très <span class="phonetic">/tʁɛ/</span> <span class="def">非常 (very / muy)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="où">où <span class="phonetic">/u/</span> <span class="def">哪里 (where / dónde)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 font-extrabold text-frRed text-lg font-mono">ˆ (â, ê, î, ô, û)</td>
+                                <td class="py-3.5 px-4 font-bold">长音符 (accent circonflexe)</td>
+                                <td class="py-3.5 px-4 text-xs text-slate-600">可出现在除 y 外元音上，常提示历史上省略了字母 s</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="forêt">forêt <span class="phonetic">/fɔʁɛ/</span> <span class="def">森林 (forest / bosque)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="tête">tête <span class="phonetic">/tɛt/</span> <span class="def">头 (head / cabeza)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="hôpital">hôpital <span class="phonetic">/ɔpital/</span> <span class="def">医院 (hospital / hospital)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 font-extrabold text-frRed text-lg font-mono">¨ (ë, ï, ü, ÿ)</td>
+                                <td class="py-3.5 px-4 font-bold">分音符 (tréma)</td>
+                                <td class="py-3.5 px-4 text-xs text-slate-600">表示两个相邻元音须分开单独发音，不构成字母组合</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="Noël">Noël <span class="phonetic">/nɔɛl/</span> <span class="def">圣诞节 (Christmas / Navidad)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="naïf">naïf <span class="phonetic">/naif/</span> <span class="def">天真的 (naive / ingenuo)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="maïs">maïs <span class="phonetic">/mais/</span> <span class="def">玉米 (corn / maíz)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 font-extrabold text-frRed text-lg font-mono">¸ (ç)</td>
+                                <td class="py-3.5 px-4 font-bold">软音符 (cédille)</td>
+                                <td class="py-3.5 px-4 text-xs text-slate-600">只用于字母 c 下，使其在 a/o/u 前发 /s/ 音而非 /k/ 音</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="garçon">garçon <span class="phonetic">/ɡaʁsɔ̃/</span> <span class="def">男孩 (boy / chico)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="français">français <span class="phonetic">/fʁɑ̃sɛ/</span> <span class="def">法语 (French / francés)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="leçon">leçon <span class="phonetic">/ləsɔ̃/</span> <span class="def">课程 (lesson / lección)</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-4 font-extrabold text-frBlue text-lg font-mono">œ / œ</td>
+                                <td class="py-3.5 px-4 font-bold">合体字 (ligature)</td>
+                                <td class="py-3.5 px-4 text-xs text-slate-600">由 e 与 o 融合而成，通常发 [œ] 或 [ø] 音</td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="sœur">sœur <span class="phonetic">/sœʁ/</span> <span class="def">姐妹 (sister / hermana)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="œil">œil <span class="phonetic">/œj/</span> <span class="def">眼睛 (eyes / ojos)</span></span></td>
+                                <td class="py-3.5 px-4"><span class="word-card" data-word="bœuf">bœuf <span class="phonetic">/bœf/</span> <span class="def">牛肉 (bœuf / bœuf)</span></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主板块三：实用生存法语 32 句 -->
+        <div id="contentPhrases" class="hidden space-y-4">
+            <div class="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                <span class="text-xs font-bold text-frBlue tracking-wider">🌟 实用法语口语 32 句 / 32 Essential French Phrases</span>
+                <span class="text-xs text-slate-400">点击朗读按钮播放整句完整内容 / Click Speak to hear entire sentence</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="phrasesContainer">
+                <!-- 动态渲染生成 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部扼要补充说明 (超纲内容精炼) -->
+    <footer class="max-w-6xl mx-auto px-4 mt-12 text-slate-500 border-t border-slate-200 pt-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs">
+            <div>
+                <h4 class="font-bold text-frBlue text-sm mb-3">📍 法语特色音素简析 / French Phonetics Key Notes</h4>
+                <p class="leading-relaxed mb-2">
+                    <strong class="text-frRed">鼻化元音 (Voyelles nasales)</strong>：发音时气流同时从口鼻流出（如 /ɛ̃/, /ɑ̃/, /ɔ̃/），形成独特共鸣。
+                </p>
+                <p class="leading-relaxed">
+                    <strong class="text-frRed">小舌音 /ʁ/ (Uvular fricative)</strong>：现代法语最具标志性辅音，由舌根靠近小舌摩擦声带发音。
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold text-frBlue text-sm mb-3">⚡ 语流音变精要 / Flow of Speech Rules</h4>
+                <ul class="space-y-2 leading-relaxed">
+                    <li>• <strong>联诵 (Liaison)</strong>：前词末不发音辅音遇后词首元音或哑音h时变读音，如 s/x 变 <strong class="text-frRed">/z/</strong>，d 变 <strong class="text-frRed">/t/</strong>。分为强制、禁止与自由联诵。</li>
+                    <li>• <strong>省音 (Élision)</strong>：功能词末的弱元音遇元音或哑音h起首的词，合并省略并书写为省字符（'）。</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-frBlue text-sm mb-3">📚 微信公众号：汲汲孜孜 / Subscribe: https://github.com/yangdns/port_languages </h4>
+                <p class="leading-relaxed mb-4">
+                    “汲汲孜孜”大孜老师出品。如果你喜欢此工具，请微信搜索关注，获取更多语言学习资源！
+                </p>
+                <div class="flex flex-col gap-2 p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
+                    <span class="font-bold text-frBlue">🔗 标准发音参考网站：</span>
+                    <a href="https://en.wikipedia.org/wiki/Help:IPA/French" target="_blank" class="text-frRed hover:underline">Wikipedia: IPA for French</a>
+                    <a href="https://ceciestlafrance.com/french-phonetic-alphabet/" target="_blank" class="text-frRed hover:underline">Ceci est la France Chart</a>
+                    <a href="https://en.wikipedia.org/wiki/French_phonology" target="_blank" class="text-frRed hover:underline">Wikipedia: French Phonology</a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-[11px] text-slate-400">
+            &copy; 2026 汲汲孜孜 版权所有
+        </div>
+    </footer>
+
+    <!-- CSS 强化组件样式 -->
+    <style>
+        .word-card {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            font-weight: 500;
+        }
+        .word-card:hover {
+            border-color: #052165;
+            background-color: #f1f5f9;
+            transform: translateY(-1px);
+        }
+        .phonetic {
+            font-family: monospace;
+            color: #052165;
+            font-size: 11px;
+            margin-left: 6px;
+            font-weight: bold;
+        }
+        .def {
+            color: #64748b;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+        .word-card::after {
+            content: "🔊";
+            font-size: 10px;
+            margin-left: 8px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+        .word-card:hover::after {
+            opacity: 1;
+        }
+        .word-card.playing {
+            background-color: #ED2939 !important;
+            border-color: #ED2939 !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(237, 41, 57, 0.2);
+        }
+        .word-card.playing .phonetic,
+        .word-card.playing .def {
+            color: white !important;
+        }
+        .word-card.playing::after {
+            content: "🎵";
+            opacity: 1;
+        }
+    </style>
+
+    <!-- JavaScript 交互与合成逻辑 -->
+    <script>
+        // 32 句实用高频口语数据
+        const phrasesData = [
+            {
+                tag: "打招呼 Salutations",
+                cn: "你/您好！",
+                fr: "Bonjour ! / Salut !",
+                en: "Hello! / Hi!",
+                es: "¡Hola!"
+            },
+            {
+                tag: "打招呼 Salutations",
+                cn: "早上（下午/晚上）好！ （晚安！）",
+                fr: "Bonjour (le matin/l’après‑midi) ! / Bonsoir ! / Bonne nuit !",
+                en: "Good morning! / Good afternoon! / Good evening! / Good night!",
+                es: "¡Buenos días! / ¡Buenas tardes! / ¡Buenas noches!"
+            },
+            {
+                tag: "再见 Congés",
+                cn: "再见！明天（一会儿/下次）见！",
+                fr: "Au revoir ! À demain ! / À tout à l'heure ! / À la prochaine !",
+                en: "Goodbye! See you tomorrow! / See you later! / See you next time!",
+                es: "¡Adiós! ¡Hasta mañana! / ¡Hasta luego! / ¡Hasta la próxima!"
+            },
+            {
+                tag: "致谢 Remerciements",
+                cn: "谢谢/多谢！ - 不客气。",
+                fr: "Merci ! / Merci beaucoup ! — De rien. / Je vous en prie.",
+                en: "Thank you! / Thanks a lot! — You’re welcome. / No problem.",
+                es: "¡Gracias! / ¡Muchas gracias! — De nada. / No hay de qué."
+            },
+            {
+                tag: "道歉 Excuses",
+                cn: "对不起/很抱歉。- 没关系/没事儿。",
+                fr: "Pardon. / Excusez‑moi. / Je suis désolé(e). — Ce n’est pas grave. / Pas de souci.",
+                en: "Sorry! / I ’m very sorry. — It’s okay. / No worries.",
+                es: "Perdón. / Lo siento. — No pasa nada. / No hay problema."
+            },
+            {
+                tag: "打扰 Déranger",
+                cn: "打扰/不好意思/麻烦/请问… - 没关系/没事儿。",
+                fr: "Excusez‑moi / Pardon de vous déranger / S’il vous plaît… — Ce n’est pas grave. / Pas de problème.",
+                en: "Excuse me / Sorry to bother you / May I ask… — No problem. / It’s fine.",
+                es: "Disculpe / Perdone / ¿Podría preguntar…? — No pasa nada. / No hay problema."
+            },
+            {
+                tag: "确认 Affirmations",
+                cn: "是/不是。对/不对。",
+                fr: "Oui. / Non. C’est vrai. / C’est faux. / C’est ça. / Ce n’est pas ça.",
+                en: "Yes. / No. That’s right. / That’s wrong.",
+                es: "Sí. / No. Es correcto. / Es incorrecto."
+            },
+            {
+                tag: "自我介绍 Présentation",
+                cn: "我是/我叫雅克，我是学生，我喜欢旅行。",
+                fr: "Je suis / Je m’appelle Jacques, je suis étudiant(e), j’aime voyager.",
+                en: "I am / My name is Jacques, I am a student, I like traveling.",
+                es: "Soy / Me llamo Jacques, soy estudiante, me gusta viajar."
+            },
+            {
+                tag: "关心 Nouvelles",
+                cn: "你【今天】怎么样？| 你没事吧？ - 很好。| 没事。",
+                fr: "Comment vas‑tu (aujourd’hui) ? | Ça va ? / Tout va bien ? — Très bien. | Ça va. / Rien de grave.",
+                en: "How are you (today)? | Are you okay? — I’m fine. | I’m okay. / Nothing serious.",
+                es: "¿Cómo estás (hoy)? | ¿Estás bien? — Muy bien. | Estoy bien. / No pasa nada."
+            },
+            {
+                tag: "喜好 Goûts",
+                cn: "我喜欢/爱你。她喜欢什么？她喜欢这个【礼物】吗？",
+                fr: "J’aime… / Je t’aime. Qu’est‑ce qu’elle aime ? Est‑ce qu’elle aime ce cadeau ?",
+                en: "I like… / I love you. What does she like? Does she like this gift?",
+                es: "Me gusta… / Te quiero (amo). ¿Qué le gusta (a ella)? ¿Le gusta este regalo?"
+            },
+            {
+                tag: "指令 Impératifs",
+                cn: "请【坐下】。- 谢谢/好的👌。",
+                fr: "Asseyez‑vous, s’il vous plaît. — Merci. / D’accord.",
+                en: "Please sit down. — Thank you. / Okay.",
+                es: "Siéntese, por favor. — Gracias. / De acuerdo."
+            },
+            {
+                tag: "警示 Alertes",
+                cn: "救命！| 小心！",
+                fr: "Au secours ! | Attention !",
+                en: "Help! / Warning! — Help! | Watch out! / Be careful!",
+                es: "¡Socorro! | ¡Cuidado!"
+            },
+            {
+                tag: "购物 Achats",
+                cn: "那个【红色的杯子】多少钱？ - 10 欧元。",
+                fr: "Combien coûte cette tasse rouge ? — 10 euros / dollars / yuans.",
+                en: "How much is that red cup? — 10 yuan / dollars / euros.",
+                es: "¿Cuánto cuesta esa taza roja? — 10 yuanes / dólares / euros."
+            },
+            {
+                tag: "购物 Achats",
+                cn: "我想要那个圆的/方的/好看的。- 给你。",
+                fr: "Je voudrais le rond / le carré / le joli. — Tiens / Voilà.",
+                en: "I want the round / square / pretty one. — Here you are.",
+                es: "Quisiera el redondo / el cuadrado / el bonito. — Aquí tienes."
+            },
+            {
+                tag: "请教 Permission",
+                cn: "我可以问你一个问题吗？ - 可以/没问题。",
+                fr: "Puis‑je vous poser une question ? — Oui, bien sûr. / Pas de problème.",
+                en: "May I ask you a question? — Yes, sure. / No problem.",
+                es: "¿Puedo hacerte una pregunta? — Sí, claro. / Sin problema."
+            },
+            {
+                tag: "问路 Itinéraires",
+                cn: "请问怎么去超市/机场/火车站/地铁/公交车站/公园？- 向前/后左/右。",
+                fr: "Excusez‑moi, comment aller au supermarché / à l’aéroport / à la gare / au métro / à l’arrêt de bus / au parc ? — Allez tout droit / à gauche / à droite / faites demi‑tour.",
+                en: "Excuse me, how do I get to the supermarket / airport / train station / subway / bus stop / park? — Go straight / left / right / back.",
+                es: "Disculpe, ¿cómo llego al supermercado / aeropuerto / estación de tren / metro / parada de autobús / parque? — Siga recto / a la izquierda / a la derecha / hacia atrás."
+            },
+            {
+                tag: "沟通 Incompréhension",
+                cn: "我不明白，请再说一遍/说慢点。",
+                fr: "Je ne comprends pas. Pouvez‑vous répéter, s’il vous plaît ? / Parlez plus lentement.",
+                en: "I don’t understand. Please say it again / speak more slowly.",
+                es: "No entiendo. Por favor, repita / hable más despacio."
+            },
+            {
+                tag: "沟通 Langues",
+                cn: "你【会】说英语（中文/西班牙语/当地语言）吗？",
+                fr: "Parlez‑vous anglais (chinois / espagnol / la langue locale) ?",
+                en: "Do you speak English (Chinese / Spanish / the local language)?",
+                es: "¿Habla inglés (chino / español / el idioma local)?"
+            },
+            {
+                tag: "沟通 Questions",
+                cn: "这是什么/啥意思？那是什么？这个怎么说？ - 禁止吸烟。",
+                fr: "Qu’est‑ce que c’est ? / Qu’est‑ce que ça veut dire ? C’est quoi, ça ? Comment dit‑on ceci ? — Interdiction de fumer.",
+                en: "What is this? / What does this mean? What is that? How do you say this? — No smoking.",
+                es: "¿Qué es esto? / ¿Qué significa esto? ¿Qué es eso? ¿Cómo se dice esto? — Prohibido fumar."
+            },
+            {
+                tag: "沟通 Événements",
+                cn: "怎么了？【发生了】什么事？ - 我不知道。",
+                fr: "Qu’est‑ce qui se passe ? / Que s’est‑il passé ? — Je ne sais pas.",
+                en: "What’s wrong? / What happened? — I don’t know.",
+                es: "¿Qué pasa? / ¿Qué ha pasado? — No sé."
+            },
+            {
+                tag: "时间 Moment",
+                cn: "你什么时候到/离开这里/车站？",
+                fr: "Quand arrives‑tu / pars‑tu d’ici / de la gare ?",
+                en: "When will you arrive / leave here / the station?",
+                es: "¿Cuándo llegas / te vas de aquí / de la estación?"
+            },
+            {
+                tag: "方位 Lieu",
+                cn: "请问饭馆/卫生间/市场/麦当劳在哪里？ - 在那边。",
+                fr: "Excusez‑moi, où se trouve le restaurant / les toilettes / le marché / le McDonald’s ? — C’est là‑bas.",
+                en: "Excuse me, where is the restaurant / restroom / market / McDonald’s? — It’s over there.",
+                es: "Disculpe, ¿đónde está el restaurante / los servicios / el mercado / McDonald’s? — Está allí."
+            },
+            {
+                tag: "方位 Origine",
+                cn: "你从哪里来，下一站去哪里？",
+                fr: "D’où viens‑tu ? Où vas‑tu après ?",
+                en: "Where are you from? Where are you going next?",
+                es: "¿De dónde vienes? ¿A dónde vas después?"
+            },
+            {
+                tag: "因果 Raison",
+                cn: "她为什么生气？ - 因为她累了/渴了/饿了。",
+                fr: "Pourquoi est‑elle en colère ? — Parce qu’elle est fatiguée / a soif / a faim.",
+                en: "Why is she angry? — Because she is tired / thirsty / hungry.",
+                es: "¿Por qué está enfadada? — Porque está cansada / tiene sed / tiene hambre."
+            },
+            {
+                tag: "目的 But",
+                cn: "他为什么在那儿/来中国/巴黎？ - 因为喜欢。",
+                fr: "Pourquoi est‑il là‑bas / est‑il venu en Chine / à Paris ? — Parce qu’il aime ça.",
+                en: "Why is he there / did he come to China / Paris? — Because he likes it.",
+                es: "¿Por qué está allí / vino a China / a París? — Porque le gusta."
+            },
+            {
+                tag: "人物 Personnes",
+                cn: "你是谁/叫什么？| 谁看到我的包了？",
+                fr: "Qui es‑tu ? / Comment tu t’appelles ? | Qui a vu mon sac ?",
+                en: "Who are you? / What’s your name? | Who saw my bag?",
+                es: "¿Quién eres? / ¿Cómo te llamas? | ¿Quién ha visto mi bolso?"
+            },
+            {
+                tag: "人物 Personnes",
+                cn: "你刚才看到谁了？| 你朋友在跟谁说话？",
+                fr: "Qui as‑tu vu tout à l’heure ? | À qui parle ton ami ?",
+                en: "Whom did you see just now? | Who is your friend talking to?",
+                es: "¿A quién viste hace un momento? | ¿Con quién habla tu amigo?"
+            },
+            {
+                tag: "支付 Moyen",
+                cn: "我怎么买/支付？ - 用现金/信用卡/支付宝/微信。",
+                fr: "Comment je peux payer ? — En espèces / par carte bancaire / avec Alipay / WeChat.",
+                en: "How do I pay? — With cash / credit card / Alipay / WeChat.",
+                es: "¿Cómo pago? — En efectivo / con tarjeta / Alipay / WeChat."
+            },
+            {
+                tag: "意愿 Volonté",
+                cn: "我今天必须得走了，你可以住一晚。 - 我想住3天，但只能住1晚，实际上可以待24小时。",
+                fr: "Je dois partir aujourd’hui, tu peux rester une nuit. — Je veux bien rester 3 jours, mais je ne peux rester qu’une nuit, en fait je peux rester 24 heures.",
+                en: "I have to leave today, you can stay one night. — I want to stay 3 days, but I can only stay 1 night, actually I can stay 24 hours.",
+                es: "Tengo que irme hoy, puedes quedarte una noche. — Quiero quedarme 3 días, pero solo puedo quedarme 1 noche, en realidad puedo quedarme 24 horas."
+            },
+            {
+                tag: "能力 Capacité",
+                cn: "你会开车/做饭吗？ - 我很会/不会（会一点儿）。",
+                fr: "Sais‑tu conduire / cuisiner ? — Oui, très bien. / Non, je ne sais pas. (Je sais un peu.)",
+                en: "Can you drive / cook? — Yes, I’m good at it. / No, I can’t. (A little bit.)",
+                es: "¿Sabes conducir / cocinar? — Sí, muy bien. / No, no sé. (Un poco.)"
+            },
+            {
+                tag: "条件 Clauses",
+                cn: "请去厕所的人带上零钱。",
+                fr: "Ceux qui vont aux toilettes, veuillez apporter de la monnaie.",
+                en: "Those who go to the toilet, please bring change.",
+                es: "Los que van al baño, por favor lleven cambio."
+            },
+            {
+                tag: "高级复合句 Complexe",
+                cn: "我打算明天坐飞机回家，因为要上班，但是我买不到票。怎么办🤷‍♀️？",
+                fr: "Je compte rentrer chez moi en avion demain, parce que je dois travailler, mais je n’arrive pas à acheter de billet. Qu’est‑ce que je fais ?",
+                en: "I plan to fly home tomorrow because I have to work, but I can’t get a ticket. What should I do?",
+                es: "Pienso volar a casa mañana porque tengo que trabajar, pero no consigo billete. ¿Qué hago?"
+            }
+        ];
+
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let activeSpeaker = null;
+
+        // 默认歌词
+        const defaultSongText = "Frère Jacques, Frère Jacques,\nDormez-vous? Dormez-vous?\nSonnez les matines! Sonnez les matines!\nDin, dan, don. Din, dan, don.";
+
+        // 初始化网页
+        document.addEventListener("DOMContentLoaded", () => {
+            initSpeech();
+            buildPhrasesList();
+            bindWordClickEvents();
+            setupCustomReader();
+        });
+
+        // 绑定语音引擎与控制器
+        function initSpeech() {
+            if (!synth) {
+                console.error("当前浏览器不支持 Web Speech API / TTS is not supported.");
+                return;
+            }
+
+            // 加载多语种语音库
+            function loadVoices() {
+                voices = synth.getVoices();
+                const select = document.getElementById("voiceSelect");
+                select.innerHTML = "";
+
+                // 筛选法语库
+                const frVoices = voices.filter(voice => voice.lang.toLowerCase().includes("fr"));
+                
+                if (frVoices.length === 0) {
+                    const opt = document.createElement("option");
+                    opt.value = "";
+                    opt.textContent = "未检测到系统法语发音库, 将采用默认引擎 / Default Engine";
+                    select.appendChild(opt);
+                } else {
+                    frVoices.forEach(voice => {
+                        const opt = document.createElement("option");
+                        opt.value = voice.name;
+                        opt.textContent = `${voice.name} (${voice.lang})`;
+                        // 优先选择高保真或常用标准声音
+                        if (voice.name.includes("Hortense") || voice.name.includes("Google") || voice.name.includes("Standard")) {
+                            opt.selected = true;
+                        }
+                        select.appendChild(opt);
+                    });
+                }
+            }
+
+            loadVoices();
+            if (synth.onvoiceschanged !== undefined) {
+                synth.onvoiceschanged = loadVoices;
+            }
+
+            // 监听语速滑动
+            const rateInput = document.getElementById("rateInput");
+            const rateValue = document.getElementById("rateValue");
+            rateInput.addEventListener("input", (e) => {
+                rateValue.textContent = e.target.value + "x";
+            });
+
+            // 监听音调滑动
+            const pitchInput = document.getElementById("pitchInput");
+            const pitchValue = document.getElementById("pitchValue");
+            pitchInput.addEventListener("input", (e) => {
+                pitchValue.textContent = e.target.value + "x";
+            });
+
+            // 停止播放按钮
+            document.getElementById("stopBtn").addEventListener("click", () => {
+                stopSpeech();
+            });
+        }
+
+        // 停止当前所有播放
+        function stopSpeech() {
+            synth.cancel();
+            if (activeSpeaker) {
+                activeSpeaker.classList.remove("playing", "playing-btn");
+                activeSpeaker = null;
+            }
+        }
+
+        // 标准法语发音主调度
+        function speakFrench(text, elementToHighlight) {
+            stopSpeech();
+
+            if (!text) return;
+
+            // 核心修复：不进行前半段切分，避免严重遗漏！
+            // 将 slash（/）、破折号（—）及 竖线（|）统一替换为顿号/逗号，保留所有文字的同时实现自然的语句分读停顿
+            let cleanText = text
+                .replace(/\//g, ', ')
+                .replace(/—/g, ', ')
+                .replace(/\|/g, ', ')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = "fr-FR";
+
+            // 匹配选择的声音
+            const selectedVoiceName = document.getElementById("voiceSelect").value;
+            const selectedVoice = voices.find(v => v.name === selectedVoiceName);
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+
+            // 读取参数
+            utterance.rate = parseFloat(document.getElementById("rateInput").value) || 0.9;
+            utterance.pitch = parseFloat(document.getElementById("pitchInput").value) || 1.0;
+
+            // 动画律动绑定
+            utterance.onstart = () => {
+                activeSpeaker = elementToHighlight;
+                if (elementToHighlight.classList.contains("word-card")) {
+                    elementToHighlight.classList.add("playing");
+                } else {
+                    elementToHighlight.classList.add("playing-btn");
+                }
+            };
+
+            // 动画撤销
+            utterance.onend = () => {
+                if (activeSpeaker) {
+                    activeSpeaker.classList.remove("playing", "playing-btn");
+                    activeSpeaker = null;
+                }
+            };
+
+            utterance.onerror = () => {
+                if (activeSpeaker) {
+                    activeSpeaker.classList.remove("playing", "playing-btn");
+                    activeSpeaker = null;
+                }
+            };
+
+            synth.speak(utterance);
+        }
+
+        // 配置最上方：自定义输入控制交互
+        function setupCustomReader() {
+            const textarea = document.getElementById("customTextInput");
+            const playBtn = document.getElementById("playCustomBtn");
+            const clearBtn = document.getElementById("clearCustomBtn");
+
+            // 预加载经典歌词
+            textarea.value = defaultSongText;
+
+            playBtn.addEventListener("click", () => {
+                speakFrench(textarea.value, playBtn);
+            });
+
+            clearBtn.addEventListener("click", () => {
+                textarea.value = "";
+                stopSpeech();
+            });
+        }
+
+        // 切换一、二板块页面
+        function switchTab(tabType) {
+            const btnRules = document.getElementById("tabRules");
+            const btnPhrases = document.getElementById("tabPhrases");
+            const conRules = document.getElementById("contentRules");
+            const conPhrases = document.getElementById("contentPhrases");
+
+            stopSpeech();
+
+            if (tabType === 'rules') {
+                btnRules.className = "flex-1 py-4 text-center text-sm font-bold tracking-wide active-tab transition";
+                btnPhrases.className = "flex-1 py-4 text-center text-sm font-bold tracking-wide text-slate-500 hover:text-frBlue transition";
+                conRules.classList.remove("hidden");
+                conPhrases.classList.add("hidden");
+            } else {
+                btnPhrases.className = "flex-1 py-4 text-center text-sm font-bold tracking-wide active-tab transition";
+                btnRules.className = "flex-1 py-4 text-center text-sm font-bold tracking-wide text-slate-500 hover:text-frBlue transition";
+                conPhrases.classList.remove("hidden");
+                conRules.classList.add("hidden");
+            }
+        }
+
+        // 绑定第一部分：音标单词卡的点击发音事件（点击精准读取 data-word，无任何杂音）
+        function bindWordClickEvents() {
+            const cards = document.querySelectorAll(".word-card");
+            cards.forEach(card => {
+                card.addEventListener("click", () => {
+                    const cleanWord = card.getAttribute("data-word");
+                    speakFrench(cleanWord, card);
+                });
+            });
+        }
+
+        // 动态渲染生存法语 32 句（带有清晰的序号格式）
+        function buildPhrasesList() {
+            const container = document.getElementById("phrasesContainer");
+            container.innerHTML = "";
+
+            phrasesData.forEach((item, index) => {
+                const card = document.createElement("div");
+                card.className = "bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition flex flex-col justify-between gap-4";
+                
+                // 序号高亮双位数
+                const displayIndex = String(index + 1).padStart(2, '0');
+
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-slate-100 text-slate-500 rounded-full tracking-wider">${item.tag}</span>
+                            <span class="text-xs font-mono font-bold text-frRed">No. ${displayIndex}</span>
+                        </div>
+                        <h4 class="text-base font-extrabold text-slate-800 leading-tight">${displayIndex}. ${item.cn}</h4>
+                        
+                        <!-- 法语朗读框 -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 mt-2">
+                            <p class="text-sm font-bold text-frBlue tracking-wide leading-relaxed">${item.fr}</p>
+                        </div>
+                        
+                        <!-- 多语种翻译对照 -->
+                        <div class="text-[11px] text-slate-400 space-y-1 mt-1 pt-1.5 border-t border-dashed border-slate-100">
+                            <p><span class="font-bold text-slate-400">EN:</span> ${item.en}</p>
+                            <p><span class="font-bold text-slate-400">ES:</span> ${item.es}</p>
+                        </div>
+                    </div>
+                    
+                    <button class="phrase-play-btn w-full mt-2 bg-frBlue hover:bg-[#072a83] text-white text-xs font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm">
+                        <span>🔊 完整朗读 / Speak Now</span>
+                    </button>
+                `;
+
+                // 绑定口语播放按钮事件（采用模式一：整句一口气完美连读，不遗漏答句）
+                const btn = card.querySelector(".phrase-play-btn");
+                btn.addEventListener("click", () => {
+                    speakFrench(item.fr, btn);
+                });
+
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
