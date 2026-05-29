@@ -11,12 +11,14 @@
 
 ##  🇨🇳 cn (zh-HanS) 简体中文 · 🇬🇧 en Simpilified Chinese 
 🇪🇸 es chino simplificado · 🇵🇹 pt chinês simplificado · 🇫🇷 fr chinois simplifié · 🇸🇦 ar الصينية المبسطة · 🇩🇪 de vereinfachtes Chinesisch · 🇳🇱 nl vereenvoudigd Chinees · 🇷🇺 ru упрощённый китайский · 🇮🇹 it cinese semplificato · 🏛️ la Sinica simplicior · 🇮🇱 he סינית מפושטת · 🇯🇵 ja 簡体字中国語 · 🇰🇷 ko 간체 중국어 · 🇮🇳 hi सरलीकृत चीनी · 🇱🇻 lv vienkāršotā ķīniešu valoda
+
 这里收录“*万国语言之门*”系列文章（微信公众号“*汲汲孜孜*”）相关的网页，是我依靠AI写的语言学习入门网页，都是学习语言相关的——帮你撬开巴别塔之门。
 （注：为方便其他语言读者，提供了其他语言的介绍，但网页里只保留了中文和英文——我们默认采用中文或英文来学习这些语言。）
 
 
 ## 🇬🇧 en English · 🇨🇳 cn (zh-HanS) 英语 
 · 🇪🇸 es inglés · 🇵🇹 pt inglês · 🇫🇷 fr anglais · 🇸🇦 ar الإنجليزية · 🇩🇪 de Englisch · 🇳🇱 nl Engels · 🇷🇺 ru английский · 🇮🇹 it inglese · 🏛️ la Anglica · 🇮🇱 he אנגלית · 🇯🇵 ja 英語 · 🇰🇷 ko 영어 · 🇮🇳 hi अंग्रेज़ी · 🇱🇻 lv angļu valoda
+
 This site collects web pages related to the "Gateway to Languages of the World" series (from the WeChat public account "Jíjí Zīzī" “*汲汲孜孜*”), which are introductory language-learning pages I created with the help of AI — all about learning languages, helping you pry open the door of Babel.
 
 ### 🇪🇸 Español (en: Spanish) (cn: 西班牙语)
@@ -77,4 +79,6 @@ Open `Filename.html'
  
 **E-mail**: yyang.ustc (AT) gmail.com
 
-Feel free to write to me for language learning ideas and techniques. You are highly appreciated to recommend this updating project to language learners or educators.
+- Feel free to write to me for language learning ideas and techniques. 
+
+- You are highly appreciated to recommend this updating project to language learners or educators.
