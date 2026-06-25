@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chinese Reading easily, with Pinyin & vice versa  中文标拼音阅读、中文-外语直接互学 </title>
+  <title> 中文轻松学 | Read2Learn: Chinese and other language with Pinyin/Latin and TTS. </title>
   <style>
     :root {
       color-scheme: light dark;
@@ -221,6 +221,15 @@
       line-height: 1.45;
     }
 
+    .pronunciation {
+      margin-top: 4px;
+      color: #7a4a24;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      font-size: 0.66em;
+      line-height: 1.45;
+    }
+
     .subject .py,
     .subject .zh,
     .subject .literal {
@@ -259,41 +268,45 @@
       <label>
         <span id="targetLanguageLabel">目标语言 / Target language</span>
         <select id="targetLang" aria-label="目标语言 / Target language">
-        <option value="zh" selected>中文</option>
-        <option value="en">English</option>
-        <option value="ja">日本語</option>
-        <option value="ko">한국어</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="pt">Português (Portugal)</option>
-        <option value="it">Italiano</option>
-        <option value="nl">Nederlands</option>
-        <option value="ru">Русский</option>
-        <option value="ar">العربية</option>
-        <option value="hi">हिन्दी</option>
-        <option value="lv">Latviešu</option>
-        <option value="he">עברית</option>
+        <option value="zh" selected>Chinese (中文) - 中文</option>
+        <option value="en">English (English) - 英语</option>
+        <option value="ja">Japanese (日本語) - 日语</option>
+        <option value="ko">Korean (한국어) - 韩语</option>
+        <option value="es">Spanish (Español) - 西班牙语</option>
+        <option value="fr">French (Français) - 法语</option>
+        <option value="de">German (Deutsch) - 德语</option>
+        <option value="pt">Portuguese (Português) - 葡萄牙语</option>
+        <option value="it">Italian (Italiano) - 意大利语</option>
+        <option value="nl">Dutch (Nederlands) - 荷兰语</option>
+        <option value="ru">Russian (Русский) - 俄语</option>
+        <option value="ar">Arabic (العربية) - 阿拉伯语</option>
+        <option value="hi">Hindi (हिन्दी) - 印地语</option>
+        <option value="lv">Latvian (Latviešu) - 拉脱维亚语</option>
+        <option value="he">Hebrew (עברית) - 希伯来语</option>
+        <option value="el">Greek (Ελληνικά) - 希腊语</option>
+        <option value="la">Latin (Latina) - 拉丁语</option>
         </select>
       </label>
       <label>
         <span id="learningLanguageLabel">学习语言 / Learning language</span>
         <select id="learningLang" aria-label="学习语言 / Learning language">
-        <option value="zh">中文</option>
-        <option value="en" selected>English</option>
-        <option value="ja">日本語</option>
-        <option value="ko">한국어</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="pt">Português (Portugal)</option>
-        <option value="it">Italiano</option>
-        <option value="nl">Nederlands</option>
-        <option value="ru">Русский</option>
-        <option value="ar">العربية</option>
-        <option value="hi">हिन्दी</option>
-        <option value="lv">Latviešu</option>
-        <option value="he">עברית</option>
+        <option value="zh">Chinese (中文) - 中文</option>
+        <option value="en" selected>English (English) - 英语</option>
+        <option value="ja">Japanese (日本語) - 日语</option>
+        <option value="ko">Korean (한국어) - 韩语</option>
+        <option value="es">Spanish (Español) - 西班牙语</option>
+        <option value="fr">French (Français) - 法语</option>
+        <option value="de">German (Deutsch) - 德语</option>
+        <option value="pt">Portuguese (Português) - 葡萄牙语</option>
+        <option value="it">Italian (Italiano) - 意大利语</option>
+        <option value="nl">Dutch (Nederlands) - 荷兰语</option>
+        <option value="ru">Russian (Русский) - 俄语</option>
+        <option value="ar">Arabic (العربية) - 阿拉伯语</option>
+        <option value="hi">Hindi (हिन्दी) - 印地语</option>
+        <option value="lv">Latvian (Latviešu) - 拉脱维亚语</option>
+        <option value="he">Hebrew (עברית) - 希伯来语</option>
+        <option value="el">Greek (Ελληνικά) - 希腊语</option>
+        <option value="la">Latin (Latina) - 拉丁语</option>
         </select>
       </label>
     </div>
@@ -755,6 +768,58 @@
         readSentence: (index, total) => `קורא את המשפט ${index} / ${total}`,
         pinyinFailed: "לא ניתן לטעון את ספריית הפין-יין. רענן לאחר חיבור לאינטרנט.",
         stopped: "הקריאה נעצרה"
+      },
+      el: {
+        name: "Ελληνικά",
+        google: "el",
+        memory: "el",
+        tts: "el",
+        dir: "ltr",
+        title: "Εργαλείο pinyin και ανάγνωσης κινεζικών",
+        chars: "χαρακτήρες",
+        prompt: "Πληκτρολογήστε κινεζικά ή οποιαδήποτε υποστηριζόμενη γλώσσα. Πρώτα θα πάρω τα κινεζικά και μετά θα δείξω pinyin, επεξηγήσεις, μετάφραση και ανάγνωση στη γλώσσα-στόχο.",
+        language: "Γλώσσα διεπαφής",
+        loading: "Φόρτωση βιβλιοθήκης pinyin...",
+        empty: "Πληκτρολογήστε κείμενο και εδώ θα εμφανιστούν τα κινεζικά, το pinyin, οι εξηγήσεις και η μετάφραση.",
+        clear: "Καθαρισμός",
+        rate: "Ταχύτητα",
+        play: "Αναπαραγωγή",
+        playFromSelection: "Αναπαραγωγή από επιλογή",
+        stop: "Διακοπή",
+        translating: "Μετάφραση...",
+        unavailable: "Η μετάφραση δεν είναι διαθέσιμη",
+        ttsUnsupported: "Αυτό το πρόγραμμα περιήγησης δεν υποστηρίζει ανάγνωση φωνής.",
+        voicesLoading: "Φόρτωση φωνών συστήματος...",
+        ttsMissing: "Αυτό το πρόγραμμα περιήγησης δεν υποστηρίζει ανάγνωση φωνής.",
+        readSentence: (index, total) => `Ανάγνωση πρότασης ${index} / ${total}`,
+        pinyinFailed: "Δεν ήταν δυνατή η φόρτωση της βιβλιοθήκης pinyin. Ανανεώστε μετά τη σύνδεση στο διαδίκτυο.",
+        stopped: "Η ανάγνωση σταμάτησε"
+      },
+      la: {
+        name: "Latina",
+        google: "la",
+        memory: "la",
+        tts: "la",
+        dir: "ltr",
+        title: "Instrumentum pinyin et lectionis Sinicae",
+        chars: "litterae",
+        prompt: "Scribe Sinice vel quavis lingua sustentata. Primum textum Sinicum obtinebo, deinde pinyin, explanationes, translationem et lectionem linguae destinatae ostendam.",
+        language: "Lingua instrumenti",
+        loading: "Bibliotheca pinyin oneratur...",
+        empty: "Scribe textum; Sinicum, pinyin, explanationes et translatio hic apparebunt.",
+        clear: "Delere",
+        rate: "Celeritas",
+        play: "Legere",
+        playFromSelection: "Legere ex selectione",
+        stop: "Sistere",
+        translating: "Transfero...",
+        unavailable: "Translatio non praesto est",
+        ttsUnsupported: "Hoc navigatrum lectionem vocalem non sustinet.",
+        voicesLoading: "Voces systematis onerantur...",
+        ttsMissing: "Hoc navigatrum lectionem vocalem non sustinet.",
+        readSentence: (index, total) => `Sententia ${index} / ${total} legitur`,
+        pinyinFailed: "Bibliotheca pinyin onerari non potuit. Renova post conexionem interretialem.",
+        stopped: "Lectio constitit"
       }
     };
     const controlLabels = {
@@ -772,7 +837,35 @@
       hi: { target: "लक्ष्य भाषा", learning: "सीखने की भाषा" },
       lv: { target: "Mērķvaloda", learning: "Mācību valoda" },
       he: { target: "שפת יעד", learning: "שפת למידה" },
+      el: { target: "Γλώσσα-στόχος", learning: "Γλώσσα εκμάθησης" },
+      la: { target: "Lingua destinata", learning: "Lingua discenda" },
       zh: { target: "目标语言", learning: "学习语言" }
+    };
+    const ipaLexicon = {
+      en: {
+        i: "aɪ", love: "lʌv", reading: "ˈriːdɪŋ", chinese: "tʃaɪˈniːz",
+        input: "ˈɪnpʊt", anything: "ˈɛniˌθɪŋ", you: "juː", can: "kæn",
+        to: "tuː", begin: "bɪˈɡɪn", language: "ˈlæŋɡwɪdʒ", learn: "lɝːn",
+        learning: "ˈlɝːnɪŋ", read: "riːd", use: "juːz"
+      },
+      la: {
+        amo: "ˈa.mo", amare: "aˈmaː.re", lego: "ˈle.go", lingua: "ˈliŋ.gwa",
+        sinica: "ˈsi.ni.ka", discere: "ˈdis.ke.re"
+      }
+    };
+    const romanMaps = {
+      el: {
+        Α: "A", Β: "V", Γ: "G", Δ: "D", Ε: "E", Ζ: "Z", Η: "I", Θ: "Th", Ι: "I", Κ: "K", Λ: "L", Μ: "M", Ν: "N", Ξ: "X", Ο: "O", Π: "P", Ρ: "R", Σ: "S", Τ: "T", Υ: "Y", Φ: "F", Χ: "Ch", Ψ: "Ps", Ω: "O",
+        α: "a", β: "v", γ: "g", δ: "d", ε: "e", ζ: "z", η: "i", θ: "th", ι: "i", κ: "k", λ: "l", μ: "m", ν: "n", ξ: "x", ο: "o", π: "p", ρ: "r", σ: "s", ς: "s", τ: "t", υ: "y", φ: "f", χ: "ch", ψ: "ps", ω: "o"
+      },
+      ru: {
+        а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "yo", ж: "zh", з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "kh", ц: "ts", ч: "ch", ш: "sh", щ: "shch", ы: "y", э: "e", ю: "yu", я: "ya", ъ: "", ь: "",
+        А: "A", Б: "B", В: "V", Г: "G", Д: "D", Е: "E", Ё: "Yo", Ж: "Zh", З: "Z", И: "I", Й: "Y", К: "K", Л: "L", М: "M", Н: "N", О: "O", П: "P", Р: "R", С: "S", Т: "T", У: "U", Ф: "F", Х: "Kh", Ц: "Ts", Ч: "Ch", Ш: "Sh", Щ: "Shch", Ы: "Y", Э: "E", Ю: "Yu", Я: "Ya", Ъ: "", Ь: ""
+      },
+      ar: { ا: "a", أ: "a", إ: "i", آ: "aa", ب: "b", ت: "t", ث: "th", ج: "j", ح: "h", خ: "kh", د: "d", ذ: "dh", ر: "r", ز: "z", س: "s", ش: "sh", ص: "s", ض: "d", ط: "t", ظ: "z", ع: "'", غ: "gh", ف: "f", ق: "q", ك: "k", ل: "l", م: "m", ن: "n", ه: "h", و: "w", ي: "y", ى: "a", ة: "a", ء: "'", "َ": "a", "ِ": "i", "ُ": "u", "ْ": "", "ّ": "" },
+      he: { א: "", ב: "b", ג: "g", ד: "d", ה: "h", ו: "v", ז: "z", ח: "kh", ט: "t", י: "y", כ: "kh", ך: "kh", ל: "l", מ: "m", ם: "m", נ: "n", ן: "n", ס: "s", ע: "", פ: "p", ף: "f", צ: "ts", ץ: "ts", ק: "q", ר: "r", ש: "sh", ת: "t" },
+      hi: { "अ": "a", "आ": "ā", "इ": "i", "ई": "ī", "उ": "u", "ऊ": "ū", "ऋ": "ṛ", "ए": "e", "ऐ": "ai", "ओ": "o", "औ": "au", "क": "ka", "ख": "kha", "ग": "ga", "घ": "gha", "च": "ca", "छ": "cha", "ज": "ja", "झ": "jha", "ट": "ṭa", "ठ": "ṭha", "ड": "ḍa", "ढ": "ḍha", "त": "ta", "थ": "tha", "द": "da", "ध": "dha", "न": "na", "प": "pa", "फ": "pha", "ब": "ba", "भ": "bha", "म": "ma", "य": "ya", "र": "ra", "ल": "la", "व": "va", "श": "śa", "ष": "ṣa", "स": "sa", "ह": "ha", "ा": "ā", "ि": "i", "ी": "ī", "ु": "u", "ू": "ū", "े": "e", "ै": "ai", "ो": "o", "ौ": "au", "ं": "ṃ", "ः": "ḥ", "्": "" },
+      ja: { あ: "a", い: "i", う: "u", え: "e", お: "o", か: "ka", き: "ki", く: "ku", け: "ke", こ: "ko", さ: "sa", し: "shi", す: "su", せ: "se", そ: "so", た: "ta", ち: "chi", つ: "tsu", て: "te", と: "to", な: "na", に: "ni", ぬ: "nu", ね: "ne", の: "no", は: "ha", ひ: "hi", ふ: "fu", へ: "he", ほ: "ho", ま: "ma", み: "mi", む: "mu", め: "me", も: "mo", や: "ya", ゆ: "yu", よ: "yo", ら: "ra", り: "ri", る: "ru", れ: "re", ろ: "ro", わ: "wa", を: "o", ん: "n", ア: "a", イ: "i", ウ: "u", エ: "e", オ: "o", カ: "ka", キ: "ki", ク: "ku", ケ: "ke", コ: "ko", サ: "sa", シ: "shi", ス: "su", セ: "se", ソ: "so", タ: "ta", チ: "chi", ツ: "tsu", テ: "te", ト: "to", ナ: "na", ニ: "ni", ヌ: "nu", ネ: "ne", ノ: "no", ハ: "ha", ヒ: "hi", フ: "fu", ヘ: "he", ホ: "ho", マ: "ma", ミ: "mi", ム: "mu", メ: "me", モ: "mo", ヤ: "ya", ユ: "yu", ヨ: "yo", ラ: "ra", リ: "ri", ル: "ru", レ: "re", ロ: "ro", ワ: "wa", ヲ: "o", ン: "n" }
     };
     const translationCache = new Map();
     let pinyin;
@@ -785,6 +878,7 @@
     let playSession = 0;
     let renderSession = 0;
     let seededInput = false;
+    let kuroshiroPromise = null;
 
     function targetLanguage() {
       return languages[targetLang.value] ?? languages.zh;
@@ -799,7 +893,6 @@
     }
 
     function interfaceLanguage() {
-      if (targetLang.value === "zh" && sourceHasChinese(input.value)) return languages.en;
       return targetLang.value === "zh" ? learningLanguage() : targetLanguage();
     }
 
@@ -829,13 +922,13 @@
       document.documentElement.lang = targetIsChinese() ? `zh-CN-${learningLang.value}` : `zh-CN-${targetLang.value}`;
       document.documentElement.dir = lang.dir;
       document.title = bilingual("中文学习工具", lang.title);
-      const labels = controlLabels[targetLang.value === "zh" && sourceHasChinese(input.value) ? "en" : (targetIsChinese() ? learningLang.value : targetLang.value)] || controlLabels.en;
+      const labels = controlLabels[targetIsChinese() ? learningLang.value : targetLang.value] || controlLabels.en;
       targetLanguageLabel.textContent = bilingual("目标语言", labels.target);
       learningLanguageLabel.textContent = bilingual("学习语言", labels.learning);
       title.textContent = bilingual("中文互学、拼音、翻译和朗读", lang.title);
       input.placeholder = bilingual("请输入任意支持语言文本", lang.prompt);
       if (!seededInput) {
-        input.value = "我爱读中文！我们开始吧！Are you ready? Input anything please.";
+        input.value = "我爱读中文！我也爱用中文学习语言。I love reading Chinese! Input anything to begin... ";
         seededInput = true;
       }
       clear.textContent = bilingual("清空", lang.clear);
@@ -900,7 +993,11 @@
         natural.className = "natural";
         natural.textContent = bilingual("翻译中...", currentLanguage().translating);
 
-        sentenceSpan.append(aligned, natural);
+        const pronunciation = document.createElement("div");
+        pronunciation.className = "pronunciation";
+        pronunciation.textContent = "";
+
+        sentenceSpan.append(aligned, natural, pronunciation);
         output.append(sentenceSpan);
         translateSentence(sentence.text, sentenceSpan, sentenceIndex, session);
       });
@@ -1005,9 +1102,10 @@
       return word;
     }
 
-    function renderSentence(sentenceNode, analysis, naturalText) {
+    function renderSentence(sentenceNode, analysis, naturalText, pronunciationText = "") {
       const aligned = sentenceNode.querySelector(".aligned");
       const natural = sentenceNode.querySelector(".natural");
+      const pronunciation = sentenceNode.querySelector(".pronunciation");
       aligned.replaceChildren();
 
       analysis.tokens.forEach((token, tokenIndex) => {
@@ -1035,6 +1133,8 @@
       });
 
       natural.textContent = naturalText || bilingual("无法翻译", currentLanguage().unavailable);
+      pronunciation.textContent = pronunciationText;
+      pronunciation.hidden = !pronunciationText;
     }
 
     function analyzeSentence(text, naturalText = "") {
@@ -1182,6 +1282,112 @@
       return found || hint[1][0];
     }
 
+    async function pronunciationLine(text, langCode) {
+      const code = normalizeLanguageCode(langCode);
+      if (!text.trim() || code === "zh-CN") return "";
+
+      if (code === "la") return ipaForLatinText(text, code);
+      if (code === "el") return transliterateGreek(text);
+      if (code === "ru") return transliterateByMap(text, romanMaps.ru);
+      if (code === "ar") return transliterateByMap(text, romanMaps.ar);
+      if (code === "he") return transliterateByMap(text, romanMaps.he);
+      if (code === "hi") return transliterateByMap(text, romanMaps.hi);
+      if (code === "ja") return await romanizeJapanese(text);
+      if (code === "ko") return transliterateKorean(text);
+
+      return "";
+    }
+
+    async function romanizeJapanese(text) {
+      try {
+        const kuroshiro = await loadKuroshiro();
+        return await kuroshiro.convert(text, {
+          mode: "spaced",
+          romajiSystem: "hepburn",
+          to: "romaji"
+        });
+      } catch {
+        return transliterateByMap(text, romanMaps.ja);
+      }
+    }
+
+    async function loadKuroshiro() {
+      if (!kuroshiroPromise) {
+        kuroshiroPromise = (async () => {
+          const [{ default: Kuroshiro }, { default: KuromojiAnalyzer }] = await Promise.all([
+            import("https://cdn.jsdelivr.net/npm/kuroshiro@1.2.0/+esm"),
+            import("https://cdn.jsdelivr.net/npm/kuroshiro-analyzer-kuromoji@1.1.0/+esm")
+          ]);
+          const kuroshiro = new Kuroshiro();
+          await kuroshiro.init(new KuromojiAnalyzer({
+            dictPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict"
+          }));
+          return kuroshiro;
+        })();
+      }
+
+      return kuroshiroPromise;
+    }
+
+    function ipaForLatinText(text, code) {
+      return text.replace(/\p{Letter}+/gu, (word) => {
+        const key = word.toLowerCase();
+        if (ipaLexicon[code]?.[key]) return `/${ipaLexicon[code][key]}/`;
+        if (ipaLexicon.en[key]) return `/${ipaLexicon.en[key]}/`;
+        return `/${roughLatinIpa(word, code)}/`;
+      });
+    }
+
+    function roughLatinIpa(word, code) {
+      let value = word.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+      const common = [
+        [/qu/g, "kw"], [/ch/g, code === "fr" ? "ʃ" : "tʃ"], [/sh/g, "ʃ"],
+        [/th/g, code === "en" ? "θ" : "t"], [/ph/g, "f"], [/gn/g, code === "it" || code === "fr" ? "ɲ" : "gn"],
+        [/ll/g, code === "es" ? "ʎ" : "l"], [/rr/g, "r"], [/j/g, code === "es" || code === "lv" ? "x" : "j"],
+        [/c(?=[eiy])/g, code === "it" ? "tʃ" : code === "fr" || code === "pt" ? "s" : "k"],
+        [/g(?=[eiy])/g, code === "it" ? "dʒ" : code === "nl" ? "ɣ" : "g"],
+        [/w/g, "w"], [/y/g, "j"], [/x/g, "ks"]
+      ];
+      for (const [pattern, replacement] of common) value = value.replace(pattern, replacement);
+      value = value
+        .replace(/a/g, "a").replace(/e/g, code === "en" ? "ɛ" : "e")
+        .replace(/i/g, "i").replace(/o/g, "o").replace(/u/g, "u");
+      return value;
+    }
+
+    function transliterateGreek(text) {
+      let normalized = text.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+      const digraphs = [
+        [/ου/gi, "ou"], [/αι/gi, "ai"], [/ει/gi, "ei"], [/οι/gi, "oi"],
+        [/υι/gi, "yi"], [/γγ/gi, "ng"], [/γκ/gi, "gk"], [/μπ/gi, "mp"],
+        [/ντ/gi, "nt"], [/αυ/gi, "av"], [/ευ/gi, "ev"], [/ηυ/gi, "iv"]
+      ];
+      for (const [pattern, replacement] of digraphs) {
+        normalized = normalized.replace(pattern, replacement);
+      }
+      return transliterateByMap(normalized, romanMaps.el);
+    }
+
+    function transliterateByMap(text, map) {
+      let result = "";
+      for (const char of text) {
+        result += map[char] ?? map[char.toLowerCase()] ?? char;
+      }
+      return result.replace(/\s+/g, " ").trim();
+    }
+
+    function transliterateKorean(text) {
+      const initial = ["g", "kk", "n", "d", "tt", "r", "m", "b", "pp", "s", "ss", "", "j", "jj", "ch", "k", "t", "p", "h"];
+      const medial = ["a", "ae", "ya", "yae", "eo", "e", "yeo", "ye", "o", "wa", "wae", "oe", "yo", "u", "wo", "we", "wi", "yu", "eu", "ui", "i"];
+      const final = ["", "k", "k", "ks", "n", "nj", "nh", "t", "l", "lk", "lm", "lb", "ls", "lt", "lp", "lh", "m", "p", "ps", "t", "t", "ng", "t", "t", "k", "t", "p", "h"];
+      return Array.from(text).map((char) => {
+        const code = char.charCodeAt(0);
+        if (code < 0xac00 || code > 0xd7a3) return char;
+        const offset = code - 0xac00;
+        return initial[Math.floor(offset / 588)] + medial[Math.floor((offset % 588) / 28)] + final[offset % 28];
+      }).join("").replace(/\s+/g, " ").trim();
+    }
+
     function findPredicate(tokens) {
       const candidates = [];
 
@@ -1248,10 +1454,12 @@
         const analysis = analyzeSentence(text, naturalText);
         await fillContextualGlosses(analysis.tokens, naturalText);
         if (session !== renderSession || !output.contains(sentenceNode)) return;
-        renderSentence(sentenceNode, analysis, naturalText);
+        const pronunciationText = await pronunciationLine(naturalText, outputLanguage().google);
+        if (session !== renderSession || !output.contains(sentenceNode)) return;
+        renderSentence(sentenceNode, analysis, naturalText, pronunciationText);
       } catch {
         if (session !== renderSession || !output.contains(sentenceNode)) return;
-        renderSentence(sentenceNode, analyzeSentence(text, ""), bilingual("无法翻译", currentLanguage().unavailable));
+        renderSentence(sentenceNode, analyzeSentence(text, ""), bilingual("无法翻译", currentLanguage().unavailable), "");
       }
     }
 
