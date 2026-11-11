@@ -1,0 +1,508 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>渔阳鼙鼓动地来</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=IBM+Plex+Mono:wght@400&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: one narrow column; hero with a drum-skin motif, then background notes, then lyric cards where every syllable is a vertical stack (pinyin / simplified / traditional / Wade-Giles) and words are tied together by a short bar. Each card carries its own speed buttons. */
+:root {
+  --bg: #ECEFEA;
+  --surface: #F6F8F4;
+  --fg: #1A2230;
+  --muted: #566274;
+  --rule: #B7C0C7;
+  --accent: #2D4E7A;
+  --seal: #A63A32;
+  --on-accent: #F6F8F4;
+  --f-display: 'Ma Shan Zheng', 'Noto Serif SC', 'Songti SC', serif;
+  --f-han: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --f-latin: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --f-en: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151B; --surface: #181E26; --fg: #E6E8E3; --muted: #9AA5B4;
+    --rule: #3A4552; --accent: #8FB0DC; --seal: #D9706A; --on-accent: #11151B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151B; --surface: #181E26; --fg: #E6E8E3; --muted: #9AA5B4;
+  --rule: #3A4552; --accent: #8FB0DC; --seal: #D9706A; --on-accent: #11151B;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.65 var(--f-latin);
+  padding-block: 0 4rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 62rem; margin: 0 auto; display: flex; flex-direction: column; gap: 2.75rem; }
+h1, h2, h3, p, dl, dd { margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* hero */
+.hero { position: relative; overflow: hidden; padding: 3.2rem 0 0.5rem; }
+.drum { position: absolute; right: -3.5rem; top: -1.5rem; width: 17rem; height: 17rem; color: var(--rule); opacity: .75; z-index: 0; pointer-events: none; }
+.drum .core { fill: var(--seal); opacity: .8; }
+.hero-in { position: relative; z-index: 1; display: flex; flex-direction: column; gap: .7rem; }
+.eyebrow { font: 600 .78rem/1.4 var(--f-latin); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 400 clamp(2.5rem, 9vw, 4.6rem)/1.15 var(--f-display); letter-spacing: .04em; text-wrap: balance; color: var(--fg); }
+.title-py { font: italic 400 1.1rem/1.4 var(--f-latin); color: var(--accent); }
+.title-en { font: italic 500 1.5rem/1.3 var(--f-en); color: var(--fg); max-width: 28rem; text-wrap: balance; }
+.credits { display: flex; flex-wrap: wrap; gap: .4rem 2.25rem; margin-top: .6rem; font-size: .98rem; }
+.credits div { min-width: 0; }
+.credits .role { color: var(--muted); letter-spacing: .12em; text-transform: uppercase; margin-right: .6rem; font-size: .72rem; }
+.credits .zh { font-family: var(--f-han); color: var(--muted); font-size: .9rem; margin-left: .25rem; }
+
+/* sections */
+h2 { font: 600 .9rem/1.3 var(--f-latin); letter-spacing: .18em; text-transform: uppercase; display: flex; align-items: center; gap: .9rem; margin-bottom: 1.1rem; }
+h2::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+.notes { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 2.25rem; }
+.notes p + p { margin-top: .8rem; }
+.notes p { max-width: 36rem; }
+.sum { background: var(--surface); border-radius: 10px; padding: 1.15rem 1.3rem; align-self: start; }
+.sum h3 { font: 600 .74rem/1.3 var(--f-latin); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+.sum ol { margin: 0; padding: 0; list-style: none; display: grid; gap: .7rem; font-size: .97rem; }
+.sum li { display: grid; grid-template-columns: 4.1rem minmax(0, 1fr); gap: .6rem; }
+.sum li b { font: 400 .74rem/1.9 var(--f-mono); color: var(--muted); letter-spacing: .02em; }
+.gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .8rem 1.5rem; margin-top: 1.4rem; font-size: .92rem; }
+.gloss dt { font-weight: 600; }
+.gloss dt span { font: 400 .95rem var(--f-han); color: var(--accent); margin-left: .4rem; }
+.gloss dd { color: var(--muted); }
+
+.watch { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.4rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 1rem 0; }
+.watch p { flex: 1 1 16rem; min-width: 0; font-size: .97rem; color: var(--muted); }
+.btn { display: inline-flex; align-items: center; gap: .55rem; background: var(--accent); color: var(--on-accent); border: 0; border-radius: 999px; padding: .6rem 1.2rem; font: 600 .95rem/1.2 var(--f-latin); text-decoration: none; cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn svg { width: .9rem; height: .9rem; fill: currentColor; flex: none; }
+
+/* controls */
+.bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem 1.5rem; align-items: end; background: var(--surface); border-radius: 10px; padding: 1.1rem 1.3rem; }
+.f { display: flex; flex-direction: column; gap: .45rem; min-width: 0; border: 0; padding: 0; margin: 0; }
+.f > label, .f > legend { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 0; }
+select { width: 100%; min-width: 0; font: .92rem var(--f-latin); color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: .5rem .6rem; text-overflow: ellipsis; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.chip span, .sp { display: inline-block; padding: .3rem .75rem; border: 1px solid var(--rule); border-radius: 999px; font: .85rem/1.4 var(--f-latin); color: var(--muted); background: var(--bg); }
+.chip input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gs { cursor: pointer; font-variant-numeric: tabular-nums; }
+.gs[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+#vstatus { grid-column: 1 / -1; font-size: .85rem; color: var(--muted); min-height: 1.4em; }
+
+/* lyric cards */
+#lines { display: flex; flex-direction: column; gap: .9rem; }
+.line { background: var(--surface); border: 1px solid transparent; border-radius: 10px; padding: .7rem 1.1rem 1.05rem; }
+.line.playing { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+.hd { display: flex; align-items: center; gap: .7rem; min-height: 2.5rem; }
+.no { font: 400 .8rem var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; margin-right: auto; }
+.spd { display: flex; gap: .25rem; }
+.spd button { min-width: 2.5rem; padding: .25rem .3rem; border: 1px solid var(--rule); border-radius: 6px; background: transparent; color: var(--muted); font: 400 .74rem/1.4 var(--f-mono); cursor: pointer; font-variant-numeric: tabular-nums; }
+.spd button:hover { border-color: var(--accent); color: var(--accent); }
+.spd button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.play { flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1.5px solid var(--accent); background: transparent; color: var(--accent); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.play:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.play svg { width: 1rem; height: 1rem; fill: currentColor; }
+.play .i-stop { display: none; }
+.line.playing .play { background: var(--seal); border-color: var(--seal); color: #fff; }
+.line.playing .play .i-play { display: none; }
+.line.playing .play .i-stop { display: block; }
+
+.cells { display: flex; flex-wrap: wrap; gap: 1rem .7rem; padding: .4rem .9rem .2rem 0; }
+.word { display: flex; border-top: 2px solid var(--rule); padding-top: .4rem; border-radius: 2px; }
+.cell { display: flex; flex-direction: column; align-items: center; min-width: 2.4rem; padding: 0 .2rem; }
+.py { font: 400 1.02rem/1.35 var(--f-latin); color: var(--accent); white-space: nowrap; }
+.hz { position: relative; display: inline-block; font: 400 2.1rem/1.25 var(--f-han); white-space: nowrap; }
+.hz.tr { font-size: 1.3rem; line-height: 1.3; color: var(--muted); }
+.pn { position: absolute; left: 100%; bottom: 0; margin-left: -.05em; }
+.wg { font: 400 .78rem/1.5 var(--f-mono); color: var(--muted); white-space: nowrap; margin-top: .1rem; }
+.en-line { margin-top: .85rem; font: italic 500 1.4rem/1.35 var(--f-en); color: var(--fg); text-wrap: balance; }
+.no-py .py, .no-sc .hz.sc, .no-tc .hz.tr, .no-wg .wg { display: none; }
+
+/* rehearsal notes */
+.tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.2rem 2rem; font-size: .95rem; }
+.tips p { max-width: 32rem; }
+.tips b { font-weight: 600; }
+.tips code { font: .85rem var(--f-mono); background: var(--surface); border-radius: 4px; padding: .05rem .35rem; white-space: nowrap; }
+.foot { font-size: .85rem; color: var(--muted); max-width: 42rem; }
+
+@media (max-width: 720px) {
+  .notes { grid-template-columns: minmax(0, 1fr); }
+  .drum { width: 13rem; height: 13rem; right: -3rem; top: -1rem; opacity: .6; }
+  .hero { padding-top: 2.4rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .line { transition: background-color .2s, border-color .2s; }
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <svg class="drum" viewBox="0 0 220 220" aria-hidden="true" fill="none" stroke="currentColor">
+      <circle cx="110" cy="110" r="104" stroke-width="2"/>
+      <circle cx="110" cy="110" r="92" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 11.56"/>
+      <circle cx="110" cy="110" r="78" stroke-width="1.5"/>
+      <circle cx="110" cy="110" r="52" stroke-width="1"/>
+      <circle class="core" cx="110" cy="110" r="9" stroke="none"/>
+    </svg>
+    <div class="hero-in">
+      <p class="eyebrow">Movement III of the cantata <i>Chang Hen Ge</i> · 清唱剧《长恨歌》之三  · (TTBB) </p>
+      <h1 lang="zh-Hans">渔阳鼙鼓动地来</h1>
+      <p class="title-py">Yu-Yang Pi-gu Dong Di Lai</p>
+      <p class="title-en">The war-drums of Yuyang come shaking the earth</p>
+      <div class="credits">
+        <div><span class="role">Music</span>Huang Zi<span class="zh" lang="zh-Hans">黄自</span></div>
+        <div><span class="role">Words</span>Wei Han Zhang<span class="zh" lang="zh-Hans">韦瀚章</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section aria-labelledby="bg">
+    <h2 id="bg">Background and meaning</h2>
+    <div class="notes">
+      <div>
+        <p><i>Chang Hen Ge</i> (《长恨歌》; Cháng Hèn Gē, “<i>Song of Everlasting Sorrow</i>”) is a long narrative poem by Bai Juyi(（白居易; Bái Jū Yì, 772-846), written in 806 under the Tang (唐; Táng) dynasty. It tells of the love between Emperor Xuanzong (玄宗; Xuán Zōng) and his consort Yang Guifei (杨贵妃; Yáng Guì Fēi), and of how it ended in catastrophe. The title line of this chorus comes from the poem’s turning point: the drums of war arrive and shatter the court’s music and dancing.</p>
+        <p>Those drums belong to the An Lushan (安禄山; Ān Lù Shān) Rebellion. In the winter of 755, An Lushan, military governor of the northeastern frontier, rose in revolt, later joined by Shi Siming (史思明, Shǐ Sīmíng). The war lasted eight years and left the Tang empire permanently weakened. The rebels took the eastern capital, Luoyang (洛阳); in the summer of 756 the fortress pass of Tongguan (潼关) fell, and the emperor fled toward Sichuan. At Mawei (马嵬), on the road west, his guards demanded Yang Guifei’s death.</p>
+        <p>The cantata was composed by Huang Zi (黄自; Huáng Zì, 1904-1938), a Chinese composer who studied in the United States, to a libretto by Wei Han Zhang (韦瀚章; Wéi Hàn Zhāng, 1906-1993) drawn from Bai Juyi’s poem. Written in the early 1930s, it is a landmark of Chinese choral music. This chorus is the moment the war breaks in.</p>
+        <p>In the poem the drum is the <i>pi</i> (鼙), a small drum carried by cavalry. The libretto shortens it to <i>gu</i> (鼓), “drum”.</p>
+        <p>The recommended musical expression might be <i>Marziale</i> (勇武的).</p>
+      </div>
+      <aside class="sum">
+        <h3>The whole script in Traditional Chinese and the meaning of each block is as below, </h3>
+        <ol>
+          <span>漁陽鼓，起邊關，西望長安犯。// 六宮粉黛，舞袖正翩翩(1)，怎料到邊臣反，哪(2)管他社稷殘。// 祇愛美人醇酒，不愛江山。// 兵威驚震哥舒翰，舉手破潼關，遙望滿城烽火，指日下長安。</span></li>
+          <span>1. “翩翩” (piān piān): describes the fluttering of the sleeves of the dancing ladies; Alternatively as “翻翻”, pronunciated as “Fan Fan”.</span></li>
+          <span>2. “哪”=“那” (nǎ, NOT “něi”, in formal situations): an interrogative particle, “哪管” here meaning “what care” or “not care”.</span></li>
+          <li><b>Lines 1–3</b><span>War-drums sound at the frontier, and the rebel army marches west on the capital, Chang’an.</span></li>
+          <li><b>Lines 4–7</b><span>In the palaces the ladies still dance. No one suspects a rebellion, and no one cares for the fate of the state.</span></li>
+          <li><b>Lines 8–9</b><span>The emperor loves beautiful women and fine wine, but not the empire itself.</span></li>
+          <li><b>Lines 10–13</b><span>The rebels’ strength terrifies the general Geshu Han, Tongguan falls, beacon-fires burn in the distance, and Chang’an is about to fall.</span></li>
+        </ol>
+      </aside>
+    </div>
+    <dl class="gloss">
+      <div><dt>Yuyang<span lang="zh-Hans">渔阳</span></dt><dd>A northern frontier district of the Tang, standing here for An Lushan’s base.</dd></div>
+      <div><dt>Chang’an<span lang="zh-Hans">长安</span></dt><dd>The Tang capital, today’s Xi’an.</dd></div>
+      <div><dt>Tongguan<span lang="zh-Hans">潼关</span></dt><dd>The mountain pass guarding the approach to Chang’an from the east.</dd></div>
+      <div><dt>Geshu Han<span lang="zh-Hans">哥舒翰</span></dt><dd>A Tang general who held Tongguan.</dd></div>
+    </dl>
+  </section>
+
+  <section class="watch" aria-label="Reference performance">
+    <p>Watch the reference performance first. Listen for the rhythm and where the phrases break, then work through the lyrics line by line.</p>
+    <a class="btn" href="https://www.youtube.com/watch?v=pKAMHDHztzs" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2l11 6-11 6z"/></svg>
+      Watch on YouTube
+    </a>
+  </section>
+
+  <section aria-labelledby="ly">
+    <h2 id="ly">Lyrics</h2>
+    <div class="bar">
+      <div class="f">
+        <label for="voice">Reading voice</label>
+        <select id="voice"><option>Looking for voices…</option></select>
+      </div>
+      <fieldset class="f">
+        <legend>Speed for all lines</legend>
+        <div class="chips" id="gspeed"></div>
+      </fieldset>
+      <fieldset class="f">
+        <legend>Show</legend>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" id="t-py" checked><span>Pinyin</span></label>
+          <label class="chip"><input type="checkbox" id="t-sc" checked><span>Simplified</span></label>
+          <label class="chip"><input type="checkbox" id="t-tc" checked><span>Traditional</span></label>
+          <label class="chip"><input type="checkbox" id="t-wg" checked><span>Wade–Giles</span></label>
+        </div>
+      </fieldset>
+      <div class="f"><button class="btn" id="all" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2l11 6-11 6z"/></svg><span>Play all, from the top</span></button></div>
+      <p id="vstatus" role="status" aria-live="polite"></p>
+    </div>
+    <div id="lines" style="margin-top:1rem"></div>
+  </section>
+
+  <section aria-labelledby="tp">
+    <h2 id="tp">Rehearsal notes</h2>
+    <div class="tips">
+      <p><b>How to read a column.</b> Each column is one syllable. From the top: pinyin, simplified character, traditional character, Wade–Giles. A bar above a group of columns marks one word, to be sung as a unit; it matches the hyphens in the romanization.</p>
+      <p><b>Speed buttons.</b> Every line has its own speed buttons (0.5× to 1×). Tapping one plays that line at that speed. Start slow, then step up until you can match the recording.</p>
+      <p><b>Aspiration.</b> In Wade–Giles an apostrophe marks an aspirated consonant: <code>t'a</code>, <code>p'o</code> and <code>ch'ang</code> carry a puff of air, while <code>ta</code>, <code>po</code> and <code>chang</code> do not.</p>
+      <p><b>The vowel ü.</b> In <code>Yü-</code> and <code>chü-</code>, round the lips as for “oo” and say “ee”, as in German <i>ü</i> or French <i>u</i>.</p>
+      <p><b>Wade–Giles to pinyin.</b> <code>hsi</code> = xi, <code>ch'i</code> = qi, <code>chih</code> = zhi, <code>chih</code> = zhi,  <code>jih</code> = ri, <code>tsen</code> = zen, <code>ts'an</code> = can, <code>t'ung</code> = tong.</p>
+      <p><b>Final consonants.</b> Many lines end on <i>-n</i> (<i>guān</i>, <i>ān</i>, <i>fàn</i>, <i>cán</i>, <i>hàn</i>, <i>shān</i>). Close each one with the tongue tip against the ridge behind the upper teeth. Keep <i>-ng</i> (<i>gōng</i>, <i>wàng</i>, <i>tóng</i>) at the back of the tongue.</p>
+    </div>
+    <p class="foot" style="margin-top:1.25rem">The reading voice speaks the words with their spoken Mandarin tones. Use it to check sounds and syllable length, not melody. In singing, the notes carry the pitch. <br> By Dr. Yang, with Claude sonnet 5.5.</p>
+  </section>
+</div>
+
+<script>
+var SPEEDS = [
+  { v: 0.5,  label: '0.5×',  name: 'Very slow' },
+  { v: 0.7,  label: '0.7×',  name: 'Slow' },
+  { v: 0.85, label: '0.85×', name: 'Medium' },
+  { v: 1,    label: '1×',    name: 'Normal' }
+];
+var DEFAULT_RATE = 0.7;
+
+var LINES = [
+  { py: "Yú- yáng gǔ", s: "渔 阳 鼓，", t: "漁 陽 鼓，", w: "Yü- yang ku",
+    en: "The war-drums of Yuyang are sounding," },
+  { py: "qǐ biān- guān", s: "起 边 关，", t: "起 邊 關，", w: "ch'i pien- kuan",
+    en: "Rising from the frontier pass," },
+  { py: "xī wàng cháng- ān fàn", s: "西 望 长 安 犯。", t: "西 望 長 安 犯。", w: "hsi wang ch'ang- an fan",
+    en: "And westward they march to assail Chang’an." },
+  { py: "Liù- gōng fěn- dài", s: "六 宫 粉 黛，", t: "六 宮 粉 黛，", w: "Liu- kung fen- tai",
+    en: "The painted beauties of the Six Palaces," },
+  { py: "wǔ xiù zhèng piān- piān", s: "舞 袖 正 翩 翩，", t: "舞 袖 正 翩 翩，", w: "wu hsiu cheng p'ien- p'ien",
+    en: "Their dancing sleeves yet fluttering like swallows in flight," },
+  { py: "zěn liào dào biān- chén fǎn", s: "怎 料 到 边 臣 反，", t: "怎 料 到 邊 臣 反，", w: "tsen liao tao pien- ch'en fan",
+    en: "Who could have foreseen the border ministers’ revolt?" },
+  { py: "nǎ guǎn tā shè- jì cán", s: "哪 管 他 社 稷 残。", t: "哪 管 他 社 稷 殘。", w: "na kuan t'a she- chi ts'an",
+    en: "What cares he though the altars of the realm lie broken?" },
+  { py: "Zhǐ ài měi- rén chún- jiǔ", s: "只 爱 美 人 醇 酒，", t: "祇 愛 美 人 醇 酒，", w: "Chih ai mei- jen ch'un- chiu",
+    en: "He loves but fair women and mellow wine," },
+  { py: "Bú  ài jiāng- shān", s: "不 爱 江 山。", t: "不 愛 江 山。", w: "Pu ai chiang- shan",
+    en: "And loves not the rivers and mountains of his throne." },
+  { py: "Bīng wēi jīng- zhèn gē- shū hàn", s: "兵 威 惊 震 哥 舒 翰，", t: "兵 威 驚 震 哥 舒 翰，", w: "Ping wei ching- chen ko- shu han",
+    en: "The rebel host’s fury shakes even Geshu Han with dread;" },
+  { py: "jǔ- shǒu pò tóng- guān", s: "举 手 破 潼 关，", t: "舉 手 破 潼 關，", w: "chü- shou p'o t'ung- kuan",
+    en: "At the lift of a hand, Tongguan is breached." },
+  { py: "yáo wàng mǎn- chéng fēng- huǒ", s: "遥 望 满 城 烽 火，", t: "遙 望 滿 城 烽 火，", w: "yao wang man- ch'eng feng- huo",
+    en: "Far off, the beacon-fires blaze across all the land," },
+  { py: "zhǐ rì xià cháng- ān", s: "指 日 下 长 安。", t: "指 日 下 長 安。", w: "chih jih hsia ch'ang- an",
+    en: "And Chang’an, ere long, must fall." }
+];
+
+var SVG_PLAY = '<svg class="i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg><svg class="i-stop" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" rx="1.5"/></svg>';
+
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+function toks(str) { return str.trim().split(/\s+/); }
+function splitPunct(tok) {
+  var ch = Array.from(tok);
+  var last = ch[ch.length - 1];
+  if (ch.length > 1 && /[，。、；！？]/.test(last)) return [ch.slice(0, -1).join(''), last];
+  return [tok, ''];
+}
+function hanzi(tok, cls, lang) {
+  var p = splitPunct(tok);
+  var h = el('span', 'hz ' + cls);
+  h.lang = lang;
+  h.appendChild(document.createTextNode(p[0]));
+  if (p[1]) h.appendChild(el('span', 'pn', p[1]));
+  return h;
+}
+
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+var rates = [];
+var savedRate = parseFloat(lsGet('yy-rate'));
+var startRate = SPEEDS.some(function (s) { return s.v === savedRate; }) ? savedRate : DEFAULT_RATE;
+LINES.forEach(function () { rates.push(startRate); });
+
+var linesEl = document.getElementById('lines');
+var speedBtns = []; /* speedBtns[line] = array of buttons */
+
+LINES.forEach(function (L, i) {
+  var py = toks(L.py), sc = toks(L.s), tc = toks(L.t), wg = toks(L.w);
+  var card = el('article', 'line');
+  card.id = 'line-' + (i + 1);
+
+  var hd = el('div', 'hd');
+  hd.appendChild(el('span', 'no', String(i + 1).padStart(2, '0')));
+
+  var grp = el('div', 'spd');
+  grp.setAttribute('role', 'group');
+  grp.setAttribute('aria-label', 'Play line ' + (i + 1) + ' at a chosen speed');
+  speedBtns[i] = SPEEDS.map(function (sp) {
+    var b = el('button', null, sp.label);
+    b.type = 'button';
+    b.title = sp.name + ' · tap to play this line at ' + sp.label;
+    b.addEventListener('click', function () { setLineRate(i, sp.v); speak(i); });
+    grp.appendChild(b);
+    return b;
+  });
+  hd.appendChild(grp);
+
+  var btn = el('button', 'play');
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Play or stop line ' + (i + 1));
+  btn.innerHTML = SVG_PLAY;
+  btn.addEventListener('click', function () { toggleLine(i); });
+  hd.appendChild(btn);
+  card.appendChild(hd);
+
+  var cells = el('div', 'cells');
+  var word = null;
+  py.forEach(function (p, k) {
+    if (!word) { word = el('span', 'word'); cells.appendChild(word); }
+    var c = el('span', 'cell');
+    c.appendChild(el('span', 'py', p.replace(/-$/, '')));
+    c.appendChild(hanzi(sc[k], 'sc', 'zh-Hans'));
+    c.appendChild(hanzi(tc[k], 'tr', 'zh-Hant'));
+    c.appendChild(el('span', 'wg', wg[k].replace(/-$/, '')));
+    word.appendChild(c);
+    if (!/-$/.test(p)) word = null;
+  });
+  card.appendChild(cells);
+  card.appendChild(el('p', 'en-line', L.en));
+  linesEl.appendChild(card);
+});
+
+/* speed state */
+var gBtns = [];
+function paintSpeeds() {
+  LINES.forEach(function (_, i) {
+    speedBtns[i].forEach(function (b, k) { b.setAttribute('aria-pressed', String(SPEEDS[k].v === rates[i])); });
+  });
+  var allSame = rates.every(function (r) { return r === rates[0]; });
+  gBtns.forEach(function (b, k) { b.setAttribute('aria-pressed', String(allSame && SPEEDS[k].v === rates[0])); });
+}
+function setLineRate(i, v) { rates[i] = v; paintSpeeds(); }
+var gspeed = document.getElementById('gspeed');
+SPEEDS.forEach(function (sp) {
+  var b = el('button', 'sp gs', sp.name + ' ' + sp.label);
+  b.type = 'button';
+  b.addEventListener('click', function () {
+    for (var i = 0; i < rates.length; i++) rates[i] = sp.v;
+    lsSet('yy-rate', String(sp.v));
+    paintSpeeds();
+  });
+  gspeed.appendChild(b);
+  gBtns.push(b);
+});
+paintSpeeds();
+
+/* display toggles */
+['py', 'sc', 'tc', 'wg'].forEach(function (k) {
+  var cb = document.getElementById('t-' + k);
+  cb.addEventListener('change', function () { linesEl.classList.toggle('no-' + k, !cb.checked); });
+});
+
+/* speech */
+var synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+var voiceSel = document.getElementById('voice');
+var statusEl = document.getElementById('vstatus');
+var allBtn = document.getElementById('all');
+var voices = [];
+var token = 0, current = -1, chain = false;
+
+function isMS(v) { return /microsoft/i.test(v.name); }
+function pickDefault(list) {
+  var ms = list.filter(isMS);
+  var cn = function (v) { return /zh[-_]CN/i.test(v.lang); };
+  return ms.find(function (v) { return cn(v) && /xiaoxiao|yunxi|xiaoyi|yunjian|yunyang|huihui|yaoyao|kangkang/i.test(v.name); })
+    || ms.find(cn) || ms[0] || list.find(cn) || list[0] || null;
+}
+function loadVoices() {
+  if (!synth) return;
+  var all = synth.getVoices();
+  voices = all.filter(function (v) { return /^zh/i.test(v.lang) || /chinese|中文|普通话|国语/i.test(v.name); });
+  voices.sort(function (a, b) {
+    if (isMS(a) !== isMS(b)) return isMS(a) ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+  var prev = voiceSel.value || lsGet('yy-voice');
+  voiceSel.innerHTML = '';
+  if (!voices.length) {
+    var o = el('option', null, 'No Chinese voice found');
+    o.value = '';
+    voiceSel.appendChild(o);
+    voiceSel.disabled = true;
+    statusEl.textContent = 'This device has no Chinese voice. Install one in your system settings, or open this page in Microsoft Edge, which includes natural Microsoft voices.';
+    return;
+  }
+  voiceSel.disabled = false;
+  voices.forEach(function (v) {
+    var o = el('option', null, (isMS(v) ? '★ ' : '') + v.name + ' · ' + v.lang);
+    o.value = v.voiceURI;
+    voiceSel.appendChild(o);
+  });
+  var keep = voices.find(function (v) { return v.voiceURI === prev; });
+  var chosen = keep || pickDefault(voices);
+  if (chosen) voiceSel.value = chosen.voiceURI;
+  statusEl.textContent = voices.some(isMS)
+    ? 'A Microsoft voice is selected by default (marked ★). Please select "Yunyang“ or "Yunxia" (Microsoft voices) for the best pronunciation. Otherwise, "Google 普通话" is recommended. Please refer to a native speaker. Tap a speed on any line to hear it at that speed.'
+    : 'No Microsoft voice found, so your system’s Chinese voice is used. "Google 普通话" is recommended for the best pronunciation. Or, please refer to a native speaker. Tap a speed on any line to hear it at that speed.';
+}
+if (synth) {
+  loadVoices();
+  if (synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices);
+  else synth.onvoiceschanged = loadVoices;
+  setTimeout(loadVoices, 600);
+} else {
+  voiceSel.innerHTML = '<option>Speech is not supported in this browser</option>';
+  voiceSel.disabled = true;
+  statusEl.textContent = 'This browser cannot read text aloud. Try the latest Edge, Chrome or Safari.';
+}
+voiceSel.addEventListener('change', function () { lsSet('yy-voice', voiceSel.value); });
+
+function setPlaying(i) {
+  current = i;
+  var cards = linesEl.children;
+  for (var k = 0; k < cards.length; k++) cards[k].classList.toggle('playing', k === i);
+  allBtn.querySelector('span').textContent = chain ? 'Stop playback' : 'Play all, from the top';
+}
+function plain(i) { return toks(LINES[i].s).join(''); }
+function stopAll() {
+  token++;
+  chain = false;
+  if (synth) synth.cancel();
+  setPlaying(-1);
+}
+function speak(i) {
+  if (!synth) return;
+  var my = ++token;
+  synth.cancel();
+  setPlaying(i);
+  var u = new SpeechSynthesisUtterance(plain(i));
+  var v = voices.find(function (x) { return x.voiceURI === voiceSel.value; });
+  if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = 'zh-CN'; }
+  u.rate = rates[i];
+  u.onend = function () {
+    if (my !== token) return;
+    if (chain && i < LINES.length - 1) {
+      setTimeout(function () { if (my === token && chain) speak(i + 1); }, 400);
+    } else {
+      chain = false;
+      setPlaying(-1);
+    }
+  };
+  u.onerror = function () { if (my === token) { chain = false; setPlaying(-1); } };
+  if (chain) {
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    linesEl.children[i].scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+  }
+  setTimeout(function () { if (my === token) synth.speak(u); }, 60);
+}
+function toggleLine(i) {
+  if (!synth) return;
+  if (current === i) { stopAll(); return; }
+  chain = false;
+  speak(i);
+}
+allBtn.addEventListener('click', function () {
+  if (!synth) return;
+  if (chain) { stopAll(); return; }
+  chain = true;
+  speak(0);
+});
+window.addEventListener('pagehide', function () { if (synth) synth.cancel(); });
+</script>
+
+</body></html>
