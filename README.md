@@ -4,12 +4,13 @@
 
 > 方便中文母语者学习地球上的其他主要语言、非中文母语者学习中文和汉字文化。
 
-🌐 **Updates (2025-05-29)** 
+🌐 **Updates (2026-11-11)** 
   1. [**Read** _Chinese_ (by the help of _Pinyin_) or **Learn other world languages** with _Chinese_ easily，with any input](https://yangdns.github.io/port_languages/Chinese_read_easily.html)
   2. [**Phonics & Pronunciatio**n Practice - 🇵🇹 **Portuguese** (🇧🇷 Brazil)](https://yangdns.github.io/port_languages/Portuguese_BR.html)
   3. [**Phonics & Pronunciation** Practice - 🇫🇷 **French**](https://yangdns.github.io/port_languages/French.html)
   4. [**Phonics & Pronunciation** Practice - 🇱🇻 **Latvian**](https://yangdns.github.io/port_languages/Latvian_LV.html)
   5. [**Read-along Practice** - _Cerf-volant_, a French song](https://yangdns.github.io/port_languages/Cerf-volant_practice.html)
+  6. [**Pronunciation Guide for Mandarin** -- **Yu-yang-Pi-gu Dong Di Lai**, a Chinese choral masterpiece in 1930s](https://yangdns.github.io/port_languages/Yu-yang-Pi-gu.html)
 
 ##  🇨🇳 cn (zh-HanS) 简体中文 · 🇬🇧 en Simpilified Chinese 
 🇪🇸 es chino simplificado · 🇵🇹 pt chinês simplificado · 🇫🇷 fr chinois simplifié · 🇸🇦 ar الصينية المبسطة · 🇩🇪 de vereinfachtes Chinesisch · 🇳🇱 nl vereenvoudigd Chinees · 🇷🇺 ru упрощённый китайский · 🇮🇹 it cinese semplificato · 🏛️ la Sinica simplicior · 🇮🇱 he סינית מפושטת · 🇯🇵 ja 簡体字中国語 · 🇰🇷 ko 간체 중국어 · 🇮🇳 hi सरलीकृत चीनी · 🇱🇻 lv vienkāršotā ķīniešu valoda
